@@ -1,0 +1,21 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <h1>Facture n° {{ invoice.id }}</h1>
+
+  <form action="/your-server-side-code" method="POST">
+    <script
+      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+      data-key="pk_test_xxx"
+      data-allow-remember-me="false"
+      data-amount="{{ invoice.amount }}"
+      data-email="{{ invoice.email }}"
+      data-name="Biblys"
+      data-label="Payer"
+      data-description="Facture n° {{ invoice.id }}"
+      data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+      data-locale="auto"
+      data-currency="eur">
+    </script>
+  </form>
+{% endblock %}
