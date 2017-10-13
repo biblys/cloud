@@ -3,6 +3,8 @@
 {% block body %}
   <h1>Facture n° {{ invoice.id }}</h1>
 
+  <p>{{ invoice.name }}</p>
+
   <form action="/your-server-side-code" method="POST">
     <script
       src="https://checkout.stripe.com/checkout.js" class="stripe-button"
