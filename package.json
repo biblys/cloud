@@ -2,7 +2,7 @@
   "name": "biblys-cloud",
   "version": "1.0.0",
   "description": "Biblys Cloud",
-  "main": "app.js",
+  "main": "./bin/www",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./bin/www"
