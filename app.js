@@ -11,8 +11,11 @@ const invoices = require('./routes/invoices');
 
 const app = express();
 
+// Config
+const config = require('./config.js');
+
 // MongoDB
-const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/biblys-cloud';
+const mongoUrl = config.MONGO_URL || process.env.MONGO_URL || 'mongodb://localhost/biblys-cloud';
 mongoose.connect(mongoUrl, { useMongoClient: true });
 process.stdout.write(`Mongoose connected to ${mongoUrl}\n`);
 
