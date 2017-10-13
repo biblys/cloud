@@ -1,14 +1,20 @@
-const express = require('express');
-const path = require('path');
-const favicon = require('serve-favicon');
-const logger = require('morgan');
+const express      = require('express');
+const path         = require('path');
+const favicon      = require('serve-favicon');
+const logger       = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
+const bodyParser   = require('body-parser');
+const mongoose     = require('mongoose');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
 
 const app = express();
+
+// MongoDB
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/biblys-cloud';
+mongoose.connect(mongoUrl, { useMongoClient: true });
+process.stdout.write(`Mongoose connected to ${mongoUrl}\n`);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
