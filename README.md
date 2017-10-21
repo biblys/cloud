@@ -18,5 +18,8 @@
 
 ## Changelog
 
+### DEV
+* Fix using custom port in config file
+
 ### 1.0.0 (2017-10-21)
 * First release
