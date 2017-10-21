@@ -9,13 +9,20 @@ const InvoiceSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  email: {
+    type: String,
+    required: true
+  },
   amount: {
     type: String,
     required: true
   },
-  email: {
-    type: String,
+  payed: {
+    type: mongoose.Schema.Types.Boolean,
     required: true
+  },
+  payedAt: {
+    type: Date
   },
   createdAt: {
     type: Date,
