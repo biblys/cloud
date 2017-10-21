@@ -1,4 +1,5 @@
 const config = {
+  AXYS_SECRET_KEY: 'xxxxxxxxxxxxxxx',
   COOKIE_PARSER_SECRET: 'xxxxxxxxxxxxxxx',
   MONGO_URL: 'mongodb://localhost/biblys-cloud',
   PORT: '3000',

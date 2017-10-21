@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const mongoose     = require('mongoose');
 const url          = require('url');
+const request      = require('request');
 
 const index = require('./routes/index');
 const invoices = require('./routes/invoices');
@@ -60,6 +61,25 @@ app.use(function(request, response, next) {
     const destination = url.parse(request.url).pathname;
     response.redirect(destination);
     return;
+  }
+
+  next();
+});
+
+// Check userUid
+app.use(function(req, res, next) {
+  if (req.signedCookies.userUid !== 'undefined') {
+    request(`https://axys.me/call.php?key=${config.AXYS_SECRET_KEY}&uid=${req.signedCookies.userUid}&format=json`, function (error, response, body) {
+
+      if (error) {
+        throw error;
+      }
+
+      if (response.statusCode == 200) {
+        const json = JSON.parse(body);
+        console.log(json);
+      }
+    });
   }
 
   next();
