@@ -12,14 +12,14 @@
 
 ## Todo
 
-* Stripe payment popup logo
+* Improve security
 * Post-update hook for invoice
-* Responsive
 
 ## Changelog
 
 ### DEV
 * Add Biblys logo in payment popup
+* Enable responsive layout
 * Fix using custom port in config file
 
 ### 1.0.0 (2017-10-21)
