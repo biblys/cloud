@@ -15,3 +15,8 @@
 * Stripe payment popup logo
 * Post-update hook for invoice
 * Responsive
+
+## Changelog
+
+### 1.0.0 (2017-10-21)
+* First release
