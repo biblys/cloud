@@ -13,13 +13,13 @@
 ## Todo
 
 * Improve security
-* Post-update hook for invoice
 
 ## Changelog
 
 ### DEV
 * Add Biblys logo in payment popup
 * Enable responsive layout
+* Add timestamps field to Invoice model
 * Fix using custom port in config file
 
 ### 1.0.0 (2017-10-21)
