@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Security headers
 app.use(function(request, response, next) {
-  response.setHeader('Content-Security-Policy', "default-src 'self'; connect-src https://checkout.stripe.com; script-src https://checkout.stripe.com; style-src 'self' https://checkout.stripe.com; img-src https://q.stripe.com; frame-src https://checkout.stripe.com");
+  response.setHeader('Content-Security-Policy', "default-src 'none'; connect-src https://checkout.stripe.com; script-src https://checkout.stripe.com; style-src 'self' https://checkout.stripe.com; img-src https://q.stripe.com; frame-src https://checkout.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'");
   response.setHeader('X-Frame-Options', 'DENY');
   response.setHeader('X-Content-Type-Options', 'nosniff');
   response.setHeader('X-XSS-Protection', '1; mode=block');

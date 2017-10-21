@@ -12,7 +12,9 @@
 
 ## Todo
 
-* Improve security
+* Login
+* Save payments in database
+* Invoice generation
 
 ## Changelog
 
