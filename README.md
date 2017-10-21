@@ -18,7 +18,7 @@
 
 ## Changelog
 
-### DEV
+### 1.1.0 (2017-10-21)
 * Add Biblys logo in payment popup
 * Enable responsive layout
 * Add timestamps field to Invoice model
