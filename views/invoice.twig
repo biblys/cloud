@@ -7,19 +7,27 @@
 
   <p>{{ invoice.name }}</p>
 
-  <form action="/invoices/{{ invoice._id }}/process-payment" method="POST">
-    <script
-      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-      data-key="{{ stripe_public_key }}"
-      data-allow-remember-me="false"
-      data-amount="{{ invoice.amount }}"
-      data-email="{{ invoice.email }}"
-      data-name="Biblys"
-      data-label="Payer"
-      data-description="Facture n° {{ invoice.number }}"
-      data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-      data-locale="auto"
-      data-currency="eur">
-    </script>
-  </form>
+  {% if invoice.payed %}
+
+    <p>Facture payée le {{ invoice.payedAt|date('d/m/Y') }}</p>
+
+  {% else %}
+
+    <form action="/invoices/{{ invoice._id }}/process-payment" method="POST">
+      <script
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="{{ stripe_public_key }}"
+        data-allow-remember-me="false"
+        data-amount="{{ invoice.amount }}"
+        data-email="{{ invoice.email }}"
+        data-name="Biblys"
+        data-label="Payer"
+        data-description="Facture n° {{ invoice.number }}"
+        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+        data-locale="auto"
+        data-currency="eur">
+      </script>
+    </form>
+
+  {% endif %}
 {% endblock %}

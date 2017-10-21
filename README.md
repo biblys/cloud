@@ -9,3 +9,9 @@
 ## Running
 
     npm start
+
+## Todo
+
+* Stripe payment popup logo
+* Post-update hook for invoice
+* Responsive

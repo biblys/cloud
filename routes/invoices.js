@@ -31,10 +31,11 @@ router.post('/:id/process-payment', function(request, response, next) {
       return;
     }
 
-    // Get stripe key from config and token from request
+    // Get Stripe key from config and token from request
     const stripe = require('stripe')(config.STRIPE_SECRET_KEY),
       token = request.body.stripeToken;
 
+    // Get Stripe to charge card
     stripe.charges.create({
       amount: invoice.amount,
       currency: 'eur',
@@ -47,9 +48,19 @@ router.post('/:id/process-payment', function(request, response, next) {
         return;
       }
 
-      // Todo: update invoice.payed & invoice.payedAt
+      // Update invoice.payed & invoice.payedAt
+      invoice.payed   = true;
+      invoice.payedAt = Date.now();
+      invoice.save(function(err, invoice) {
+        if (err) {
+          next(err);
+          return;
+        }
 
-      response.redirect(`/invoices/${invoice._id}`);
+        // Redirect to payement page
+        response.redirect(`/invoices/${invoice._id}`);
+      });
+
     });
 
   });
