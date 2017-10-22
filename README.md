@@ -13,7 +13,6 @@
 
 ## Todo
 
-* Save payments in database
 * Admin: generate customer
 * Admin: generate invoice
 * Save cards
@@ -29,6 +28,7 @@
 * Add Axys support
 * Allow customers to only see their invoices
 * Add an admin role that can see all invoices
+* Save each payment individually in database
 
 ### 1.1.0 (2017-10-21)
 * Add Biblys logo in payment popup

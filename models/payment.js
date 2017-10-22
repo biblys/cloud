@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const PaymentSchema = new mongoose.Schema({
-  axysId: {
-    type: String,
-    required: true
-  },
   customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Customer',

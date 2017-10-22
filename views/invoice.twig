@@ -13,7 +13,8 @@
 
   {% else %}
 
-    <form action="/invoices/{{ invoice._id }}/process-payment" method="POST">
+    <form action="/payments/create" method="POST">
+      <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
       <script
         src="https://checkout.stripe.com/checkout.js" class="stripe-button"
         data-key="{{ stripe_public_key }}"
