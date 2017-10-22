@@ -16,7 +16,7 @@ router.get('/:id', function(request, response, next) {
     }
 
     // If Invoice is not for this user
-    if (!invoice.customer._id.equals(response.locals.customer._id)) {
+    if (!invoice.customer._id.equals(response.locals.customer._id) && !response.locals.customer.isAdmin) {
       const err = new Error('You are not authorized to see this invoice.');
       err.status = 403;
       next(err);
