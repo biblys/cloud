@@ -11,6 +11,8 @@ const request      = require('request');
 const index = require('./routes/index');
 const invoices = require('./routes/invoices');
 
+const Customer = require('./models/customer');
+
 const app = express();
 
 // Config
@@ -69,20 +71,47 @@ app.use(function(request, response, next) {
 // Check userUid
 app.use(function(req, res, next) {
   if (req.signedCookies.userUid !== 'undefined') {
+    res.locals.userUid = req.signedCookies.userUid;
     request(`https://axys.me/call.php?key=${config.AXYS_SECRET_KEY}&uid=${req.signedCookies.userUid}&format=json`, function (error, response, body) {
 
       if (error) {
         throw error;
       }
 
+      // If UID is unkown by Axys, delete cookie
+      if (response.statusCode == 404) {
+        res.cookie('userUid', '', { expires: new Date(0) });
+        next();
+        return;
+      }
+
+      // If another error occurs
+      if (response.statusCode != 200) {
+        const json = JSON.parse(body),
+          err = new Error(`Axys error ${response.statusCode}: ${json.error}`);
+        next(err);
+        return;
+      }
+
       if (response.statusCode == 200) {
         const json = JSON.parse(body);
-        console.log(json);
+
+        Customer.findOne({ axysId: json.user_id }, function(err, customer) {
+          if (err) throw err;
+
+          if (!customer) {
+            const err = new Error(`User ${json.user_email} is unknown.`);
+            next(err);
+          } else {
+            customer.uid = req.signedCookies.userUid;
+            req.customer = customer;
+            res.locals.customer = customer;
+            next();
+          }
+        });
       }
     });
   }
-
-  next();
 });
 
 app.use('/', index);
