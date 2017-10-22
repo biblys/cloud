@@ -1,14 +1,37 @@
 body {
-  padding: 10px;
+  background: #f60;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 10px;
 }
 
 a {
   color: #00B7FF;
 }
 
+h1 {
+  margin-top: 0;
+}
+
+.main-logo {
+  display: block;
+  margin: auto;
+  max-width: 100%;
+}
+
+.page {
+  background: white;
+  border-radius: 15px;
+  margin: auto;
+  max-width: 700px;
+  padding: 25px;
+}
+
 @media (min-width: 768px) {
   body {
     padding: 25px 50px;
+  }
+
+  .main-logo {
+    width: 450px;
   }
 }
