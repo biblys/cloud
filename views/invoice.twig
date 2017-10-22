@@ -5,7 +5,7 @@
 {% block body %}
   <h1>Facture n° {{ invoice.number }}</h1>
 
-  <p>{{ invoice.name }}</p>
+  <p>{{ invoice.customer.name }}</p>
 
   {% if invoice.payed %}
 
@@ -13,17 +13,18 @@
 
   {% else %}
 
-    <form action="/invoices/{{ invoice._id }}/process-payment" method="POST">
+    <form action="/payments/create" method="POST">
+      <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
       <script
         src="https://checkout.stripe.com/checkout.js" class="stripe-button"
         data-key="{{ stripe_public_key }}"
         data-allow-remember-me="false"
         data-amount="{{ invoice.amount }}"
-        data-email="{{ invoice.email }}"
+        data-email="{{ invoice.customer.email }}"
         data-name="Biblys"
         data-label="Payer"
         data-description="Facture n° {{ invoice.number }}"
-        data-image="/images/biblys-logo.jpg"
+        data-image="/images/biblys-logo-stripe.jpg"
         data-locale="auto"
         data-currency="eur">
       </script>

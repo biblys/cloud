@@ -5,12 +5,9 @@ const InvoiceSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  name: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
+  customer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Customer',
     required: true
   },
   amount: {
