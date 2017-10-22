@@ -18,6 +18,10 @@
 
 ## Changelog
 
+### DEV 
+* Add Axys support
+* Allow customers to only see their invoices
+
 ### 1.1.0 (2017-10-21)
 * Add Biblys logo in payment popup
 * Enable responsive layout
