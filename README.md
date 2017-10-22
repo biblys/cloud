@@ -14,8 +14,13 @@
 ## Todo
 
 * Save payments in database
+* Admin: generate customer
+* Admin: generate invoice
+* Save cards
+* Admin: show revenue
 * Generate complete invoices
 * List all invoices for a customer
+* Support tickets
 * Tests!
 
 ## Changelog

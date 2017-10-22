@@ -10,14 +10,6 @@ const InvoiceSchema = new mongoose.Schema({
     ref: 'Customer',
     required: true
   },
-  name: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true
-  },
   amount: {
     type: String,
     required: true
