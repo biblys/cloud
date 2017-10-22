@@ -6,9 +6,19 @@ const Invoice = require('../models/invoice');
 
 router.get('/:id', function(request, response, next) {
 
-  Invoice.findById(request.params.id, function(err, invoice) {
+  Invoice.findById(request.params.id).populate('customer').exec(function(err, invoice) {
 
     if (invoice === null) {
+      const err = new Error('Invoice Not Found');
+      err.status = 404;
+      next(err);
+      return;
+    }
+
+    // If Invoice is not for this user
+    if (!invoice.customer._id.equals(response.locals.customer._id)) {
+      const err = new Error('You are not authorized to see this invoice.');
+      err.status = 403;
       next(err);
       return;
     }
