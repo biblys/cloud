@@ -5,6 +5,11 @@ const InvoiceSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  customer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Customer',
+    required: true
+  },
   name: {
     type: String,
     required: true
