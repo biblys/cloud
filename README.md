@@ -13,8 +13,9 @@
 
 ## Todo
 
-* Admin: generate customer
+* Add information for transfer payment
 * Admin: generate invoice
+* Admin: generate customer
 * Save cards
 * Admin: show revenue
 * Generate complete invoices
@@ -24,7 +25,7 @@
 
 ## Changelog
 
-### DEV 
+### 1.2.0 (2017-10-22)
 * Add Axys support
 * Allow customers to only see their invoices
 * Add an admin role that can see all invoices
