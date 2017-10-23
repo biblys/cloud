@@ -27,6 +27,7 @@
 ### DEV
 * Display login invite when accessing invoice page while unlogged
 * Display transfer info on invoice page if available
+* Add admin dashboard
 
 ### 1.2.0 (2017-10-22)
 * Add Axys support
