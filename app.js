@@ -14,9 +14,13 @@ const config = require('./config.js');
 const app = express();
 
 // Controllers
-const index = require('./routes/index');
+const index    = require('./routes/index');
 const invoices = require('./routes/invoices');
 const payments = require('./routes/payments');
+
+// Debug logs
+const debug      = require('debug')('biblys-cloud:app');
+const mongoDebug = require('debug')('biblys-cloud:mongo');
 
 // Models
 const Customer = require('./models/customer');
@@ -24,7 +28,7 @@ const Customer = require('./models/customer');
 // MongoDB
 const mongoUrl = config.MONGO_URL || process.env.MONGO_URL || 'mongodb://localhost/biblys-cloud';
 mongoose.connect(mongoUrl, { useMongoClient: true });
-process.stdout.write(`Mongoose connected to ${mongoUrl}\n`);
+mongoDebug(`Connected to ${mongoUrl}`);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -59,6 +63,8 @@ app.use(function(request, response, next) {
       secure: request.secure,
       signed: true
     });
+
+    debug(`User logged from Axys with UID ${request.query.UID} `);
 
     // Remove UID from URL
     const destination = url.parse(request.url).pathname;

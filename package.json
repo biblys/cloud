@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./bin/www",
-    "dev": "./node_modules/nodemon/bin/nodemon.js"
+    "dev": "DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js"
   },
   "repository": {
     "type": "git",
