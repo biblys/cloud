@@ -7,7 +7,9 @@ const config  = require('../config.js');
 const Invoice = require('../models/invoice');
 const Payment = require('../models/payment');
 
-router.get('/:id', function(request, response, next) {
+const auth = require('../middlewares/auth');
+
+router.get('/:id', auth, function(request, response, next) {
 
   Invoice.findById(request.params.id).populate('customer').exec(function(err, invoice) {
 
@@ -16,11 +18,6 @@ router.get('/:id', function(request, response, next) {
       err.status = 404;
       next(err);
       return;
-    }
-
-    // User not logged in
-    if (typeof response.locals.customer === 'undefined') {
-      return response.render('login', { url: request.protocol + '://' + request.get('host') + request.originalUrl });
     }
 
     // If Invoice is not for this user

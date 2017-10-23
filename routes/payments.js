@@ -5,7 +5,9 @@ const config  = require('../config.js');
 const Invoice = require('../models/invoice');
 const Payment = require('../models/payment');
 
-router.post('/create', function(request, response, next) {
+const auth = require('../middlewares/auth');
+
+router.post('/create', auth, function(request, response, next) {
 
   Invoice.findById(request.body.invoiceId, function(err, invoice) {
 
