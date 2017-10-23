@@ -22,13 +22,19 @@
         data-amount="{{ invoice.amount }}"
         data-email="{{ invoice.customer.email }}"
         data-name="Biblys"
-        data-label="Payer"
+        data-label="Payer par carte"
         data-description="Facture n° {{ invoice.number }}"
         data-image="/images/biblys-logo-stripe.jpg"
         data-locale="auto"
         data-currency="eur">
       </script>
     </form>
+
+    {% if iban %}
+
+      <p>Payer par virement : IBAN {{ iban }}</p>
+
+    {% endif %}
 
   {% endif %}
 {% endblock %}

@@ -30,7 +30,8 @@ router.get('/:id', auth, function(request, response, next) {
 
     response.render('invoice', {
       invoice: invoice,
-      stripe_public_key: config.STRIPE_PUBLIC_KEY
+      stripe_public_key: config.STRIPE_PUBLIC_KEY,
+      iban: config.IBAN
     });
 
   });
