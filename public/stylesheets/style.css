@@ -26,6 +26,10 @@ h1 {
   padding: 25px;
 }
 
+.addToAxysMenu {
+  display: none;
+}
+
 @media (min-width: 768px) {
   body {
     padding: 25px 50px;
