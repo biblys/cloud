@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const router  = express.Router();
 const config  = require('../config.js');
@@ -14,6 +16,11 @@ router.get('/:id', function(request, response, next) {
       err.status = 404;
       next(err);
       return;
+    }
+
+    // User not logged in
+    if (typeof response.locals.customer === 'undefined') {
+      return response.render('login', { url: request.protocol + '://' + request.get('host') + request.originalUrl });
     }
 
     // If Invoice is not for this user

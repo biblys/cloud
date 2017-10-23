@@ -6,7 +6,7 @@
     cd biblys-cloud
     npm install
     cp config.dist.js config.js
-  
+
 ## Running
 
     npm start
@@ -24,6 +24,9 @@
 * Tests!
 
 ## Changelog
+
+### DEV
+* Display login invite when accessing invoice page while unlogged
 
 ### 1.2.0 (2017-10-22)
 * Add Axys support
