@@ -17,15 +17,15 @@ router.post('/create', auth, function(request, response, next) {
     }
 
     // Get Stripe key from config and token from request
-    const stripe = require('stripe')(config.STRIPE_SECRET_KEY),
-      token = request.body.stripeToken;
+    const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+    const token = request.body.stripeToken;
 
     // Get Stripe to charge card
     stripe.charges.create({
       amount: invoice.amount,
       currency: 'eur',
       description: `Facture n° ${invoice.number}`,
-      source: token,
+      source: token
     }, function(err, charge) {
 
       if (err) return next(err);

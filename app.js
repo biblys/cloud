@@ -79,7 +79,7 @@ app.use(function(request, response, next) {
 app.use(function(req, res, next) {
   if (req.signedCookies.userUid !== 'undefined') {
     res.locals.userUid = req.signedCookies.userUid;
-    request(`https://axys.me/call.php?key=${config.AXYS_SECRET_KEY}&uid=${req.signedCookies.userUid}&format=json`, function (error, response, body) {
+    request(`https://axys.me/call.php?key=${config.AXYS_SECRET_KEY}&uid=${req.signedCookies.userUid}&format=json`, function(error, response, body) {
 
       if (error) {
         throw error;
@@ -94,8 +94,8 @@ app.use(function(req, res, next) {
 
       // If another error occurs
       if (response.statusCode != 200) {
-        const json = JSON.parse(body),
-          err = new Error(`Axys error ${response.statusCode}: ${json.error}`);
+        const json = JSON.parse(body);
+        const err = new Error(`Axys error ${response.statusCode}: ${json.error}`);
         next(err);
         return;
       }

@@ -9,6 +9,9 @@ describe('Linters', function() {
     'app.js'
   ];
 
+  // JSCS
+  require('mocha-jscs')(paths);
+
   // ESlint
   require('mocha-eslint')(paths);
 });
