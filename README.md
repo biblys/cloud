@@ -28,7 +28,7 @@
 
 ## Changelog
 
-### DEV
+### 1.3.0 (2017-10-24)
 * Display login invite when accessing invoice page while unlogged
 * Display transfer info on invoice page if available
 * Add admin dashboard
