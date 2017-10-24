@@ -6,21 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+
+    {% if customer %}
+      <div class="user-zone">
+        Connecté en tant que <strong>{{ customer.name }}</strong>
+        {% if customer.isAdmin %}[<a href="/admin/">admin</a>]{% endif %}
+        [<a href="/logout">déconnexion</a>]
+      </div>
+    {% else %}
+      <div class="user-zone">
+        <strong>Anonyme</strong>
+        [<a href="/login">connexion</a>]
+      </div>
+    {% endif %}
+
     <div class="page">
       <a href="https://www.biblys.fr/">
         <img src="/images/biblys-logo.png" alt="Biblys" class="main-logo">
       </a>
+
       {% block body %}{% endblock %}
     </div>
-    <script type="text/javascript" src="https://axys.me/widget.php{% if userUid %}?UID={{ userUid }}{% endif %}"></script>
-
-    {% if customer and customer.isAdmin %}
-      <ul class="addToAxysMenu">
-        <li>
-          <a href="/admin/">administration</a>
-        </li>
-      </ul>
-    {% endif %}
 
   </body>
 </html>
