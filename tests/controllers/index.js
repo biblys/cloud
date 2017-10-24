@@ -7,12 +7,12 @@ const server   = require('../../bin/www');
 chai.should();
 chai.use(chaiHttp);
 
-describe('GET /', function() {
+after(function(done) {
+  server.close();
+  done();
+});
 
-  afterEach(function(done) {
-    server.close();
-    done();
-  });
+describe('GET /', function() {
 
   it('should display home page on / GET', function(done) {
     chai.request(server)
@@ -22,6 +22,17 @@ describe('GET /', function() {
         done();
       });
   });
+});
+
+describe('GET /login', function() {
+  it('should display login page');
+});
+
+describe('GET /logout', function() {
+  it('should display logout page');
+});
+
+describe('GET /admin/', function() {
 
   it('should prevent access /admin/ for unlogged visitor', function(done) {
     chai.request(server)
@@ -31,4 +42,8 @@ describe('GET /', function() {
         done();
       });
   });
+
+  it('should prevent access for logged non-admin user');
+
+  it('should display admin page for admin user');
 });
