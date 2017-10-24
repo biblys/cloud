@@ -14,9 +14,9 @@ const config = require('./config.js');
 const app = express();
 
 // Controllers
-const index    = require('./routes/index');
-const invoices = require('./routes/invoices');
-const payments = require('./routes/payments');
+const index    = require('./controllers/index');
+const invoices = require('./controllers/invoices');
+const payments = require('./controllers/payments');
 
 // Debug logs
 const debug      = require('debug')('biblys-cloud:app');

@@ -2,7 +2,7 @@
 
 describe('Linters', function() {
   const paths = [
-    'routes',
+    'controllers',
     'middlewares',
     'models',
     'tests',
