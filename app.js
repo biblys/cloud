@@ -6,6 +6,7 @@ const bodyParser   = require('body-parser');
 const mongoose     = require('mongoose');
 const url          = require('url');
 const request      = require('request');
+const http         = require('http');
 
 // Load config file
 const config = require('./config.js');
@@ -143,4 +144,12 @@ app.use(function(err, req, res) {
   res.render('error');
 });
 
-module.exports = app;
+// Create HTTP server
+const server = http.createServer(app);
+
+server.on('close', function() {
+  mongoose.connection.close();
+  mongoDebug(`Closing connection to ${mongoUrl}`);
+});
+
+module.exports = server;
