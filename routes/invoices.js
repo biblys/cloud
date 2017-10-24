@@ -5,10 +5,18 @@ const router  = express.Router();
 const config  = require('../config.js');
 
 const Invoice = require('../models/invoice');
-const Payment = require('../models/payment');
 
-const auth = require('../middlewares/auth');
+const auth      = require('../middlewares/auth');
+const authAdmin = require('../middlewares/auth');
 
+// New
+router.get('/new', auth, authAdmin, function(request, response) {
+
+  response.render('invoices/new');
+
+});
+
+// Show
 router.get('/:id', auth, function(request, response, next) {
 
   Invoice.findById(request.params.id).populate('customer').exec(function(err, invoice) {
