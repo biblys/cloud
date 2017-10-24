@@ -1,0 +1,29 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Créer une facture{% endblock %}
+
+{% block body %}
+
+<h1>Créer une facture</h1>
+
+<form class="model-form" action="/invoices/create" method="post">
+
+  <div class="field">
+    <label for="number">Number:</label>
+    <input type="text" name="number" id="number">
+  </div>
+
+  <div class="field">
+    <label for="customer">Customer:</label>
+    <input type="text" name="customer" id="customer">
+  </div>
+
+  <div class="field">
+    <label for="amount">Amount:</label>
+    <input type="number" name="amount" id="amount">
+  </div>
+
+  <button type="submit" class="submit-button">Save</button>
+</form>
+
+{% endblock %}

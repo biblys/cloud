@@ -6,14 +6,17 @@
     cd biblys-cloud
     npm install
     cp config.dist.js config.js
-  
-## Running
+
+## Running in production
 
     npm start
 
+## Running in development
+
+    npm run dev
+
 ## Todo
 
-* Add information for transfer payment
 * Admin: generate invoice
 * Admin: generate customer
 * Save cards
@@ -24,6 +27,12 @@
 * Tests!
 
 ## Changelog
+
+### 1.3.0 (2017-10-24)
+* Display login invite when accessing invoice page while unlogged
+* Display transfer info on invoice page if available
+* Add admin dashboard
+* Add nodemon as a depency and `npm run dev` script
 
 ### 1.2.0 (2017-10-22)
 * Add Axys support

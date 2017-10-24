@@ -5,7 +5,9 @@ const config  = require('../config.js');
 const Invoice = require('../models/invoice');
 const Payment = require('../models/payment');
 
-router.post('/create', function(request, response, next) {
+const auth = require('../middlewares/auth');
+
+router.post('/create', auth, function(request, response, next) {
 
   Invoice.findById(request.body.invoiceId, function(err, invoice) {
 
@@ -15,15 +17,15 @@ router.post('/create', function(request, response, next) {
     }
 
     // Get Stripe key from config and token from request
-    const stripe = require('stripe')(config.STRIPE_SECRET_KEY),
-      token = request.body.stripeToken;
+    const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+    const token = request.body.stripeToken;
 
     // Get Stripe to charge card
     stripe.charges.create({
       amount: invoice.amount,
       currency: 'eur',
       description: `Facture n° ${invoice.number}`,
-      source: token,
+      source: token
     }, function(err, charge) {
 
       if (err) return next(err);

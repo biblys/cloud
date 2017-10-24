@@ -6,6 +6,7 @@ const bodyParser   = require('body-parser');
 const mongoose     = require('mongoose');
 const url          = require('url');
 const request      = require('request');
+const http         = require('http');
 
 // Load config file
 const config = require('./config.js');
@@ -14,9 +15,13 @@ const config = require('./config.js');
 const app = express();
 
 // Controllers
-const index = require('./routes/index');
-const invoices = require('./routes/invoices');
-const payments = require('./routes/payments');
+const index    = require('./controllers/index');
+const invoices = require('./controllers/invoices');
+const payments = require('./controllers/payments');
+
+// Debug logs
+const debug      = require('debug')('biblys-cloud:app');
+const mongoDebug = require('debug')('biblys-cloud:mongo');
 
 // Models
 const Customer = require('./models/customer');
@@ -24,7 +29,7 @@ const Customer = require('./models/customer');
 // MongoDB
 const mongoUrl = config.MONGO_URL || process.env.MONGO_URL || 'mongodb://localhost/biblys-cloud';
 mongoose.connect(mongoUrl, { useMongoClient: true });
-process.stdout.write(`Mongoose connected to ${mongoUrl}\n`);
+mongoDebug(`Connected to ${mongoUrl}`);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -60,6 +65,8 @@ app.use(function(request, response, next) {
       signed: true
     });
 
+    debug(`User logged from Axys with UID ${request.query.UID} `);
+
     // Remove UID from URL
     const destination = url.parse(request.url).pathname;
     response.redirect(destination);
@@ -73,7 +80,7 @@ app.use(function(request, response, next) {
 app.use(function(req, res, next) {
   if (req.signedCookies.userUid !== 'undefined') {
     res.locals.userUid = req.signedCookies.userUid;
-    request(`https://axys.me/call.php?key=${config.AXYS_SECRET_KEY}&uid=${req.signedCookies.userUid}&format=json`, function (error, response, body) {
+    request(`https://axys.me/call.php?key=${config.AXYS_SECRET_KEY}&uid=${req.signedCookies.userUid}&format=json`, function(error, response, body) {
 
       if (error) {
         throw error;
@@ -88,8 +95,8 @@ app.use(function(req, res, next) {
 
       // If another error occurs
       if (response.statusCode != 200) {
-        const json = JSON.parse(body),
-          err = new Error(`Axys error ${response.statusCode}: ${json.error}`);
+        const json = JSON.parse(body);
+        const err = new Error(`Axys error ${response.statusCode}: ${json.error}`);
         next(err);
         return;
       }
@@ -137,4 +144,12 @@ app.use(function(err, req, res) {
   res.render('error');
 });
 
-module.exports = app;
+// Create HTTP server
+const server = http.createServer(app);
+
+server.on('close', function() {
+  mongoose.connection.close();
+  mongoDebug(`Closing connection to ${mongoUrl}`);
+});
+
+module.exports = server;
