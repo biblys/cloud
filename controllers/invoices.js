@@ -36,7 +36,7 @@ router.get('/:id', auth, function(request, response, next) {
       return;
     }
 
-    response.render('invoice', {
+    response.render('invoices/show', {
       invoice: invoice,
       stripePublicKey: config.STRIPE_PUBLIC_KEY,
       iban: config.IBAN
