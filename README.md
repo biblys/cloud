@@ -29,6 +29,7 @@
 
 ### DEV
 * Add an admin page to create a new invoice
+* Add an admin page that lists all invoices
 * Revamp login system without Axys widget
 * Add tests
 

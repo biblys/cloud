@@ -56,6 +56,15 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
 
 });
 
+// List
+router.get('/', auth, authAdmin, function(request, response, next) {
+
+  Invoice.find({}).populate('customer').exec().then(function(invoices) {
+    response.render('invoices/list', { invoices: invoices });
+  }).catch((err) => next(err));
+
+});
+
 // Show
 router.get('/:id', auth, function(request, response, next) {
 
