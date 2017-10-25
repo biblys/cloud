@@ -27,7 +27,7 @@
 
 ## Changelog
 
-### DEV
+### 1.4.0 (2017-10-25)
 * Add an admin page to create a new invoice
 * Add an admin page that lists all invoices
 * Revamp login system without Axys widget
