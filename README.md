@@ -17,7 +17,6 @@
 
 ## Todo
 
-* Admin: generate invoice
 * Admin: generate customer
 * Save cards
 * Admin: show revenue
@@ -27,6 +26,12 @@
 * Tests!
 
 ## Changelog
+
+### 1.4.0 (2017-10-25)
+* Add an admin page to create a new invoice
+* Add an admin page that lists all invoices
+* Revamp login system without Axys widget
+* Add tests
 
 ### 1.3.0 (2017-10-24)
 * Display login invite when accessing invoice page while unlogged

@@ -5,6 +5,9 @@ const CustomerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  axysSessionUid: {
+    type: String
+  },
   isAdmin: {
     type: mongoose.Schema.Types.Boolean,
     default: false,

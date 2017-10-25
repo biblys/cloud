@@ -1,0 +1,38 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Factures{% endblock %}
+
+{% block body %}
+
+  <h1>Factures</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Numéro</th>
+        <th>Client</th>
+        <th>Montant</th>
+        <th>Crée le</th>
+        <th>Payée le</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for invoice in invoices %}
+        <tr>
+          <td>
+            <a href="/invoices/{{ invoice._id }}">{{ invoice.number }}</a>
+          </td>
+          <td>{{ invoice.customer.name }}</td>
+          <td>{{ invoice.createdAt|date('d/m/Y') }}</td>
+          <td>{{ invoice.amount|currency }}</td>
+          <td>
+            {% if invoice.payed %}
+              {{ invoice.payedAt|date('d/m/Y') }}
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

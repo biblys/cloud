@@ -9,11 +9,25 @@ const auth = require('../middlewares/auth');
 
 router.post('/create', auth, function(request, response, next) {
 
-  Invoice.findById(request.body.invoiceId, function(err, invoice) {
+  Invoice.findById(request.body.invoiceId).populate('customer').exec(function(err, invoice) {
 
     if (invoice === null) {
-      next(err);
-      return;
+      const err = new Error('No invoice with that id');
+      err.status = 400;
+      return next(err);
+    }
+
+    // If Invoice is not for this user
+    if (!invoice.customer._id.equals(response.locals.customer._id) && !response.locals.customer.isAdmin) {
+      const err = new Error('You are not authorized to pay for this invoice.');
+      err.status = 403;
+      return next(err);
+    }
+
+    if (typeof request.body.stripeToken === 'undefined') {
+      const err = new Error('Stripe token not provided.');
+      err.status = 400;
+      return next(err);
     }
 
     // Get Stripe key from config and token from request
