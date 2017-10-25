@@ -24,8 +24,7 @@ router.get('/:id', auth, function(request, response, next) {
     if (invoice === null) {
       const err = new Error('Invoice Not Found');
       err.status = 404;
-      next(err);
-      return;
+      return next(err);
     }
 
     // If Invoice is not for this user
