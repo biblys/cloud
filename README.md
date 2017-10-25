@@ -17,7 +17,6 @@
 
 ## Todo
 
-* Admin: generate invoice
 * Admin: generate customer
 * Save cards
 * Admin: show revenue
@@ -29,6 +28,7 @@
 ## Changelog
 
 ### DEV
+* Add an admin page to create a new invoice
 * Revamp login system without Axys widget
 * Add tests
 

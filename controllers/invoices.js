@@ -21,6 +21,41 @@ router.get('/new', auth, authAdmin, function(request, response, next) {
 
 });
 
+// Create
+router.post('/create', auth, authAdmin, function(request, response, next) {
+
+  if (typeof request.body.number === 'undefined') {
+    const error = new Error('Le champ numéro est obligatoire.');
+    error.status = 400;
+    return next(error);
+  }
+
+  if (typeof request.body.customer === 'undefined') {
+    const error = new Error('Le champ client est obligatoire.');
+    error.status = 400;
+    return next(error);
+  }
+
+  if (typeof request.body.amount === 'undefined') {
+    const error = new Error('Le champ montant est obligatoire.');
+    error.status = 400;
+    return next(error);
+  }
+
+  const invoice = new Invoice({
+    number: request.body.number,
+    customer: request.body.customer,
+    amount: request.body.amount,
+    payed: false
+  });
+  invoice.save().then(function(invoice) {
+    response.redirect(`/invoices/${invoice._id}`);
+  }).catch(function(error) {
+    return next(error);
+  });
+
+});
+
 // Show
 router.get('/:id', auth, function(request, response, next) {
 

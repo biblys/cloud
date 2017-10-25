@@ -112,6 +112,80 @@ describe('Invoices controller', function() {
     });
   });
 
+  describe('POST /invoices/create', function() {
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .post('/invoices/create')
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .post('/invoices/create')
+        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 400 if number field is missing', function(done) {
+      chai.request(server)
+        .post('/invoices/create')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ numéro est obligatoire.');
+          done();
+        });
+    });
+
+    it('should return 400 if customer field is missing', function(done) {
+      chai.request(server)
+        .post('/invoices/create')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: 1145 })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ client est obligatoire.');
+          done();
+        });
+    });
+
+    it('should return 400 if amount field is missing', function(done) {
+      chai.request(server)
+        .post('/invoices/create')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: 1145, customer: customer._id })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ montant est obligatoire.');
+          done();
+        });
+    });
+
+    it('should redirect admin user after invoice creation', function(done) {
+      chai.request(server)
+        .post('/invoices/create')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: 1145, customer: customer._id, amount: 999 })
+        .end(function(err, res) {
+          res.should.redirect;
+          done();
+        });
+    });
+  });
+
   describe('GET /invoices/xxx', function() {
 
     it('should return 401 for unlogged user', function(done) {
