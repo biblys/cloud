@@ -4,7 +4,7 @@
   "description": "Biblys Cloud",
   "main": "./bin/www",
   "scripts": {
-    "test": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test node_modules/mocha/bin/mocha tests --recursive",
+    "test": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test node_modules/mocha/bin/mocha tests --recursive --timeout 5000",
     "start": "node ./bin/www",
     "dev": "DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig"
   },

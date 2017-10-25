@@ -31,8 +31,7 @@ router.get('/:id', auth, function(request, response, next) {
     if (!invoice.customer._id.equals(response.locals.customer._id) && !response.locals.customer.isAdmin) {
       const err = new Error('You are not authorized to see this invoice.');
       err.status = 403;
-      next(err);
-      return;
+      return next(err);
     }
 
     response.render('invoices/show', {
