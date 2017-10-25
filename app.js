@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const mongoose     = require('mongoose');
 const http         = require('http');
+const twig         = require('twig');
 
 // Load config file
 const config = require('./config.js');
@@ -33,6 +34,12 @@ mongoDebug(`Connected to ${mongoUrl}`);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'twig');
+
+twig.extendFilter('currency', function(value) {
+  value /= 100;
+  value = value.toFixed(2).toString().replace('.', ',');
+  return `${value} €`;
+});
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
