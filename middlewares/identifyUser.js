@@ -5,11 +5,11 @@ const Customer = require('../models/customer');
 // Identify user from Axys session UID
 module.exports = function(req, res, next) {
 
-  if (typeof req.signedCookies.userUid === 'undefined') {
+  if (typeof req.cookies.userUid === 'undefined') {
     return next();
   }
 
-  Customer.findOne({ axysSessionUid: req.signedCookies.userUid }, function(err, customer) {
+  Customer.findOne({ axysSessionUid: req.cookies.userUid }, function(err, customer) {
 
     if (err) return next(err);
 

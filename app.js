@@ -25,8 +25,9 @@ const axysReturn   = require('./middlewares/axysReturn');
 const identifyUser = require('./middlewares/identifyUser');
 
 // MongoDB
-const mongoUrl = config.MONGO_URL || process.env.MONGO_URL || 'mongodb://localhost/biblys-cloud';
+const mongoUrl = process.env.MONGO_URL || config.MONGO_URL || 'mongodb://localhost/biblys-cloud';
 mongoose.connect(mongoUrl, { useMongoClient: true });
+mongoose.Promise = global.Promise;
 mongoDebug(`Connected to ${mongoUrl}`);
 
 // view engine setup

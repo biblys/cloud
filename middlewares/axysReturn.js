@@ -54,8 +54,7 @@ module.exports = function(req, res, next) {
         // Set cookie
         res.cookie('userUid', req.query.UID, {
           httpOnly: true,
-          secure: request.secure,
-          signed: true
+          secure: request.secure
         });
 
         debug(`User logged from Axys with UID ${req.query.UID} `);
