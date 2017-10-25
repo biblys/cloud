@@ -9,18 +9,22 @@
 <form class="model-form" action="/invoices/create" method="post">
 
   <div class="field">
-    <label for="number">Number:</label>
-    <input type="text" name="number" id="number">
+    <label for="number">Numéro :</label>
+    <input type="text" name="number" id="number" required>
   </div>
 
   <div class="field">
-    <label for="customer">Customer:</label>
-    <input type="text" name="customer" id="customer">
+    <label for="customer">Client :</label>
+    <select name="customer" id="customer" required>
+      {% for customer in customers %}
+        <option value="{{ customer._id }}">{{ customer.name }}</option>
+      {% endfor %}
+    </select>
   </div>
 
   <div class="field">
-    <label for="amount">Amount:</label>
-    <input type="number" name="amount" id="amount">
+    <label for="amount">Montant (centimes) :</label>
+    <input type="number" name="amount" id="amount" required>
   </div>
 
   <button type="submit" class="submit-button">Save</button>

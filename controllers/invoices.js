@@ -4,15 +4,20 @@ const express = require('express');
 const router  = express.Router();
 const config  = require('../config.js');
 
-const Invoice = require('../models/invoice');
+const Customer = require('../models/customer');
+const Invoice  = require('../models/invoice');
 
 const auth      = require('../middlewares/auth');
-const authAdmin = require('../middlewares/auth');
+const authAdmin = require('../middlewares/authAdmin');
 
 // New
-router.get('/new', auth, authAdmin, function(request, response) {
+router.get('/new', auth, authAdmin, function(request, response, next) {
 
-  response.render('invoices/new');
+  Customer.find({}).exec().then(function(customers) {
+    response.render('invoices/new', { customers: customers });
+  }).catch(function(err) {
+    return next(err);
+  });
 
 });
 

@@ -74,6 +74,44 @@ describe('Invoices controller', function() {
     });
   });
 
+  describe('GET /invoices/new', function() {
+
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .get('/invoices/new')
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .get('/invoices/new')
+        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 200 for admin user', function(done) {
+      chai.request(server)
+        .get('/invoices/new')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(200);
+          res.should.be.html;
+          res.text.should.include('Créer une facture');
+          done();
+        });
+    });
+  });
+
   describe('GET /invoices/xxx', function() {
 
     it('should return 401 for unlogged user', function(done) {
