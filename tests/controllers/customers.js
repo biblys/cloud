@@ -12,40 +12,10 @@ const debug = require('debug')('biblys-cloud:test');
 chai.should();
 chai.use(chaiHttp);
 
-let customer;
-let admin;
-let customerInvoice;
-let otherInvoice;
+const { customer, admin, customerInvoice, otherInvoice } = require('../test-data.js');
 
 describe('Customers controller', function() {
   before(function(done) {
-
-    customer = new Customer({
-      name: 'A Customer',
-      axysSessionUid: 'xxxx',
-      email: 'customer@biblys.fr',
-      axysId: '1134'
-    });
-
-    admin = new Customer({
-      name: 'An admin',
-      axysSessionUid: 'yyyy',
-      email: 'adminr@biblys.fr',
-      axysId: '1135',
-      isAdmin: true
-    });
-
-    customerInvoice = new Invoice({
-      number: 1234,
-      amount: 999,
-      payed: false
-    });
-
-    otherInvoice = new Invoice({
-      number: 1235,
-      amount: 999,
-      payed: false
-    });
 
     customer.save().then(function() {
       return admin.save();
