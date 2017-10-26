@@ -1,0 +1,26 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Clients{% endblock %}
+
+{% block body %}
+
+  <h1>Clients</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>E-mail</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customer in customers %}
+        <tr>
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.email }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
