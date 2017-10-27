@@ -17,21 +17,18 @@ router.get('/new', auth, authAdmin, function(request, response) {
 router.post('/create', auth, authAdmin, function(request, response, next) {
 
   if (typeof request.body.axysId === 'undefined') {
-    const error = new Error('Le champ ID Axys est obligatoire.');
-    error.status = 400;
-    return next(error);
+    response.status(400);
+    return next('Le champ ID Axys est obligatoire.');
   }
 
   if (typeof request.body.name === 'undefined') {
-    const error = new Error('Le champ Nom est obligatoire.');
-    error.status = 400;
-    return next(error);
+    response.status(400);
+    return next('Le champ Nom est obligatoire.');
   }
 
   if (typeof request.body.email === 'undefined') {
-    const error = new Error('Le champ E-mail est obligatoire.');
-    error.status = 400;
-    return next(error);
+    response.status(400);
+    return next('Le champ E-mail est obligatoire.');
   }
 
   const customer = new Customer({

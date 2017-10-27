@@ -14,22 +14,19 @@ router.post('/create', auth, function(request, response, next) {
   Invoice.findById(request.body.invoiceId).populate('customer').exec(function(err, invoice) {
 
     if (invoice === null) {
-      const err = new Error('No invoice with that id');
-      err.status = 400;
-      return next(err);
+      response.status(400);
+      return next('No invoice with that id');
     }
 
     // If Invoice is not for this user
     if (!invoice.customer._id.equals(response.locals.customer._id) && !response.locals.customer.isAdmin) {
-      const err = new Error('You are not authorized to pay for this invoice.');
-      err.status = 403;
-      return next(err);
+      response.status(403);
+      return next('You are not authorized to pay for this invoice.');
     }
 
     if (typeof request.body.stripeToken === 'undefined') {
-      const err = new Error('Stripe token not provided.');
-      err.status = 400;
-      return next(err);
+      response.status(400);
+      return next('Stripe token not provided.');
     }
 
     // Get Stripe key from config and token from request

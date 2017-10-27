@@ -6,6 +6,7 @@ const server   = require('../../bin/www');
 
 const Customer = require('../../models/customer');
 const Invoice  = require('../../models/invoice');
+const Payment  = require('../../models/payment');
 
 const debug = require('debug')('biblys-cloud:test');
 
@@ -68,6 +69,8 @@ describe('Payments controller', function() {
   after(function(done) {
     Customer.collection.drop().then(function() {
       return Invoice.collection.drop();
+    }).then(function() {
+      return Payment.collection.drop();
     }).then(function() {
       done();
     }).catch(function(error) {
