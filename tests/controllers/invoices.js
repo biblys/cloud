@@ -239,7 +239,7 @@ describe('Invoices controller', function() {
 
     it('should return 404 for non existing invoice', function(done) {
       chai.request(server)
-        .get('/invoices/xxx')
+        .get(`/invoices/${mongoose.Types.ObjectId()}`)
         .set('Cookie', `userUid=${customer.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(404);
