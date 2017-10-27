@@ -23,12 +23,17 @@
             <a href="/invoices/{{ invoice._id }}">{{ invoice.number }}</a>
           </td>
           <td>{{ invoice.customer.name }}</td>
-          <td>{{ invoice.createdAt|date('d/m/Y') }}</td>
           <td>{{ invoice.amount|currency }}</td>
+          <td>{{ invoice.createdAt|date('d/m/Y') }}</td>
           <td>
             {% if invoice.payed %}
               {{ invoice.payedAt|date('d/m/Y') }}
             {% endif %}
+          </td>
+          <td>
+            <form method="post" action="/invoices/{{ invoice._id }}/delete">
+              <button>suppr.</button>
+            </form>
           </td>
         </tr>
       {% endfor %}

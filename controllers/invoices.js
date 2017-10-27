@@ -93,4 +93,24 @@ router.get('/:id', auth, function(request, response, next) {
 
 });
 
+// Show
+router.post('/:id/delete', auth, authAdmin, function(request, response, next) {
+
+  Invoice.findById(request.params.id).exec().then(function(invoice) {
+
+    if (invoice === null) {
+      const err = new Error('Invoice Not Found');
+      err.status = 404;
+      throw err;
+    }
+
+    return Invoice.remove({ _id: invoice._id }).exec();
+
+  }).then(function() {
+    response.redirect('/invoices/');
+  }).catch(function(error) {
+    return next(error);
+  });
+});
+
 module.exports = router;
