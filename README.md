@@ -26,7 +26,7 @@
 
 ## Changelog
 
-### DEV
+### 1.5.0 (2017-10-27)
 * Add an admin page to create a new customer
 * Add an admin page that lists all customers
 * Add an admin page that lists all payments
