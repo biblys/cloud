@@ -17,7 +17,7 @@
 
 ## Todo
 
-* Save cards
+* Reuse saved cards
 * Generate complete invoices
 * Allow customers to see all their invoices
 * Support tickets
@@ -30,7 +30,8 @@
 * Add an admin page to create a new customer
 * Add an admin page that lists all customers
 * Add an admin page that lists all payments
-* Add a delete option for inbox
+* Add a delete option for invoices
+* Save Stripe customer ID on payment
 
 ### 1.4.0 (2017-10-25)
 * Add an admin page to create a new invoice

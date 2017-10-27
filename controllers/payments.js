@@ -1,9 +1,11 @@
 const express = require('express');
 const router  = express.Router();
 const config  = require('../config.js');
+const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
 
-const Invoice = require('../models/invoice');
-const Payment = require('../models/payment');
+const Customer = require('../models/customer');
+const Invoice =  require('../models/invoice');
+const Payment =  require('../models/payment');
 
 const auth      = require('../middlewares/auth');
 const authAdmin = require('../middlewares/authAdmin');
@@ -16,32 +18,49 @@ router.post('/create', auth, function(request, response, next) {
 
     if (invoice === null) {
       response.status(400);
-      return next('No invoice with that id');
+      throw 'No invoice with that id';
     }
 
     // If Invoice is not for this user
     if (!invoice.customer._id.equals(response.locals.customer._id) && !response.locals.customer.isAdmin) {
       response.status(403);
-      return next('You are not authorized to pay for this invoice.');
+      throw 'You are not authorized to pay for this invoice.';
     }
 
     if (typeof request.body.stripeToken === 'undefined') {
       response.status(400);
-      return next('Stripe token not provided.');
+      throw 'Stripe token not provided.';
     }
 
     this.invoice = invoice;
 
-    // Get Stripe key from config and token from request
-    const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
-    const token = request.body.stripeToken;
+    // Create Stripe customer
+    return stripe.customers.create({
+      email: invoice.customer.email,
+      source: request.body.stripeToken
+    });
+
+  }).then((stripeCustomer) => {
+
+    this.stripeCustomerId = stripeCustomer.id;
+
+    // Get customer for current invoice
+    return Customer.findById(this.invoice.customer._id).exec();
+
+  }).then((customer) => {
+
+    // Save stripeCustomerId to local customer
+    customer.stripeCustomerId = this.stripeCustomerId;
+    return customer.save();
+
+  }).then((customer) => {
 
     // Get Stripe to charge card
     return stripe.charges.create({
-      amount: invoice.amount,
+      amount: this.invoice.amount,
       currency: 'eur',
-      description: `Facture n° ${invoice.number}`,
-      source: token
+      description: `Facture n° ${this.invoice.number}`,
+      customer: customer.stripeCustomerId
     });
 
   }).then((charge) => {
