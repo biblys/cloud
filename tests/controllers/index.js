@@ -97,7 +97,7 @@ describe('Index controller', function() {
 
   describe('GET /admin/', function() {
 
-    it('should prevent access /admin/ for unlogged visitor', function(done) {
+    it('should prevent access for unlogged visitor', function(done) {
       chai.request(server)
         .get('/admin/')
         .end(function(err, res) {
@@ -122,7 +122,7 @@ describe('Index controller', function() {
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(200);
-          res.text.should.include('Admin Dashboard');
+          res.text.should.include('Administration');
           done();
         });
     });

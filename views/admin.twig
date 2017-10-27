@@ -1,7 +1,9 @@
 {% extends 'layout.twig' %}
 
+{% block title %}Administration{% endblock %}
+
 {% block body %}
-  <h1>Admin Dashboard</h1>
+  <h1>Administration</h1>
 
   <h2>Clients</h2>
   <ul>
@@ -17,6 +19,6 @@
 
   <h2>Paiements</h2>
   <ul>
-    <li>Lister (todo)</li>
+    <li><a href="/payments/">Lister</a></li>
   </ul>
 {% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Paiements{% endblock %}
+
+{% block body %}
+
+  <h1>Paiements</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Facture</th>
+        <th>Montant</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for payment in payments %}
+        <tr>
+          <td>{{ payment.customer.name }}</td>
+          <td>
+            <a href="/invoices/{{ payment.invoice._id }}">{{ payment.invoice.number }}</a>
+          </td>
+          <td>{{ payment.amount|currency }}</td>
+          <td>{{ payment.createdAt|date('d/m/Y') }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

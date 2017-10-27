@@ -17,19 +17,20 @@
 
 ## Todo
 
-* Admin: generate customer
+* Admin: delete invoice
 * Save cards
-* Admin: show revenue
 * Generate complete invoices
-* List all invoices for a customer
+* Allow customers to see all their invoices
 * Support tickets
-* Tests!
+* Tests for middlewares
+* Webpack
 
 ## Changelog
 
 ### DEV
 * Add an admin page to create a new customer
 * Add an admin page that lists all customers
+* Add an admin page that lists all payments
 
 ### 1.4.0 (2017-10-25)
 * Add an admin page to create a new invoice

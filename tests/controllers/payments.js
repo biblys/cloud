@@ -76,6 +76,43 @@ describe('Payments controller', function() {
     });
   });
 
+  describe('GET /payments/', function() {
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .get('/payments/')
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .get('/payments/')
+        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 200 for admin user', function(done) {
+      chai.request(server)
+        .get('/payments/')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(200);
+          res.should.be.html;
+          res.text.should.include('Paiements');
+          done();
+        });
+    });
+  });
+
   describe('POST /payments/create', function() {
 
     it('should return 401 for unlogged user', function(done) {

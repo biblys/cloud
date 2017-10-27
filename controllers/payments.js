@@ -5,8 +5,10 @@ const config  = require('../config.js');
 const Invoice = require('../models/invoice');
 const Payment = require('../models/payment');
 
-const auth = require('../middlewares/auth');
+const auth      = require('../middlewares/auth');
+const authAdmin = require('../middlewares/authAdmin');
 
+// Create a new invoice
 router.post('/create', auth, function(request, response, next) {
 
   Invoice.findById(request.body.invoiceId).populate('customer').exec(function(err, invoice) {
@@ -67,6 +69,15 @@ router.post('/create', auth, function(request, response, next) {
     });
 
   });
+
+});
+
+// List all invoices (admin)
+router.get('/', auth, authAdmin, function(request, response, next) {
+
+  Payment.find({}).populate('customer').populate('invoice').exec().then(function(payments) {
+    response.render('payments/list', { payments: payments });
+  }).catch((err) => next(err));
 
 });
 
