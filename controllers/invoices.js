@@ -7,10 +7,12 @@ const config  = require('../config.js');
 const Customer = require('../models/customer');
 const Invoice  = require('../models/invoice');
 
-const auth      = require('../middlewares/auth');
-const authAdmin = require('../middlewares/authAdmin');
+const auth       = require('../middlewares/auth');
+const authAdmin  = require('../middlewares/authAdmin');
+const getInvoice = require('../middlewares/getInvoice');
 
 // New
+
 router.get('/new', auth, authAdmin, function(request, response, next) {
 
   Customer.find({}).exec().then(function(customers) {
@@ -22,24 +24,22 @@ router.get('/new', auth, authAdmin, function(request, response, next) {
 });
 
 // Create
+
 router.post('/create', auth, authAdmin, function(request, response, next) {
 
   if (typeof request.body.number === 'undefined') {
-    const error = new Error('Le champ numéro est obligatoire.');
-    error.status = 400;
-    return next(error);
+    response.status(400);
+    return next('Le champ numéro est obligatoire.');
   }
 
   if (typeof request.body.customer === 'undefined') {
-    const error = new Error('Le champ client est obligatoire.');
-    error.status = 400;
-    return next(error);
+    response.status(400);
+    return next('Le champ client est obligatoire.');
   }
 
   if (typeof request.body.amount === 'undefined') {
-    const error = new Error('Le champ montant est obligatoire.');
-    error.status = 400;
-    return next(error);
+    response.status(400);
+    return next('Le champ montant est obligatoire.');
   }
 
   const invoice = new Invoice({
@@ -57,6 +57,7 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
 });
 
 // List
+
 router.get('/', auth, authAdmin, function(request, response, next) {
 
   Invoice.find({}).populate('customer').exec().then(function(invoices) {
@@ -65,32 +66,26 @@ router.get('/', auth, authAdmin, function(request, response, next) {
 
 });
 
-// Show
-router.get('/:id', auth, function(request, response, next) {
+// Show invoice
 
-  Invoice.findById(request.params.id).populate('customer').exec(function(err, invoice) {
+router.get('/:id', auth, getInvoice, function(request, response) {
 
-    if (invoice === null) {
-      const err = new Error('Invoice Not Found');
-      err.status = 404;
-      return next(err);
-    }
-
-    // If Invoice is not for this user
-    if (!invoice.customer._id.equals(response.locals.customer._id) && !response.locals.customer.isAdmin) {
-      const err = new Error('You are not authorized to see this invoice.');
-      err.status = 403;
-      return next(err);
-    }
-
-    response.render('invoices/show', {
-      invoice: invoice,
-      stripePublicKey: config.STRIPE_PUBLIC_KEY,
-      iban: config.IBAN
-    });
-
+  response.render('invoices/show', {
+    stripePublicKey: config.STRIPE_PUBLIC_KEY,
+    iban: config.IBAN
   });
 
+});
+
+// Delete
+
+router.post('/:id/delete', auth, authAdmin, getInvoice, function(request, response, next) {
+
+  Invoice.remove({ _id: request.invoice._id }).exec().then(function() {
+    response.redirect('/invoices/');
+  }).catch(function(error) {
+    return next(error);
+  });
 });
 
 module.exports = router;

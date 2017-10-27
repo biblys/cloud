@@ -14,9 +14,10 @@ const config = require('./config.js');
 const app = express();
 
 // Controllers
-const index    = require('./controllers/index');
-const invoices = require('./controllers/invoices');
-const payments = require('./controllers/payments');
+const customers = require('./controllers/customers');
+const index     = require('./controllers/index');
+const invoices  = require('./controllers/invoices');
+const payments  = require('./controllers/payments');
 
 // Debug logs
 const mongoDebug = require('debug')('biblys-cloud:mongo');
@@ -66,6 +67,7 @@ app.use(axysReturn);
 app.use(identifyUser);
 
 app.use('/', index);
+app.use('/customers', customers);
 app.use('/invoices', invoices);
 app.use('/payments', payments);
 

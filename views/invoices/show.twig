@@ -5,7 +5,7 @@
 {% block body %}
   <h1>Facture n° {{ invoice.number }}</h1>
 
-  <p>{{ invoice.customer.name }}</p>
+  <p>{{ invoice.customer.name }} - {{ invoice.amount|currency }}</p>
 
   {% if invoice.payed %}
 

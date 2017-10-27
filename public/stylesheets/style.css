@@ -35,6 +35,12 @@ h1 {
   display: none;
 }
 
+/* Override Milligram */
+form,
+button {
+  margin-bottom: 0;
+}
+
 @media (min-width: 768px) {
   body {
     padding: 25px 50px;

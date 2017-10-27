@@ -29,8 +29,7 @@ module.exports = function(req, res, next) {
     // If another error occurs
     if (response.statusCode != 200) {
       const json = JSON.parse(body);
-      const err = new Error(`Axys error ${response.statusCode}: ${json.error}`);
-      return next(err);
+      return next(`Axys error ${response.statusCode}: ${json.error}`);
     }
 
     // Else is response has status 200
@@ -42,8 +41,7 @@ module.exports = function(req, res, next) {
 
       // If no customer found, throw error
       if (!customer) {
-        const err = new Error(`User ${json.user_email} is unknown.`);
-        return next(err);
+        return next(`User ${json.user_email} is unknown.`);
       }
 
       // Associate Axys session UID with customer

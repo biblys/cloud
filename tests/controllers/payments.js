@@ -6,6 +6,7 @@ const server   = require('../../bin/www');
 
 const Customer = require('../../models/customer');
 const Invoice  = require('../../models/invoice');
+const Payment  = require('../../models/payment');
 
 const debug = require('debug')('biblys-cloud:test');
 
@@ -69,10 +70,49 @@ describe('Payments controller', function() {
     Customer.collection.drop().then(function() {
       return Invoice.collection.drop();
     }).then(function() {
+      return Payment.collection.drop();
+    }).then(function() {
       done();
     }).catch(function(error) {
       debug(error);
       done();
+    });
+  });
+
+  describe('GET /payments/', function() {
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .get('/payments/')
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .get('/payments/')
+        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 200 for admin user', function(done) {
+      chai.request(server)
+        .get('/payments/')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(200);
+          res.should.be.html;
+          res.text.should.include('Paiements');
+          done();
+        });
     });
   });
 

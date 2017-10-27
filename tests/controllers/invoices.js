@@ -3,6 +3,7 @@
 const chai     = require('chai');
 const chaiHttp = require('chai-http');
 const server   = require('../../bin/www');
+const mongoose = require('mongoose');
 
 const Customer = require('../../models/customer');
 const Invoice  = require('../../models/invoice');
@@ -238,7 +239,7 @@ describe('Invoices controller', function() {
 
     it('should return 404 for non existing invoice', function(done) {
       chai.request(server)
-        .get('/invoices/xxx')
+        .get(`/invoices/${mongoose.Types.ObjectId()}`)
         .set('Cookie', `userUid=${customer.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(404);
@@ -284,4 +285,54 @@ describe('Invoices controller', function() {
         });
     });
   });
+
+  // POST /invoices/:id/delete
+
+  describe('POST /invoices/:id/delete', function() {
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/delete`)
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/delete`)
+        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 404 for non existing invoice', function(done) {
+      chai.request(server)
+        .post(`/invoices/${mongoose.Types.ObjectId()}/delete`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(404);
+          res.should.be.html;
+          res.text.should.include('Invoice Not Found');
+          done();
+        });
+    });
+
+    it('should redirect to invoices list after deletion', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/delete`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(200);
+          done();
+        });
+    });
+  });
+
 });

@@ -17,15 +17,21 @@
 
 ## Todo
 
-* Admin: generate customer
-* Save cards
-* Admin: show revenue
+* Reuse saved cards
 * Generate complete invoices
-* List all invoices for a customer
+* Allow customers to see all their invoices
 * Support tickets
-* Tests!
+* Tests for middlewares
+* Webpack
 
 ## Changelog
+
+### 1.5.0 (2017-10-27)
+* Add an admin page to create a new customer
+* Add an admin page that lists all customers
+* Add an admin page that lists all payments
+* Add a delete option for invoices
+* Save Stripe customer ID on payment
 
 ### 1.4.0 (2017-10-25)
 * Add an admin page to create a new invoice

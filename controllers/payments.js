@@ -1,72 +1,102 @@
 const express = require('express');
 const router  = express.Router();
 const config  = require('../config.js');
+const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
 
-const Invoice = require('../models/invoice');
-const Payment = require('../models/payment');
+const Customer = require('../models/customer');
+const Invoice =  require('../models/invoice');
+const Payment =  require('../models/payment');
 
-const auth = require('../middlewares/auth');
+const auth      = require('../middlewares/auth');
+const authAdmin = require('../middlewares/authAdmin');
+
+// Create a new payment
 
 router.post('/create', auth, function(request, response, next) {
 
-  Invoice.findById(request.body.invoiceId).populate('customer').exec(function(err, invoice) {
+  Invoice.findById(request.body.invoiceId).populate('customer').exec().then((invoice) => {
 
     if (invoice === null) {
-      const err = new Error('No invoice with that id');
-      err.status = 400;
-      return next(err);
+      response.status(400);
+      throw 'No invoice with that id';
     }
 
     // If Invoice is not for this user
     if (!invoice.customer._id.equals(response.locals.customer._id) && !response.locals.customer.isAdmin) {
-      const err = new Error('You are not authorized to pay for this invoice.');
-      err.status = 403;
-      return next(err);
+      response.status(403);
+      throw 'You are not authorized to pay for this invoice.';
     }
 
     if (typeof request.body.stripeToken === 'undefined') {
-      const err = new Error('Stripe token not provided.');
-      err.status = 400;
-      return next(err);
+      response.status(400);
+      throw 'Stripe token not provided.';
     }
 
-    // Get Stripe key from config and token from request
-    const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
-    const token = request.body.stripeToken;
+    this.invoice = invoice;
 
-    // Get Stripe to charge card
-    stripe.charges.create({
-      amount: invoice.amount,
-      currency: 'eur',
-      description: `Facture n° ${invoice.number}`,
-      source: token
-    }, function(err, charge) {
-
-      if (err) return next(err);
-
-      // Create payment
-      const payment = new Payment({
-        invoice:  invoice._id,
-        customer: response.locals.customer._id,
-        amount:   charge.amount
-      });
-      payment.save(function(err) {
-        if (err) return next(err);
-
-        // Update invoice.payed & invoice.payedAt
-        invoice.payed   = true;
-        invoice.payedAt = Date.now();
-        invoice.save(function(err, invoice) {
-          if (err) return next(err);
-
-          // Redirect to payement page
-          response.redirect(`/invoices/${invoice._id}`);
-        });
-      });
-
+    // Create Stripe customer
+    return stripe.customers.create({
+      email: invoice.customer.email,
+      source: request.body.stripeToken
     });
 
+  }).then((stripeCustomer) => {
+
+    this.stripeCustomerId = stripeCustomer.id;
+
+    // Get customer for current invoice
+    return Customer.findById(this.invoice.customer._id).exec();
+
+  }).then((customer) => {
+
+    // Save stripeCustomerId to local customer
+    customer.stripeCustomerId = this.stripeCustomerId;
+    return customer.save();
+
+  }).then((customer) => {
+
+    // Get Stripe to charge card
+    return stripe.charges.create({
+      amount: this.invoice.amount,
+      currency: 'eur',
+      description: `Facture n° ${this.invoice.number}`,
+      customer: customer.stripeCustomerId
+    });
+
+  }).then((charge) => {
+
+    // Create payment
+    const payment = new Payment({
+      invoice:  request.body.invoiceId,
+      customer: response.locals.customer._id,
+      amount:   charge.amount
+    });
+    return payment.save();
+
+  }).then(() => {
+
+    // Update invoice.payed & invoice.payedAt
+    this.invoice.payed   = true;
+    this.invoice.payedAt = Date.now();
+    return this.invoice.save();
+
+  }).then((invoice) => {
+
+    // Redirect to payement page
+    response.redirect(`/invoices/${invoice._id}`);
+
+  }).catch(function(error) {
+    return next(error);
   });
+
+});
+
+// List all invoices (admin)
+router.get('/', auth, authAdmin, function(request, response, next) {
+
+  Payment.find({}).populate('customer').populate('invoice').exec().then(function(payments) {
+    response.render('payments/list', { payments: payments });
+  }).catch((err) => next(err));
 
 });
 
