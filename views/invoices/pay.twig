@@ -1,0 +1,24 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Paiement de la facture {{ invoice.number }}{% endblock %}
+
+{% block body %}
+
+  <h1>Paiement</h1>
+
+  <p>Facture n° {{ invoice.number }} pour {{ invoice.customer.name }}</p>
+
+  <form action="/payments/new" method="post">
+
+    <div>
+      {% for card in cards %}
+        <input type="radio" name="stripeCard" value="{{ card.id }}" id="{{ card.id }}" required{% if loop.index == 1 %} checked{% endif %}>
+        <label class="label-inline" for="{{ card.id }}">{{ card.brand }} **** **** **** {{ card.last4 }} (Exp. {{ card.exp_month }}/{{ card.exp_year }})</label><br>
+      {% endfor %}
+    </div>
+
+    <button>Payer {{ invoice.amount|currency }}</button>
+
+  </form>
+
+{% endblock %}

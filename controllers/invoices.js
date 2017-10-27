@@ -2,6 +2,7 @@
 
 const express = require('express');
 const router  = express.Router();
+const stripe  = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const Customer = require('../models/customer');
 const Invoice  = require('../models/invoice');
@@ -76,7 +77,25 @@ router.get('/:id', auth, getInvoice, function(request, response) {
 
 });
 
-// Delete
+// Pay invoice
+
+router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
+
+  if (typeof request.invoice.customer.stripeCustomerId === 'undefined') {
+    return response.redirect('/stripe/create-customer');
+  }
+
+  stripe.customers.listCards(request.invoice.customer.stripeCustomerId).then((customer) => {
+    response.render('invoices/pay', {
+      cards: customer.data
+    });
+  }).catch((error) => {
+    return next(error);
+  });
+
+});
+
+// Delete invoice
 
 router.post('/:id/delete', auth, authAdmin, getInvoice, function(request, response, next) {
 

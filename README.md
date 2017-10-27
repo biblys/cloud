@@ -34,6 +34,7 @@
 * Replace `config.js` file with `.env` for configuration
 * Remove unused fields from Customer model
 * Update users properties from Axys on connection
+* Add a payment page that lists Stripe saved cards
 
 ### 1.6.0 (2017-11-11)
 * Use User model to identify visitor instead of Customer
