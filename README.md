@@ -17,6 +17,8 @@
 
 ## Todo
 
+* Add User model
+* Use User model to identify user and associate with Customer
 * Reuse saved cards
 * Generate complete invoices
 * Allow customers to see all their invoices
@@ -25,6 +27,9 @@
 * Webpack
 
 ## Changelog
+
+### DEV
+* Add a Customer edit form
 
 ### 1.5.0 (2017-10-27)
 * Add an admin page to create a new customer

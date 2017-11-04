@@ -18,6 +18,10 @@
         <tr>
           <td>{{ customer.name }}</td>
           <td>{{ customer.email }}</td>
+          <td>
+            <a class="button" href="/customers/{{ customer.id }}/edit">
+              modif.
+            </a>
         </tr>
       {% endfor %}
     </tbody>

@@ -9,11 +9,13 @@ const auth      = require('../middlewares/auth');
 const authAdmin = require('../middlewares/authAdmin');
 
 // New
+
 router.get('/new', auth, authAdmin, function(request, response) {
   response.render('customers/new');
 });
 
 // Create
+
 router.post('/create', auth, authAdmin, function(request, response, next) {
 
   if (typeof request.body.axysId === 'undefined') {
@@ -45,12 +47,68 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
 });
 
 // List
+
 router.get('/', auth, authAdmin, function(request, response, next) {
 
   Customer.find({}).exec().then(function(customers) {
     response.render('customers/list', { customers: customers });
   }).catch((err) => next(err));
 
+});
+
+// Edit
+
+router.get('/:id/edit', auth, authAdmin, function(request, response, next) {
+
+  Customer.findById(request.params.id).exec().then(function(customer) {
+
+    if (customer === null) {
+      response.status(404);
+      throw 'Customer Not Found';
+    }
+
+    response.render('customers/edit', { customer: customer });
+  }).catch((err) => next(err));
+
+});
+
+// Update
+
+router.post('/:id/update', auth, authAdmin, function(request, response, next) {
+
+  Customer.findById(request.params.id).exec().then(function(customer) {
+
+    if (customer === null) {
+      response.status(404);
+      throw 'Customer Not Found';
+    }
+
+    if (typeof request.body.axysId === 'undefined') {
+      response.status(400);
+      throw 'Le champ ID Axys est obligatoire.';
+    }
+
+    if (typeof request.body.name === 'undefined') {
+      response.status(400);
+      throw 'Le champ Nom est obligatoire.';
+    }
+
+    if (typeof request.body.email === 'undefined') {
+      response.status(400);
+      throw 'Le champ E-mail est obligatoire.';
+    }
+
+    customer.axysId = request.body.axysId;
+    customer.name   = request.body.name;
+    customer.email  = request.body.email;
+
+    return customer.save();
+
+  }).then(function() {
+    response.redirect('/customers/');
+  }).catch(function(error) {
+    return next(error);
+  });
 });
 
 module.exports = router;
