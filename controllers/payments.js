@@ -22,7 +22,7 @@ router.post('/create', auth, function(request, response, next) {
     }
 
     // If Invoice is not for this user
-    if (!invoice.customer._id.equals(response.locals.customer._id) && !response.locals.customer.isAdmin) {
+    if (!invoice.customer._id.equals(response.locals.currentCustomer._id) && !response.locals.currentCustomer.isAdmin) {
       response.status(403);
       throw 'You are not authorized to pay for this invoice.';
     }
@@ -68,7 +68,7 @@ router.post('/create', auth, function(request, response, next) {
     // Create payment
     const payment = new Payment({
       invoice:  request.body.invoiceId,
-      customer: response.locals.customer._id,
+      customer: response.locals.currentCustomer._id,
       amount:   charge.amount
     });
     return payment.save();

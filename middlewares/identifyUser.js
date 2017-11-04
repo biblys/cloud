@@ -15,8 +15,8 @@ module.exports = function(req, res, next) {
 
     if (!customer) return next();
 
-    req.customer = customer;
-    res.locals.customer = customer;
+    req.currentCustomer = customer;
+    res.locals.currentCustomer = customer;
 
     return next();
   });

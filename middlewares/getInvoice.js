@@ -17,7 +17,7 @@ module.exports = function(request, response, next) {
     }
 
     // If Invoice is not for this user
-    if (!invoice.customer._id.equals(response.locals.customer._id) && !response.locals.customer.isAdmin) {
+    if (!invoice.customer._id.equals(response.locals.currentCustomer._id) && !response.locals.currentCustomer.isAdmin) {
       response.status(403);
       throw 'You are not authorized to see this invoice.';
     }
