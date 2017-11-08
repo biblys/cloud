@@ -17,8 +17,8 @@
 
 ## Todo
 
-* Add User model
 * Use User model to identify user and associate with Customer
+* Remove unused fields from Customer model
 * Reuse saved cards
 * Generate complete invoices
 * Allow customers to see all their invoices
