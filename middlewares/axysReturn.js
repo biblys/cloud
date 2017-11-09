@@ -5,7 +5,7 @@ const request      = require('request');
 
 const config = require('../config.js');
 
-const Customer = require('../models/customer');
+const User = require('../models/user');
 
 const debug      = require('debug')('biblys-cloud:app');
 
@@ -36,17 +36,17 @@ module.exports = function(req, res, next) {
     const json = JSON.parse(body);
 
     // Find customer for this axys id
-    Customer.findOne({ axysId: json.user_id }, function(err, customer) {
+    User.findOne({ axysId: json.user_id }, function(err, user) {
       if (err) throw err;
 
       // If no customer found, throw error
-      if (!customer) {
+      if (!user) {
         return next(`User ${json.user_email} is unknown.`);
       }
 
       // Associate Axys session UID with customer
-      customer.axysSessionUid = req.query.UID;
-      customer.save(function(err) {
+      user.axysSessionUid = req.query.UID;
+      user.save(function(err) {
         if (err) return next(err);
 
         // Set cookie

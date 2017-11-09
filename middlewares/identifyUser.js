@@ -1,6 +1,6 @@
 'use strict';
 
-const Customer = require('../models/customer');
+const User = require('../models/user');
 
 // Identify user from Axys session UID
 module.exports = function(req, res, next) {
@@ -9,15 +9,15 @@ module.exports = function(req, res, next) {
     return next();
   }
 
-  Customer.findOne({ axysSessionUid: req.cookies.userUid }, function(err, customer) {
+  User.findOne({ axysSessionUid: req.cookies.userUid }).populate('customer').exec().then(function(user) {
 
-    if (err) return next(err);
+    if (!user) return next();
 
-    if (!customer) return next();
-
-    req.currentCustomer = customer;
-    res.locals.currentCustomer = customer;
+    req.currentUser = user;
+    res.locals.currentUser = user;
 
     return next();
+  }).catch(function(error) {
+    return next(error);
   });
 };

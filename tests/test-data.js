@@ -1,21 +1,34 @@
 'use strict';
 
+const User     = require('../models/user');
 const Customer = require('../models/customer');
 const Invoice  = require('../models/invoice');
 
-const customer = new Customer({
-  name: 'A Customer',
+const user = new User({
+  name: 'A user',
   axysSessionUid: 'xxxx',
-  email: 'customer@biblys.fr',
+  email: 'user@biblys.fr',
   axysId: '1134'
 });
 
-const admin = new Customer({
+const admin = new User({
   name: 'An admin',
   axysSessionUid: 'yyyy',
-  email: 'adminr@biblys.fr',
+  email: 'admin@biblys.fr',
   axysId: '1135',
   isAdmin: true
+});
+
+const customer = new Customer({
+  name: 'A Customer',
+  email: 'customer@biblys.fr',
+  axysId: '1135'
+});
+
+const otherCustomer = new Customer({
+  name: 'Another Customer',
+  email: 'another.customer@biblys.fr',
+  axysId: '1136'
 });
 
 const customerInvoice = new Invoice({
@@ -30,4 +43,4 @@ const otherInvoice = new Invoice({
   payed: false
 });
 
-module.exports = { customer, admin, customerInvoice, otherInvoice };
+module.exports = { user, admin, customer, otherCustomer, customerInvoice, otherInvoice };

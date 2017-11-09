@@ -16,8 +16,10 @@ module.exports = function(request, response, next) {
       throw 'Invoice Not Found';
     }
 
+    console.log(response.locals.currentUser.isAdmin, invoice.customer, response.locals.currentUser.customer);
+
     // If Invoice is not for this user
-    if (!invoice.customer._id.equals(response.locals.currentCustomer._id) && !response.locals.currentCustomer.isAdmin) {
+    if (!response.locals.currentUser.isAdmin && !invoice.customer._id.equals(response.locals.currentUser.customer._id)) {
       response.status(403);
       throw 'You are not authorized to see this invoice.';
     }

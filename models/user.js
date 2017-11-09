@@ -10,8 +10,7 @@ const UserSchema = new mongoose.Schema({
   },
   isAdmin: {
     type: mongoose.Schema.Types.Boolean,
-    default: false,
-    required: true
+    default: false
   },
   name: {
     type: String,
@@ -23,8 +22,7 @@ const UserSchema = new mongoose.Schema({
   },
   customer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Customer',
-    required: true
+    ref: 'Customer'
   }
 }, {
   timestamps: true

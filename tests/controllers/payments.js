@@ -66,18 +66,18 @@ describe('Payments controller', function() {
     });
   });
 
-  after(function(done) {
-    Customer.collection.drop().then(function() {
-      return Invoice.collection.drop();
-    }).then(function() {
-      return Payment.collection.drop();
-    }).then(function() {
-      done();
-    }).catch(function(error) {
-      debug(error);
-      done();
-    });
-  });
+  // after(function(done) {
+  //   Customer.collection.remove({}).then(function() {
+  //     return Invoice.collection.remove({});
+  //   }).then(function() {
+  //     return Payment.collection.remove({});
+  //   }).then(function() {
+  //     done();
+  //   }).catch(function(error) {
+  //     debug(error);
+  //     done();
+  //   });
+  // });
 
   describe('GET /payments/', function() {
     it('should return 401 for unlogged user', function(done) {

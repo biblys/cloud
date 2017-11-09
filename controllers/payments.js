@@ -22,7 +22,7 @@ router.post('/create', auth, function(request, response, next) {
     }
 
     // If Invoice is not for this user
-    if (!invoice.customer._id.equals(response.locals.currentCustomer._id) && !response.locals.currentCustomer.isAdmin) {
+    if (!invoice.customer._id.equals(response.locals.currentUser.customer._id) && !response.locals.currentUser.isAdmin) {
       response.status(403);
       throw 'You are not authorized to pay for this invoice.';
     }

@@ -5,6 +5,7 @@ const chaiHttp = require('chai-http');
 const server   = require('../../bin/www');
 const mongoose = require('mongoose');
 
+const User     = require('../../models/user');
 const Customer = require('../../models/customer');
 const Invoice  = require('../../models/invoice');
 
@@ -13,12 +14,15 @@ const debug = require('debug')('biblys-cloud:test');
 chai.should();
 chai.use(chaiHttp);
 
-const { customer, admin, customerInvoice, otherInvoice } = require('../test-data.js');
+const { user, admin, customer, customerInvoice, otherInvoice } = require('../test-data.js');
 
 describe('Customers controller', function() {
   before(function(done) {
 
     customer.save().then(function() {
+      user.customer = customer._id;
+      return user.save();
+    }).then(function() {
       return admin.save();
     }).then(function() {
       customerInvoice.customer = customer._id;
@@ -34,16 +38,18 @@ describe('Customers controller', function() {
     });
   });
 
-  after(function(done) {
-    Customer.collection.drop().then(function() {
-      return Invoice.collection.drop();
-    }).then(function() {
-      done();
-    }).catch(function(error) {
-      debug(error);
-      done();
-    });
-  });
+  // after(function(done) {
+  //   Customer.collection.remove({}).then(function() {
+  //     return User.collection.remove({});
+  //   }).then(function() {
+  //     return Invoice.collection.remove({});
+  //   }).then(function() {
+  //     done();
+  //   }).catch(function(error) {
+  //     debug(error);
+  //     done();
+  //   });
+  // });
 
   // GET /customers/new
 
@@ -63,7 +69,7 @@ describe('Customers controller', function() {
     it('should return 403 for non admin user', function(done) {
       chai.request(server)
         .get('/customers/new')
-        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(403);
           res.should.be.html;
@@ -103,7 +109,7 @@ describe('Customers controller', function() {
     it('should return 403 for non admin user', function(done) {
       chai.request(server)
         .post('/customers/create')
-        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(403);
           res.should.be.html;
@@ -183,7 +189,7 @@ describe('Customers controller', function() {
     it('should return 403 for non admin user', function(done) {
       chai.request(server)
         .get('/customers/')
-        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(403);
           res.should.be.html;
@@ -207,7 +213,7 @@ describe('Customers controller', function() {
 
   // GET /customers/edit
 
-  describe('GET /customers/edit', function() {
+  describe('GET /customers/:id/edit', function() {
 
     it('should return 401 for unlogged user', function(done) {
       chai.request(server)
@@ -223,7 +229,7 @@ describe('Customers controller', function() {
     it('should return 403 for non admin user', function(done) {
       chai.request(server)
         .get(`/customers/${customer._id}/edit`)
-        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(403);
           res.should.be.html;
@@ -275,7 +281,7 @@ describe('Customers controller', function() {
     it('should return 403 for non admin user', function(done) {
       chai.request(server)
         .post(`/customers/${customer._id}/update`)
-        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(403);
           res.should.be.html;
