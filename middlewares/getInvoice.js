@@ -5,18 +5,19 @@ const Invoice = require('../models/invoice');
 // Identify user from Axys session UID
 module.exports = function(request, response, next) {
 
-  if (typeof request.params.id === 'undefined') {
+  // Get invoice id from GET or POST param
+  const invoiceId = request.params.id || request.body.invoiceId;
+
+  if (typeof invoiceId === 'undefined') {
     return next();
   }
 
-  Invoice.findById(request.params.id).populate('customer').exec().then(function(invoice) {
+  Invoice.findById(invoiceId).populate('customer').exec().then(function(invoice) {
 
     if (invoice === null) {
       response.status(404);
       throw 'Invoice Not Found';
     }
-
-    console.log(response.locals.currentUser.isAdmin, invoice.customer, response.locals.currentUser.customer);
 
     // If Invoice is not for this user
     if (!response.locals.currentUser.isAdmin && !invoice.customer._id.equals(response.locals.currentUser.customer._id)) {

@@ -4,80 +4,14 @@ const chai     = require('chai');
 const chaiHttp = require('chai-http');
 const server   = require('../../bin/www');
 
-const Customer = require('../../models/customer');
-const Invoice  = require('../../models/invoice');
-const Payment  = require('../../models/payment');
-
-const debug = require('debug')('biblys-cloud:test');
-
 const config  = require('../../config.js');
 
 chai.should();
 chai.use(chaiHttp);
 
-let customer;
-let admin;
-let customerInvoice;
-let otherInvoice;
+const { user, admin, customerInvoice, otherInvoice } = require('../test-data.js');
 
 describe('Payments controller', function() {
-  before(function(done) {
-
-    customer = new Customer({
-      name: 'A Customer',
-      axysSessionUid: 'xxxx',
-      email: 'customer@biblys.fr',
-      axysId: '1134'
-    });
-
-    admin = new Customer({
-      name: 'An admin',
-      axysSessionUid: 'yyyy',
-      email: 'adminr@biblys.fr',
-      axysId: '1135',
-      isAdmin: true
-    });
-
-    customerInvoice = new Invoice({
-      number: 1234,
-      amount: 999,
-      payed: false
-    });
-
-    otherInvoice = new Invoice({
-      number: 1235,
-      amount: 999,
-      payed: false
-    });
-
-    customer.save().then(function() {
-      return admin.save();
-    }).then(function() {
-      customerInvoice.customer = customer._id;
-      return customerInvoice.save();
-    }).then(function() {
-      otherInvoice.customer = admin._id;
-      return otherInvoice.save();
-    }).then(function() {
-      done();
-    }).catch(function(error) {
-      debug(error);
-      done();
-    });
-  });
-
-  // after(function(done) {
-  //   Customer.collection.remove({}).then(function() {
-  //     return Invoice.collection.remove({});
-  //   }).then(function() {
-  //     return Payment.collection.remove({});
-  //   }).then(function() {
-  //     done();
-  //   }).catch(function(error) {
-  //     debug(error);
-  //     done();
-  //   });
-  // });
 
   describe('GET /payments/', function() {
     it('should return 401 for unlogged user', function(done) {
@@ -94,7 +28,7 @@ describe('Payments controller', function() {
     it('should return 403 for non admin user', function(done) {
       chai.request(server)
         .get('/payments/')
-        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(403);
           res.should.be.html;
@@ -132,12 +66,12 @@ describe('Payments controller', function() {
     it('should return 403 for unauthorized user', function(done) {
       chai.request(server)
         .post('/payments/create')
-        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
         .send({ invoiceId: otherInvoice._id })
         .end(function(err, res) {
           res.should.have.status(403);
           res.should.be.html;
-          res.text.should.include('You are not authorized to pay for this invoice.');
+          res.text.should.include('You are not authorized to see this invoice.');
           done();
         });
     });
@@ -145,7 +79,7 @@ describe('Payments controller', function() {
     it('should return 400 when not sending stripeToken', function(done) {
       chai.request(server)
         .post('/payments/create')
-        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
         .send({ invoiceId: customerInvoice._id })
         .end(function(err, res) {
           res.should.have.status(400);
@@ -169,7 +103,7 @@ describe('Payments controller', function() {
       }, function(err, token) {
         chai.request(server)
           .post('/payments/create')
-          .set('Cookie', `userUid=${customer.axysSessionUid}`)
+          .set('Cookie', `userUid=${user.axysSessionUid}`)
           .send({ invoiceId: customerInvoice._id, stripeToken: token.id })
           .end(function(err, res) {
             res.should.redirect;

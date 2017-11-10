@@ -5,51 +5,12 @@ const chaiHttp = require('chai-http');
 const server   = require('../../bin/www');
 const mongoose = require('mongoose');
 
-const User     = require('../../models/user');
-const Customer = require('../../models/customer');
-const Invoice  = require('../../models/invoice');
-
-const debug = require('debug')('biblys-cloud:test');
-
 chai.should();
 chai.use(chaiHttp);
 
-const { user, admin, customer, customerInvoice, otherInvoice } = require('../test-data.js');
+const { user, admin, customer } = require('../test-data.js');
 
 describe('Customers controller', function() {
-  before(function(done) {
-
-    customer.save().then(function() {
-      user.customer = customer._id;
-      return user.save();
-    }).then(function() {
-      return admin.save();
-    }).then(function() {
-      customerInvoice.customer = customer._id;
-      return customerInvoice.save();
-    }).then(function() {
-      otherInvoice.customer = admin._id;
-      return otherInvoice.save();
-    }).then(function() {
-      done();
-    }).catch(function(error) {
-      debug(error);
-      done();
-    });
-  });
-
-  // after(function(done) {
-  //   Customer.collection.remove({}).then(function() {
-  //     return User.collection.remove({});
-  //   }).then(function() {
-  //     return Invoice.collection.remove({});
-  //   }).then(function() {
-  //     done();
-  //   }).catch(function(error) {
-  //     debug(error);
-  //     done();
-  //   });
-  // });
 
   // GET /customers/new
 
@@ -164,7 +125,7 @@ describe('Customers controller', function() {
       chai.request(server)
         .post('/customers/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ axysId: 1145, name: 'A Customer', email: 'customer@biblys.fr' })
+        .send({ axysId: 1145, name: 'A Customer', email: 'created-customer@biblys.fr' })
         .end(function(err, res) {
           res.should.redirect;
           done();

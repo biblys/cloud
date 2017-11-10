@@ -4,10 +4,6 @@ const chai     = require('chai');
 const chaiHttp = require('chai-http');
 const server   = require('../../bin/www');
 
-const User = require('../../models/user');
-
-const debug = require('debug')('biblys-cloud:test');
-
 chai.should();
 chai.use(chaiHttp);
 
@@ -20,26 +16,6 @@ after(function(done) {
 const { user, admin } = require('../test-data.js');
 
 describe('Index controller', function() {
-  before(function(done) {
-
-    user.save().then(function() {
-      return admin.save();
-    }).then(function() {
-      done();
-    }).catch(function(error) {
-      debug(error);
-      done();
-    });
-  });
-
-  // after(function(done) {
-  //   User.collection.remove({}).then(function() {
-  //     done();
-  //   }).catch(function(error) {
-  //     debug(error);
-  //     done();
-  //   });
-  // });
 
   describe('GET /', function() {
 
