@@ -17,8 +17,9 @@
 
 ## Todo
 
-* User edition
+* Save user in payment model
 * Remove unused fields from Customer model
+* Update users props from Axys on connection
 * Reuse saved cards
 * Generate complete invoices
 * Allow customers to see all their invoices
@@ -29,7 +30,8 @@
 ## Changelog
 
 ### DEV
-* Add a Customer edit form
+* Add an admin page to edit a customer
+* Add admin pages to create, list and edit users
 
 ### 1.5.0 (2017-10-27)
 * Add an admin page to create a new customer

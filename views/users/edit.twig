@@ -1,0 +1,13 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Modifier un utilisateur{% endblock %}
+
+{% block body %}
+
+  <h1>Modifier un utilisateur</h1>
+
+  <form class="model-form" action="/users/{{ user._id }}/update" method="post">
+    {% include 'users/_form.twig' %}
+  </form>
+
+{% endblock %}

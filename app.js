@@ -18,6 +18,7 @@ const customers = require('./controllers/customers');
 const index     = require('./controllers/index');
 const invoices  = require('./controllers/invoices');
 const payments  = require('./controllers/payments');
+const users     = require('./controllers/users');
 
 // Debug logs
 const mongoDebug = require('debug')('biblys-cloud:mongo');
@@ -70,6 +71,7 @@ app.use('/', index);
 app.use('/customers', customers);
 app.use('/invoices', invoices);
 app.use('/payments', payments);
+app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
