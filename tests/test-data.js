@@ -55,40 +55,33 @@ const otherInvoice = new Invoice({
 });
 
 before(function(done) {
-  customer.save().then(function() {
+  (async function() {
+    await customer.save();
     user.customer = customer._id;
-    return user.save();
-  }).then(function() {
-    return admin.save();
-  }).then(function() {
-    return otherCustomer.save();
-  }).then(function() {
+    await user.save();
+    await admin.save();
+    await otherCustomer.save();
     customerInvoice.customer = customer._id;
-    return customerInvoice.save();
-  }).then(function() {
+    await customerInvoice.save();
     otherInvoice.customer = otherCustomer._id;
-    return otherInvoice.save();
-  }).then(function() {
+    await otherInvoice.save();
     deletableInvoice.customer = customer._id;
-    return deletableInvoice.save();
-  }).then(function() {
+    await deletableInvoice.save();
     done();
-  }).catch(function(error) {
+  })().catch(function(error) {
     debug(error);
     done();
   });
 });
 
 after(function(done) {
-  User.remove({}).then(function() {
-    return Customer.remove({});
-  }).then(function() {
-    return Invoice.remove({});
-  }).then(function() {
-    return Payment.remove({});
-  }).then(function() {
+  (async function() {
+    await User.remove({});
+    await Customer.remove({});
+    await Invoice.remove({});
+    await Payment.remove({});
     done();
-  }).catch(function(error) {
+  })().catch(function(error) {
     debug(error);
     done();
   });
