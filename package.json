@@ -1,6 +1,6 @@
 {
   "name": "biblys-cloud",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Biblys Cloud",
   "main": "./bin/www",
   "scripts": {
@@ -18,6 +18,9 @@
     "url": "https://github.com/iwazaru/biblys-cloud/issues"
   },
   "homepage": "https://github.com/iwazaru/biblys-cloud#readme",
+  "engines": {
+    "node": ">=8.0"
+  },
   "dependencies": {
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",

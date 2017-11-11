@@ -1,0 +1,30 @@
+
+<div class="field">
+  <label for="axysId">ID Axys :</label>
+  <input type="text" name="axysId" id="axysId" value="{{ user.axysId }}" required>
+</div>
+
+<div class="field">
+  <label for="name">Nom :</label>
+  <input type="text" name="name" id="name" value="{{ user.name }}" required>
+</div>
+
+<div class="field">
+  <label for="email">E-mail :</label>
+  <input type="email" name="email" id="email" value="{{ user.email }}" required>
+</div>
+
+<div class="field">
+  <label for="customer">Client :</label>
+  <select name="customer" id="customer" required>
+    <option></option>
+    {% if user.customer %}
+      <option value="{{ user.customer._id }}" selected>{{ user.customer.name }}</option>
+    {% endif %}
+    {% for customer in customers %}
+      <option value="{{ customer._id }}">{{ customer.name }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<button type="submit" class="submit-button">Save</button>

@@ -18,7 +18,12 @@
     <tbody>
       {% for payment in payments %}
         <tr>
-          <td>{{ payment.customer.name }}</td>
+          <td>
+            {{ payment.customer.name }}
+            {% if payment.user %}
+              <br><small>{{ payment.user.name }}</small>
+            {% endif %}
+          </td>
           <td>
             <a href="/invoices/{{ payment.invoice._id }}">{{ payment.invoice.number }}</a>
           </td>

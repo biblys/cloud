@@ -4,15 +4,8 @@ const chai     = require('chai');
 const chaiHttp = require('chai-http');
 const server   = require('../../bin/www');
 
-const Customer = require('../../models/customer');
-
-const debug = require('debug')('biblys-cloud:test');
-
 chai.should();
 chai.use(chaiHttp);
-
-let customer;
-let admin;
 
 // After all tests
 after(function(done) {
@@ -20,41 +13,9 @@ after(function(done) {
   done();
 });
 
+const { user, admin } = require('../test-data.js');
+
 describe('Index controller', function() {
-  before(function(done) {
-
-    customer = new Customer({
-      name: 'A Customer',
-      axysSessionUid: 'xxxx',
-      email: 'customer@biblys.fr',
-      axysId: '1134'
-    });
-
-    admin = new Customer({
-      name: 'An admin',
-      axysSessionUid: 'yyyy',
-      email: 'adminr@biblys.fr',
-      axysId: '1135',
-      isAdmin: true
-    });
-
-    customer.save().then(function() {
-      return admin.save();
-    }).then(function() {
-      done();
-    }).catch(function(error) {
-      throw error;
-    });
-  });
-
-  after(function(done) {
-    Customer.collection.drop().then(function() {
-      done();
-    }).catch(function(error) {
-      debug(error);
-      done();
-    });
-  });
 
   describe('GET /', function() {
 
@@ -109,7 +70,7 @@ describe('Index controller', function() {
     it('should prevent access for logged non-admin user', function(done) {
       chai.request(server)
         .get('/admin/')
-        .set('Cookie', `userUid=${customer.axysSessionUid}`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(403);
           done();

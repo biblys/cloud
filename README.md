@@ -17,6 +17,8 @@
 
 ## Todo
 
+* Remove unused fields from Customer model
+* Update users props from Axys on connection
 * Reuse saved cards
 * Generate complete invoices
 * Allow customers to see all their invoices
@@ -25,6 +27,12 @@
 * Webpack
 
 ## Changelog
+
+### 1.6.0 (2017-11-11)
+* Use User model to identify visitor instead of Customer
+* Add an admin page to edit a customer
+* Add admin pages to create, list and edit users
+* Associate current user with payments
 
 ### 1.5.0 (2017-10-27)
 * Add an admin page to create a new customer

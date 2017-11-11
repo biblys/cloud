@@ -18,6 +18,7 @@ const customers = require('./controllers/customers');
 const index     = require('./controllers/index');
 const invoices  = require('./controllers/invoices');
 const payments  = require('./controllers/payments');
+const users     = require('./controllers/users');
 
 // Debug logs
 const mongoDebug = require('debug')('biblys-cloud:mongo');
@@ -70,22 +71,32 @@ app.use('/', index);
 app.use('/customers', customers);
 app.use('/invoices', invoices);
 app.use('/payments', payments);
+app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+  res.status(404);
+  next('Not Found');
 });
 
 // error handler
-app.use(function(err, req, res) {
+app.use(function(err, req, res, next) {
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  const error = new Error(err);
+
+  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.message = error.message;
+  res.locals.errorCode = statusCode;
+  res.locals.error = req.app.get('env') === 'development' ? error : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(statusCode);
   res.render('error');
 });
 

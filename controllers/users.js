@@ -3,6 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 
+const User     = require('../models/user');
 const Customer = require('../models/customer');
 
 const auth      = require('../middlewares/auth');
@@ -10,8 +11,12 @@ const authAdmin = require('../middlewares/authAdmin');
 
 // New
 
-router.get('/new', auth, authAdmin, function(request, response) {
-  response.render('customers/new');
+router.get('/new', auth, authAdmin, function(request, response,next) {
+  Customer.find({}).exec().then(function(customers) {
+    response.render('users/new', { customers });
+  }).catch(function(err) {
+    return next(err);
+  });
 });
 
 // Create
@@ -33,14 +38,15 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
     return next('Le champ E-mail est obligatoire.');
   }
 
-  const customer = new Customer({
-    axysId: request.body.axysId,
-    name: request.body.name,
-    email: request.body.email,
+  const user = new User({
+    axysId:   request.body.axysId,
+    name:     request.body.name,
+    email:    request.body.email,
+    customer: request.body.customer,
     isAdmin: false
   });
-  customer.save().then(function() {
-    response.redirect('/customers/');
+  user.save().then(function() {
+    response.redirect('/users/');
   }).catch(function(error) {
     return next(error);
   });
@@ -50,8 +56,8 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
 
 router.get('/', auth, authAdmin, function(request, response, next) {
 
-  Customer.find({}).exec().then(function(customers) {
-    response.render('customers/list', { customers: customers });
+  User.find({}).exec().then(function(users) {
+    response.render('users/list', { users });
   }).catch((err) => next(err));
 
 });
@@ -60,15 +66,20 @@ router.get('/', auth, authAdmin, function(request, response, next) {
 
 router.get('/:id/edit', auth, authAdmin, function(request, response, next) {
 
-  Customer.findById(request.params.id).exec().then(function(customer) {
+  (async () => {
 
-    if (customer === null) {
+    const user = await User.findById(request.params.id).populate('customer').exec();
+
+    if (user === null) {
       response.status(404);
-      throw 'Customer Not Found';
+      throw 'User Not Found';
     }
 
-    response.render('customers/edit', { customer: customer });
-  }).catch((err) => next(err));
+    const customers = await Customer.find({}).exec();
+
+    response.render('users/edit', { user, customers });
+
+  })().catch((err) => next(err));
 
 });
 
@@ -76,11 +87,11 @@ router.get('/:id/edit', auth, authAdmin, function(request, response, next) {
 
 router.post('/:id/update', auth, authAdmin, function(request, response, next) {
 
-  Customer.findById(request.params.id).exec().then(function(customer) {
+  User.findById(request.params.id).exec().then(function(user) {
 
-    if (customer === null) {
+    if (user === null) {
       response.status(404);
-      throw 'Customer Not Found';
+      throw 'User Not Found';
     }
 
     if (typeof request.body.axysId === 'undefined') {
@@ -98,14 +109,15 @@ router.post('/:id/update', auth, authAdmin, function(request, response, next) {
       throw 'Le champ E-mail est obligatoire.';
     }
 
-    customer.axysId = request.body.axysId;
-    customer.name   = request.body.name;
-    customer.email  = request.body.email;
+    user.axysId   = request.body.axysId;
+    user.name     = request.body.name;
+    user.email    = request.body.email;
+    user.customer = request.body.customer;
 
-    return customer.save();
+    return user.save();
 
   }).then(function() {
-    response.redirect('/customers/');
+    response.redirect('/users/');
   }).catch(function(error) {
     return next(error);
   });

@@ -1,0 +1,13 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Créer un nouvel utilisateur{% endblock %}
+
+{% block body %}
+
+  <h1>Créer un nouvel utilisateur</h1>
+
+  <form class="model-form" action="/users/create" method="post">
+    {% include 'users/_form.twig' %}
+  </form>
+
+{% endblock %}

@@ -8,10 +8,10 @@
   </head>
   <body>
 
-    {% if customer %}
+    {% if currentUser %}
       <div class="user-zone">
-        Connecté en tant que <strong>{{ customer.name }}</strong>
-        {% if customer.isAdmin %}[<a href="/admin/">admin</a>]{% endif %}
+        Connecté en tant que <strong>{{ currentUser.name }}</strong>
+        {% if currentUser.isAdmin %}[<a href="/admin/">admin</a>]{% endif %}
         [<a href="/logout">déconnexion</a>]
       </div>
     {% else %}

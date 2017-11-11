@@ -1,0 +1,13 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Modifier un client{% endblock %}
+
+{% block body %}
+
+  <h1>Modifier un client</h1>
+
+  <form class="model-form" action="/customers/{{ customer._id }}/update" method="post">
+    {% include 'customers/_form.twig' %}
+  </form>
+
+{% endblock %}
