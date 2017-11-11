@@ -41,6 +41,7 @@ module.exports = function(req, res, next) {
 
       // If no customer found, throw error
       if (!user) {
+        res.status(401);
         return next(`User ${json.user_email} is unknown.`);
       }
 
