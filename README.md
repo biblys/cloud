@@ -28,7 +28,7 @@
 
 ## Changelog
 
-### DEV
+### 1.6.0 (2017-11-11)
 * Use User model to identify visitor instead of Customer
 * Add an admin page to edit a customer
 * Add admin pages to create, list and edit users
