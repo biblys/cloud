@@ -53,7 +53,7 @@ router.post('/create', auth, getInvoice, function(request, response, next) {
     // Create payment
     const payment = new Payment({
       invoice:  request.body.invoiceId,
-      customer: response.locals.currentUser.customer._id,
+      customer: this.invoice.customer._id,
       amount:   charge.amount
     });
     return payment.save();
