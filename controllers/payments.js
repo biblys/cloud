@@ -53,6 +53,7 @@ router.post('/create', auth, getInvoice, function(request, response, next) {
     // Create payment
     const payment = new Payment({
       invoice:  request.body.invoiceId,
+      user:     response.locals.currentUser._id,
       customer: this.invoice.customer._id,
       amount:   charge.amount
     });
@@ -79,7 +80,7 @@ router.post('/create', auth, getInvoice, function(request, response, next) {
 // List all invoices (admin)
 router.get('/', auth, authAdmin, function(request, response, next) {
 
-  Payment.find({}).populate('customer').populate('invoice').exec().then(function(payments) {
+  Payment.find({}).populate('customer').populate('invoice').populate('user').exec().then(function(payments) {
     response.render('payments/list', { payments: payments });
   }).catch((err) => next(err));
 
