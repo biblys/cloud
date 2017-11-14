@@ -5,7 +5,7 @@
     git clone git@github.com:iwazaru/biblys-cloud.git
     cd biblys-cloud
     npm install
-    cp config.dist.js config.js
+    cp .env.template .env
 
 ## Running in production
 
@@ -27,6 +27,9 @@
 * Webpack
 
 ## Changelog
+
+### DEV
+* Replace `config.js` file with `.env` for configuration
 
 ### 1.6.0 (2017-11-11)
 * Use User model to identify visitor instead of Customer

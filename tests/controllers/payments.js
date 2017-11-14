@@ -4,8 +4,6 @@ const chai     = require('chai');
 const chaiHttp = require('chai-http');
 const server   = require('../../bin/www');
 
-const config  = require('../../config.js');
-
 chai.should();
 chai.use(chaiHttp);
 
@@ -92,7 +90,7 @@ describe('Payments controller', function() {
     it('should process payment', function(done) {
 
       // Create test stripe token
-      const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+      const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
       stripe.tokens.create({
         card: {
           number: '4242424242424242',

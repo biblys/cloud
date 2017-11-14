@@ -1,7 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const config  = require('../config.js');
-const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const Customer = require('../models/customer');
 const Payment =  require('../models/payment');

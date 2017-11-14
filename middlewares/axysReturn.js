@@ -1,13 +1,10 @@
 'use strict';
 
-const url          = require('url');
-const request      = require('request');
-
-const config = require('../config.js');
+const url     = require('url');
+const request = require('request');
+const debug   = require('debug')('biblys-cloud:app');
 
 const User = require('../models/user');
-
-const debug      = require('debug')('biblys-cloud:app');
 
 // Handle axys return
 module.exports = function(req, res, next) {
@@ -16,7 +13,7 @@ module.exports = function(req, res, next) {
     return next();
   }
 
-  request(`https://axys.me/call.php?key=${config.AXYS_SECRET_KEY}&uid=${req.query.UID}&format=json`, function(error, response, body) {
+  request(`https://axys.me/call.php?key=${process.env.AXYS_SECRET_KEY}&uid=${req.query.UID}&format=json`, function(error, response, body) {
 
     if (error) return next(error);
 

@@ -2,7 +2,6 @@
 
 const express = require('express');
 const router  = express.Router();
-const config  = require('../config.js');
 
 const Customer = require('../models/customer');
 const Invoice  = require('../models/invoice');
@@ -71,8 +70,8 @@ router.get('/', auth, authAdmin, function(request, response, next) {
 router.get('/:id', auth, getInvoice, function(request, response) {
 
   response.render('invoices/show', {
-    stripePublicKey: config.STRIPE_PUBLIC_KEY,
-    iban: config.IBAN
+    stripePublicKey: process.env.STRIPE_PUBLIC_KEY,
+    iban: process.env.IBAN
   });
 
 });
