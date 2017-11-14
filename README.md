@@ -17,7 +17,6 @@
 
 ## Todo
 
-* Remove unused fields from Customer model
 * Update users props from Axys on connection
 * Reuse saved cards
 * Generate complete invoices
@@ -30,6 +29,7 @@
 
 ### DEV
 * Replace `config.js` file with `.env` for configuration
+* Remove unused fields from Customer model
 
 ### 1.6.0 (2017-11-11)
 * Use User model to identify visitor instead of Customer
