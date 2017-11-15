@@ -43,6 +43,8 @@ module.exports = function(req, res, next) {
       }
 
       // Associate Axys session UID with customer
+      user.email = json.user_email;
+      user.name = json.user_screen_name;
       user.axysSessionUid = req.query.UID;
       user.save(function(err) {
         if (err) return next(err);

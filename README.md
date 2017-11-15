@@ -17,20 +17,26 @@
 
 ## Todo
 
+<<<<<<< HEAD
 * Delete customers
 * Show associated customer in users list
+=======
+>>>>>>> Update users properties from Axys on connection
 * Reuse saved cards
 * Generate complete invoices
 * Allow customers to see all their invoices
 * Support tickets
 * Tests for middlewares
 * Webpack
+* Favicon
+* Home page
 
 ## Changelog
 
 ### DEV
 * Replace `config.js` file with `.env` for configuration
 * Remove unused fields from Customer model
+* Update users properties from Axys on connection
 
 ### 1.6.0 (2017-11-11)
 * Use User model to identify visitor instead of Customer
