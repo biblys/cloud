@@ -17,7 +17,28 @@
       {% endfor %}
     </div>
 
-    <button>Payer {{ invoice.amount|currency }}</button>
+    {% if cards is not empty %}
+      <button>Payer {{ invoice.amount|currency }}</button>
+    {% endif %}
+
+    <br><br>
+
+    <form action="/payments/create" method="POST">
+      <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
+      <script
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="{{ stripePublicKey }}"
+        data-allow-remember-me="false"
+        data-amount="{{ invoice.amount }}"
+        data-email="{{ invoice.customer.email }}"
+        data-name="Biblys"
+        data-label="Payer avec une nouvelle carte"
+        data-description="Facture n° {{ invoice.number }}"
+        data-image="/images/biblys-logo-stripe.jpg"
+        data-locale="auto"
+        data-currency="eur">
+      </script>
+    </form>
 
   </form>
 

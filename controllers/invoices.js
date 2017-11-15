@@ -69,29 +69,27 @@ router.get('/', auth, authAdmin, function(request, response, next) {
 // Show invoice
 
 router.get('/:id', auth, getInvoice, function(request, response) {
-
-  response.render('invoices/show', {
-    stripePublicKey: process.env.STRIPE_PUBLIC_KEY,
-    iban: process.env.IBAN
-  });
-
+  response.render('invoices/show');
 });
 
 // Pay invoice
 
 router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
 
-  if (typeof request.invoice.customer.stripeCustomerId === 'undefined') {
-    return response.redirect('/stripe/create-customer');
-  }
+  (async function() {
+    let cards = [];
 
-  stripe.customers.listCards(request.invoice.customer.stripeCustomerId).then((customer) => {
+    if (typeof request.invoice.customer.stripeCustomerId !== 'undefined') {
+      const stripeCardsList = await stripe.customers.listCards(request.invoice.customer.stripeCustomerId);
+      cards = stripeCardsList.data;
+    }
+
     response.render('invoices/pay', {
-      cards: customer.data
+      cards: cards,
+      stripePublicKey: process.env.STRIPE_PUBLIC_KEY
     });
-  }).catch((error) => {
-    return next(error);
-  });
+
+  })().catch((error) => next(error));
 
 });
 

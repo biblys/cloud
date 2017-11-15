@@ -20,6 +20,8 @@
 * Delete customers
 * Show associated customer in users list
 * Reuse saved cards
+* Delete saved cards
+* Use Stripe Elements to add a new card
 * Generate complete invoices
 * Allow customers to see all their invoices
 * Support tickets
