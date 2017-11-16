@@ -17,7 +17,8 @@
 
 ## Todo
 
-* Update users props from Axys on connection
+* Delete customers
+* Show associated customer in users list
 * Reuse saved cards
 * Generate complete invoices
 * Allow customers to see all their invoices
