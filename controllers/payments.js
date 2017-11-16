@@ -11,68 +11,58 @@ const getInvoice = require('../middlewares/getInvoice');
 
 // Create a new payment
 
-router.post('/create', auth, getInvoice, function(request, response, next) {
+router.post('/create', auth, getInvoice, async function(request, response, next) {
 
   if (typeof request.body.stripeToken === 'undefined') {
     response.status(400);
     return next('Stripe token not provided.');
   }
 
-  this.invoice = response.locals.invoice;
+  const invoice = request.invoice;
 
-  // Create Stripe customer
-  stripe.customers.create({
-    email: this.invoice.customer.email,
-    source: request.body.stripeToken
-  }).then((stripeCustomer) => {
+  try {
 
-    this.stripeCustomerId = stripeCustomer.id;
-
-    // Get customer for current invoice
-    return Customer.findById(this.invoice.customer._id).exec();
-
-  }).then((customer) => {
-
-    // Save stripeCustomerId to local customer
-    customer.stripeCustomerId = this.stripeCustomerId;
-    return customer.save();
-
-  }).then((customer) => {
-
-    // Get Stripe to charge card
-    return stripe.charges.create({
-      amount: this.invoice.amount,
-      currency: 'eur',
-      description: `Facture n° ${this.invoice.number}`,
-      customer: customer.stripeCustomerId
+    // Create Stripe customer
+    const stripeCustomer = await stripe.customers.create({
+      email: invoice.customer.email,
+      source: request.body.stripeToken
     });
 
-  }).then((charge) => {
+    // Get customer for current invoice
+    const customer = await Customer.findById(invoice.customer._id).exec();
+
+    // Save stripeCustomerId to local customer
+    customer.stripeCustomerId = stripeCustomer.id;
+    await customer.save();
+
+    // Get Stripe to charge card
+    const charge = await stripe.charges.create({
+      amount: invoice.amount,
+      currency: 'eur',
+      description: `Facture n° ${invoice.number}`,
+      customer: customer.stripeCustomerId
+    });
 
     // Create payment
     const payment = new Payment({
       invoice:  request.body.invoiceId,
       user:     response.locals.currentUser._id,
-      customer: this.invoice.customer._id,
+      customer: invoice.customer._id,
       amount:   charge.amount
     });
-    return payment.save();
-
-  }).then(() => {
+    await payment.save();
 
     // Update invoice.payed & invoice.payedAt
-    this.invoice.payed   = true;
-    this.invoice.payedAt = Date.now();
-    return this.invoice.save();
-
-  }).then((invoice) => {
+    invoice.payed   = true;
+    invoice.payedAt = Date.now();
+    await invoice.save();
 
     // Redirect to payement page
-    response.redirect(`/invoices/${invoice._id}`);
+    return response.redirect(`/invoices/${invoice._id}`);
 
-  }).catch(function(error) {
-    return next(error);
-  });
+  } catch (error) {
+    next(error);
+  }
 
 });
 
