@@ -7,7 +7,7 @@ const server   = require('../../bin/www');
 chai.should();
 chai.use(chaiHttp);
 
-const { user, admin, customerInvoice, otherInvoice } = require('../test-data.js');
+const { user, admin, customerInvoice, otherInvoice, getStripeToken } = require('../test-data.js');
 
 describe('Payments controller', function() {
 
@@ -74,7 +74,7 @@ describe('Payments controller', function() {
         });
     });
 
-    it('should return 400 when not sending stripeToken', function(done) {
+    it('should return 400 when not sending Stripe card token', function(done) {
       chai.request(server)
         .post('/payments/create')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
@@ -87,27 +87,17 @@ describe('Payments controller', function() {
         });
     });
 
-    it('should process payment', function(done) {
+    it('should process payment with a Strip card token', async function() {
 
       // Create test stripe token
-      const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-      stripe.tokens.create({
-        card: {
-          number: '4242424242424242',
-          exp_month: 12,
-          exp_year: 2021,
-          cvc: '123'
-        }
-      }, function(err, token) {
-        chai.request(server)
-          .post('/payments/create')
-          .set('Cookie', `userUid=${user.axysSessionUid}`)
-          .send({ invoiceId: customerInvoice._id, stripeToken: token.id })
-          .end(function(err, res) {
-            res.should.redirect;
-            done();
-          });
-      });
+      const token = await getStripeToken();
+
+      const res = await chai.request(server)
+        .post('/payments/create')
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .send({ invoiceId: customerInvoice._id, stripeToken: token.id });
+
+      res.should.redirect;
     });
   });
 });

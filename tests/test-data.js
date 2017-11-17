@@ -64,6 +64,17 @@ const stripeCard = {
   }
 };
 
+const getStripeToken = async function() {
+  return await stripe.tokens.create({
+    card: {
+      number: '4242424242424242',
+      exp_month: 12,
+      exp_year: 2021,
+      cvc: '123'
+    }
+  });
+};
+
 before(function(done) {
   (async function() {
     const token = await stripe.tokens.create(stripeCard);
@@ -100,4 +111,9 @@ after(function(done) {
   });
 });
 
-module.exports = { user, admin, customer, otherCustomer, customerInvoice, otherInvoice, deletableInvoice };
+module.exports = {
+  user, admin,
+  customer, otherCustomer,
+  customerInvoice, otherInvoice, deletableInvoice,
+  getStripeToken
+};
