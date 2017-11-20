@@ -17,11 +17,8 @@
 
 ## Todo
 
-<<<<<<< HEAD
 * Delete customers
 * Show associated customer in users list
-=======
->>>>>>> Update users properties from Axys on connection
 * Reuse saved cards
 * Generate complete invoices
 * Allow customers to see all their invoices
