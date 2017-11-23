@@ -19,7 +19,7 @@
 
 * Delete customers
 * Show associated customer in users list
-* Reuse saved cards
+* Allow to add multiple cards
 * Delete saved cards
 * Use Stripe Elements to add a new card
 * Generate complete invoices
@@ -33,6 +33,7 @@
 ## Changelog
 
 ### DEV
+* Allow customers to use cards saved with Stripe
 * Replace `config.js` file with `.env` for configuration
 * Remove unused fields from Customer model
 * Update users properties from Axys on connection
