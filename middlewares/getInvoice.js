@@ -9,7 +9,8 @@ module.exports = function(request, response, next) {
   const invoiceId = request.params.id || request.body.invoiceId;
 
   if (typeof invoiceId === 'undefined') {
-    return next();
+    response.status(400);
+    return next('invoiceId parameter must be provided');
   }
 
   Invoice.findById(invoiceId).populate('customer').exec().then(function(invoice) {
