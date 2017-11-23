@@ -85,6 +85,10 @@ app.use(function(err, req, res, next) {
   }
 
   const error = new Error(err);
+  console.log({ error });
+  if (typeof err.stack !== 'undefined') {
+    error.stack = err.stack;
+  }
 
   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
 
