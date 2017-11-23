@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('../lib/stripe-helper');
 
 const Customer = require('../models/customer');
 const Payment =  require('../models/payment');
@@ -23,9 +23,9 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
   try {
 
     // Create Stripe customer
-    const stripeCustomer = await stripe.customers.create({
+    const stripeCustomer = await stripe.createCustomer({
       email: invoice.customer.email,
-      source: request.body.stripeToken
+      token: request.body.stripeToken
     });
 
     // Get customer for current invoice
@@ -36,9 +36,8 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
     await customer.save();
 
     // Get Stripe to charge card
-    const charge = await stripe.charges.create({
+    const charge = await stripe.charge({
       amount: invoice.amount,
-      currency: 'eur',
       description: `Facture n° ${invoice.number}`,
       customer: customer.stripeCustomerId
     });
