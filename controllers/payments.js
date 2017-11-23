@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const router  = express.Router();
 const stripe = require('../lib/stripe-helper');
@@ -13,41 +15,57 @@ const getInvoice = require('../middlewares/getInvoice');
 
 router.post('/create', auth, getInvoice, async function(request, response, next) {
 
-  if (typeof request.body.stripeToken === 'undefined') {
+  if (typeof request.body.stripeToken === 'undefined' && typeof request.body.stripeCard === 'undefined') {
     response.status(400);
-    return next('Stripe token not provided.');
+    return next('Stripe card token or card id must be provided.');
   }
 
   const invoice = request.invoice;
 
   try {
 
-    // Create Stripe customer
-    const stripeCustomer = await stripe.createCustomer({
-      email: invoice.customer.email,
-      token: request.body.stripeToken
-    });
+    // Paying with a new card
+    if (typeof request.body.stripeToken !== 'undefined') {
 
-    // Get customer for current invoice
-    const customer = await Customer.findById(invoice.customer._id).exec();
+      // Create Stripe customer
+      const stripeCustomer = await stripe.createCustomer({
+        email: invoice.customer.email,
+        token: request.body.stripeToken
+      });
 
-    // Save stripeCustomerId to local customer
-    customer.stripeCustomerId = stripeCustomer.id;
-    await customer.save();
+      // Get customer for current invoice
+      const customer = await Customer.findById(invoice.customer._id).exec();
 
-    // Get Stripe to charge card
-    const charge = await stripe.charge({
-      amount: invoice.amount,
-      description: `Facture n° ${invoice.number}`,
-      customer: customer.stripeCustomerId
-    });
+      // Save stripeCustomerId to local customer
+      customer.stripeCustomerId = stripeCustomer.id;
+      await customer.save();
+
+      // Get Stripe to charge new customer default card
+      await stripe.charge({
+        amount: invoice.amount,
+        description: `Facture n° ${invoice.number}`,
+        customer: customer.stripeCustomerId
+      });
+
+    // Paying with a saved card
+    } else if (typeof request.body.stripeCard !== 'undefined') {
+
+      // Get Stripe to charge saved card
+      await stripe.charge({
+        amount: invoice.amount,
+        description: `Facture n° ${invoice.number}`,
+        customer: invoice.customer.stripeCustomerId,
+        source: request.body.stripeCard
+      });
+
+    }
 
     // Create payment
     const payment = new Payment({
       invoice:  request.body.invoiceId,
       user:     response.locals.currentUser._id,
       customer: invoice.customer._id,
-      amount:   charge.amount
+      amount:   invoice.amount
     });
     await payment.save();
 

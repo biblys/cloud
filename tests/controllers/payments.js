@@ -3,11 +3,12 @@
 const chai     = require('chai');
 const chaiHttp = require('chai-http');
 const server   = require('../../bin/www');
+const stripe   = require('../../lib/stripe-helper.js');
 
 chai.should();
 chai.use(chaiHttp);
 
-const { user, admin, customerInvoice, otherInvoice, getStripeToken } = require('../test-data.js');
+const { user, admin, customer, customerInvoice, otherInvoice, getStripeToken } = require('../test-data.js');
 
 describe('Payments controller', function() {
 
@@ -82,12 +83,25 @@ describe('Payments controller', function() {
         .end(function(err, res) {
           res.should.have.status(400);
           res.should.be.html;
-          res.text.should.include('Stripe token not provided.');
+          res.text.should.include('Stripe card token or card id must be provided.');
           done();
         });
     });
 
-    it('should process payment with a Strip card token', async function() {
+    it('should process payment with a saved card', async function() {
+
+      const cards    = await stripe.getCards(customer.stripeCustomerId);
+      const cardId   = cards[0].id;
+
+      const res = await chai.request(server)
+        .post('/payments/create')
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .send({ invoiceId: customerInvoice._id, stripeCard: cardId });
+
+      res.should.redirect;
+    });
+
+    it('should process payment with a new card', async function() {
 
       // Create test stripe token
       const token = await getStripeToken();

@@ -9,6 +9,7 @@
   <p>Facture n° {{ invoice.number }} pour {{ invoice.customer.name }}</p>
 
   <form action="/payments/create" method="post">
+    <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
 
     <div>
       {% for card in cards %}
