@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router  = express.Router();
-const stripe  = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe  = require('../lib/stripe-helper');
 
 const Customer = require('../models/customer');
 const Invoice  = require('../models/invoice');
@@ -80,8 +80,7 @@ router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
     let cards = [];
 
     if (typeof request.invoice.customer.stripeCustomerId !== 'undefined') {
-      const stripeCardsList = await stripe.customers.listCards(request.invoice.customer.stripeCustomerId);
-      cards = stripeCardsList.data;
+      cards = await stripe.getCards(request.invoice.customer.stripeCustomerId);
     }
 
     response.render('invoices/pay', {
