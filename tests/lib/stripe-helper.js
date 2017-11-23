@@ -77,4 +77,20 @@ describe('Stripe Helper', function() {
       charge.should.have.property('id');
     });
   });
+
+  describe('Get cards for a Stripe customer', function() {
+
+    it('should throw an error if customer was not provided', function() {
+      stripe.getCards().should.be.rejectedWith(Error);
+    });
+
+    it('should get Cards from a valid customer', async function() {
+      const token    = await stripe.createTokenFromCard(stripeCard);
+      const customer = await stripe.createCustomer({ token: token.id, email: 'customer@biblys.fr' });
+      const cards    = await stripe.getCards(customer.id);
+
+      cards.should.be.an('array');
+    });
+  });
+
 });
