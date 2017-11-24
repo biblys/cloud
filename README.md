@@ -32,7 +32,7 @@
 
 ## Changelog
 
-### DEV
+### 1.7.0 (2017-11-24)
 * Allow customers to use cards saved with Stripe
 * Replace `config.js` file with `.env` for configuration
 * Remove unused fields from Customer model
