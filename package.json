@@ -1,10 +1,10 @@
 {
   "name": "biblys-cloud",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Biblys Cloud",
   "main": "./bin/www",
   "scripts": {
-    "test": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test node_modules/mocha/bin/mocha tests --recursive --timeout 5000",
+    "test": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test node_modules/mocha/bin/mocha tests --recursive --timeout 10000",
     "start": "node ./bin/www",
     "dev": "DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig"
   },
@@ -25,17 +25,17 @@
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "express": "~4.15.5",
-    "mongoose": "^4.12.1",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "mongoose": "^4.13.2",
     "morgan": "~1.9.0",
     "request": "^2.83.0",
-    "serve-favicon": "~2.4.5",
-    "ssl-root-cas": "^1.2.4",
     "stripe": "^5.1.1",
     "twig": "~0.10.3"
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "chai-http": "^3.0.0",
     "mocha": "^4.0.1",
     "mocha-eslint": "^4.1.0",

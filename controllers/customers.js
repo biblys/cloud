@@ -18,11 +18,6 @@ router.get('/new', auth, authAdmin, function(request, response) {
 
 router.post('/create', auth, authAdmin, function(request, response, next) {
 
-  if (typeof request.body.axysId === 'undefined') {
-    response.status(400);
-    return next('Le champ ID Axys est obligatoire.');
-  }
-
   if (typeof request.body.name === 'undefined') {
     response.status(400);
     return next('Le champ Nom est obligatoire.');
@@ -34,10 +29,8 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
   }
 
   const customer = new Customer({
-    axysId: request.body.axysId,
     name: request.body.name,
-    email: request.body.email,
-    isAdmin: false
+    email: request.body.email
   });
   customer.save().then(function() {
     response.redirect('/customers/');
@@ -83,11 +76,6 @@ router.post('/:id/update', auth, authAdmin, function(request, response, next) {
       throw 'Customer Not Found';
     }
 
-    if (typeof request.body.axysId === 'undefined') {
-      response.status(400);
-      throw 'Le champ ID Axys est obligatoire.';
-    }
-
     if (typeof request.body.name === 'undefined') {
       response.status(400);
       throw 'Le champ Nom est obligatoire.';
@@ -98,7 +86,6 @@ router.post('/:id/update', auth, authAdmin, function(request, response, next) {
       throw 'Le champ E-mail est obligatoire.';
     }
 
-    customer.axysId = request.body.axysId;
     customer.name   = request.body.name;
     customer.email  = request.body.email;
 

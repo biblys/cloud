@@ -81,23 +81,11 @@ describe('Customers controller', function() {
 
     // Required fields
 
-    it('should return 400 if axysId field is missing', function(done) {
-      chai.request(server)
-        .post('/customers/create')
-        .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .end(function(err, res) {
-          res.should.have.status(400);
-          res.should.be.html;
-          res.text.should.include('Le champ ID Axys est obligatoire.');
-          done();
-        });
-    });
-
     it('should return 400 if name field is missing', function(done) {
       chai.request(server)
         .post('/customers/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ axysId: 1145 })
+        .send()
         .end(function(err, res) {
           res.should.have.status(400);
           res.should.be.html;
@@ -110,7 +98,7 @@ describe('Customers controller', function() {
       chai.request(server)
         .post('/customers/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ axysId: 1145, name: 'A Customer' })
+        .send({ name: 'A Customer' })
         .end(function(err, res) {
           res.should.have.status(400);
           res.should.be.html;
@@ -125,7 +113,7 @@ describe('Customers controller', function() {
       chai.request(server)
         .post('/customers/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ axysId: 1145, name: 'A Customer', email: 'created-customer@biblys.fr' })
+        .send({ name: 'A Customer', email: 'created-customer@biblys.fr' })
         .end(function(err, res) {
           res.should.redirect;
           done();
@@ -265,23 +253,11 @@ describe('Customers controller', function() {
 
     // Required fields
 
-    it('should return 400 if axysId field is missing', function(done) {
-      chai.request(server)
-        .post(`/customers/${customer._id}/update`)
-        .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .end(function(err, res) {
-          res.should.have.status(400);
-          res.should.be.html;
-          res.text.should.include('Le champ ID Axys est obligatoire.');
-          done();
-        });
-    });
-
     it('should return 400 if name field is missing', function(done) {
       chai.request(server)
         .post(`/customers/${customer._id}/update`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ axysId: 1145 })
+        .send()
         .end(function(err, res) {
           res.should.have.status(400);
           res.should.be.html;
@@ -294,7 +270,7 @@ describe('Customers controller', function() {
       chai.request(server)
         .post(`/customers/${customer._id}/update`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ axysId: 1145, name: 'A Customer' })
+        .send({ name: 'A Customer' })
         .end(function(err, res) {
           res.should.have.status(400);
           res.should.be.html;
@@ -309,7 +285,7 @@ describe('Customers controller', function() {
       chai.request(server)
         .post(`/customers/${customer._id}/update`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ axysId: 1145, name: 'A Customer', email: 'customer@biblys.fr' })
+        .send({ name: 'A Customer', email: 'customer@biblys.fr' })
         .end(function(err, res) {
           res.should.redirect;
           done();

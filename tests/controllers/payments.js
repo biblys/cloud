@@ -3,13 +3,12 @@
 const chai     = require('chai');
 const chaiHttp = require('chai-http');
 const server   = require('../../bin/www');
-
-const config  = require('../../config.js');
+const stripe   = require('../../lib/stripe-helper.js');
 
 chai.should();
 chai.use(chaiHttp);
 
-const { user, admin, customerInvoice, otherInvoice } = require('../test-data.js');
+const { user, admin, customer, customerInvoice, otherInvoice, getStripeToken } = require('../test-data.js');
 
 describe('Payments controller', function() {
 
@@ -76,7 +75,7 @@ describe('Payments controller', function() {
         });
     });
 
-    it('should return 400 when not sending stripeToken', function(done) {
+    it('should return 400 when not sending Stripe card token', function(done) {
       chai.request(server)
         .post('/payments/create')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
@@ -84,32 +83,35 @@ describe('Payments controller', function() {
         .end(function(err, res) {
           res.should.have.status(400);
           res.should.be.html;
-          res.text.should.include('Stripe token not provided.');
+          res.text.should.include('Stripe card token or card id must be provided.');
           done();
         });
     });
 
-    it('should process payment', function(done) {
+    it('should process payment with a saved card', async function() {
+
+      const cards    = await stripe.getCards(customer.stripeCustomerId);
+      const cardId   = cards[0].id;
+
+      const res = await chai.request(server)
+        .post('/payments/create')
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .send({ invoiceId: customerInvoice._id, stripeCard: cardId });
+
+      res.should.redirect;
+    });
+
+    it('should process payment with a new card', async function() {
 
       // Create test stripe token
-      const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
-      stripe.tokens.create({
-        card: {
-          number: '4242424242424242',
-          exp_month: 12,
-          exp_year: 2021,
-          cvc: '123'
-        }
-      }, function(err, token) {
-        chai.request(server)
-          .post('/payments/create')
-          .set('Cookie', `userUid=${user.axysSessionUid}`)
-          .send({ invoiceId: customerInvoice._id, stripeToken: token.id })
-          .end(function(err, res) {
-            res.should.redirect;
-            done();
-          });
-      });
+      const token = await getStripeToken();
+
+      const res = await chai.request(server)
+        .post('/payments/create')
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .send({ invoiceId: customerInvoice._id, stripeToken: token.id });
+
+      res.should.redirect;
     });
   });
 });

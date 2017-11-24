@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express      = require('express');
 const path         = require('path');
 const logger       = require('morgan');
@@ -6,9 +7,6 @@ const bodyParser   = require('body-parser');
 const mongoose     = require('mongoose');
 const http         = require('http');
 const twig         = require('twig');
-
-// Load config file
-const config = require('./config.js');
 
 // Create Express app
 const app = express();
@@ -28,7 +26,7 @@ const axysReturn   = require('./middlewares/axysReturn');
 const identifyUser = require('./middlewares/identifyUser');
 
 // MongoDB
-const mongoUrl = process.env.MONGO_URL || config.MONGO_URL || 'mongodb://localhost/biblys-cloud';
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/biblys-cloud';
 mongoose.connect(mongoUrl, { useMongoClient: true });
 mongoose.Promise = global.Promise;
 mongoDebug(`Connected to ${mongoUrl}`);
@@ -46,7 +44,7 @@ twig.extendFilter('currency', function(value) {
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser(config.COOKIE_PARSER_SECRET));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Security headers
@@ -87,6 +85,9 @@ app.use(function(err, req, res, next) {
   }
 
   const error = new Error(err);
+  if (typeof err.stack !== 'undefined') {
+    error.stack = err.stack;
+  }
 
   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
 

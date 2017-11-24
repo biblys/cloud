@@ -5,7 +5,7 @@
     git clone git@github.com:iwazaru/biblys-cloud.git
     cd biblys-cloud
     npm install
-    cp config.dist.js config.js
+    cp .env.template .env
 
 ## Running in production
 
@@ -17,16 +17,27 @@
 
 ## Todo
 
-* Remove unused fields from Customer model
-* Update users props from Axys on connection
-* Reuse saved cards
+* Delete customers
+* Show associated customer in users list
+* Allow to add multiple cards
+* Delete saved cards
+* Use Stripe Elements to add a new card
 * Generate complete invoices
 * Allow customers to see all their invoices
 * Support tickets
 * Tests for middlewares
 * Webpack
+* Favicon
+* Home page
 
 ## Changelog
+
+### 1.7.0 (2017-11-24)
+* Allow customers to use cards saved with Stripe
+* Replace `config.js` file with `.env` for configuration
+* Remove unused fields from Customer model
+* Update users properties from Axys on connection
+* Add a payment page that lists Stripe saved cards
 
 ### 1.6.0 (2017-11-11)
 * Use User model to identify visitor instead of Customer

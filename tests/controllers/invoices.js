@@ -161,6 +161,8 @@ describe('Invoices controller', function() {
     });
   });
 
+  // GET /invoices/:id
+
   describe('GET /invoices/:id', function() {
 
     it('should return 401 for unlogged user', function(done) {
@@ -218,6 +220,72 @@ describe('Invoices controller', function() {
           res.should.have.status(200);
           res.should.be.html;
           res.text.should.include('Facture n° 1234');
+          done();
+        });
+    });
+  });
+
+  // GET /invoices/:id/pay
+
+  describe('GET /invoices/:id/pay', function() {
+
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .get('/invoices/xxx/pay')
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 404 for non existing invoice', function(done) {
+      chai.request(server)
+        .get(`/invoices/${mongoose.Types.ObjectId()}/pay`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(404);
+          res.should.be.html;
+          res.text.should.include('Invoice Not Found');
+          done();
+        });
+    });
+
+    it('should return 403 for unauthorized user', function(done) {
+      chai.request(server)
+        .get(`/invoices/${otherInvoice._id}/pay`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('You are not authorized to see this invoice.');
+          done();
+        });
+    });
+
+    it('should redirect user without a stripeCustomerId');
+
+    it('should allow authorized user to access page', function(done) {
+      chai.request(server)
+        .get(`/invoices/${customerInvoice._id}/pay`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(200);
+          res.should.be.html;
+          res.text.should.include(`Facture n° ${customerInvoice.number} pour ${customer.name}`);
+          done();
+        });
+    });
+
+    it('should allow admin to access all invoices', function(done) {
+      chai.request(server)
+        .get(`/invoices/${customerInvoice._id}/pay`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(200);
+          res.should.be.html;
+          res.text.should.include(`Facture n° ${customerInvoice.number} pour ${customer.name}`);
           done();
         });
     });

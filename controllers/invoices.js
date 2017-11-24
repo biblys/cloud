@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router  = express.Router();
-const config  = require('../config.js');
+const stripe  = require('../lib/stripe-helper');
 
 const Customer = require('../models/customer');
 const Invoice  = require('../models/invoice');
@@ -69,15 +69,30 @@ router.get('/', auth, authAdmin, function(request, response, next) {
 // Show invoice
 
 router.get('/:id', auth, getInvoice, function(request, response) {
+  response.render('invoices/show');
+});
 
-  response.render('invoices/show', {
-    stripePublicKey: config.STRIPE_PUBLIC_KEY,
-    iban: config.IBAN
-  });
+// Pay invoice
+
+router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
+
+  (async function() {
+    let cards = [];
+
+    if (typeof request.invoice.customer.stripeCustomerId !== 'undefined') {
+      cards = await stripe.getCards(request.invoice.customer.stripeCustomerId);
+    }
+
+    response.render('invoices/pay', {
+      cards: cards,
+      stripePublicKey: process.env.STRIPE_PUBLIC_KEY
+    });
+
+  })().catch((error) => next(error));
 
 });
 
-// Delete
+// Delete invoice
 
 router.post('/:id/delete', auth, authAdmin, getInvoice, function(request, response, next) {
 
