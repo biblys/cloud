@@ -55,6 +55,30 @@ describe('Stripe Helper', function() {
     });
   });
 
+  // Add card to existing customer
+
+  describe('Add card to existing customer', function() {
+
+    it('should throw an error if customer was not provided', function() {
+      stripe.addCard().should.be.rejectedWith(Error);
+    });
+
+    it('should throw an error if card token was not provided', function() {
+      stripe.addCard({ customer: 'customer' }).should.be.rejectedWith(Error);
+    });
+
+    it('should add card if valid customer and card token are provided', async function() {
+      const token    = await stripe.createTokenFromCard(stripeCard);
+      const customer = await stripe.createCustomer({ token: token.id, email: 'customer@biblys.fr' });
+      const token2   = await stripe.createTokenFromCard(stripeCard);
+      const card     = await stripe.addCard({ customer: customer.id, token: token2.id });
+
+      card.should.have.property('id');
+    });
+  });
+
+  // Create charge from customer or card
+
   describe('Create charge from customer or card', function() {
 
     it('should throw an error if neither a customer nor a charge is provided', function() {
