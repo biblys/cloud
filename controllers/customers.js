@@ -98,4 +98,24 @@ router.post('/:id/update', auth, authAdmin, function(request, response, next) {
   });
 });
 
+// Delete customer
+
+router.post('/:id/delete', auth, authAdmin, async function(request, response, next) {
+
+  try {
+    const customer = await Customer.findById(request.params.id).exec();
+
+    if (customer === null) {
+      response.status(404);
+      throw 'Customer Not Found';
+    }
+
+    await Customer.remove({ _id: customer._id }).exec();
+
+    return response.redirect('/customers/');
+  } catch (error) {
+    return next(error);
+  }
+});
+
 module.exports = router;

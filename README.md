@@ -17,7 +17,6 @@
 
 ## Todo
 
-* Delete customers
 * Show associated customer in users list
 * Allow to add multiple cards
 * Delete saved cards
@@ -31,6 +30,9 @@
 * Home page
 
 ## Changelog
+
+### DEV
+* Add a delete button for customers
 
 ### 1.7.0 (2017-11-24)
 * Allow customers to use cards saved with Stripe

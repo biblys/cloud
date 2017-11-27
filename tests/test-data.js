@@ -37,6 +37,12 @@ const otherCustomer = new Customer({
   axysId: '1136'
 });
 
+const deletableCustomer = new Customer({
+  name: 'Deletable Customer',
+  email: 'deletable.customer@biblys.fr',
+  axysId: '1137'
+});
+
 const customerInvoice = new Invoice({
   number: '1234',
   amount: '999',
@@ -85,6 +91,7 @@ before(function(done) {
     await user.save();
     await admin.save();
     await otherCustomer.save();
+    await deletableCustomer.save();
     customerInvoice.customer = customer._id;
     await customerInvoice.save();
     otherInvoice.customer = otherCustomer._id;
@@ -113,7 +120,7 @@ after(function(done) {
 
 module.exports = {
   user, admin,
-  customer, otherCustomer,
+  customer, otherCustomer, deletableCustomer,
   customerInvoice, otherInvoice, deletableInvoice,
   getStripeToken
 };
