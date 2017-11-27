@@ -27,25 +27,48 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
     // Paying with a new card
     if (typeof request.body.stripeToken !== 'undefined') {
 
-      // Create Stripe customer
-      const stripeCustomer = await stripe.createCustomer({
-        email: invoice.customer.email,
-        token: request.body.stripeToken
-      });
-
       // Get customer for current invoice
       const customer = await Customer.findById(invoice.customer._id).exec();
 
-      // Save stripeCustomerId to local customer
-      customer.stripeCustomerId = stripeCustomer.id;
-      await customer.save();
+      // If customer already has a stripe id, use it to add card
+      if (typeof customer.stripeCustomerId !== 'undefined') {
 
-      // Get Stripe to charge new customer default card
-      await stripe.charge({
-        amount: invoice.amount,
-        description: `Facture n° ${invoice.number}`,
-        customer: customer.stripeCustomerId
-      });
+        // Add new card to Stripe customer
+        const card = await stripe.addCard({
+          customer: customer.stripeCustomerId,
+          token: request.body.stripeToken
+        });
+
+        // Charge new card
+        await stripe.charge({
+          amount: invoice.amount,
+          description: `Facture n° ${invoice.number}`,
+          customer: customer.stripeCustomerId,
+          source: card.id
+        });
+      }
+
+      // Else create a Stripe customer and charge its default source
+      else {
+
+        // Create Stripe customer
+        const stripeCustomer = await stripe.createCustomer({
+          email: invoice.customer.email,
+          token: request.body.stripeToken
+        });
+
+        // Save stripeCustomerId to local customer
+        customer.stripeCustomerId = stripeCustomer.id;
+        await customer.save();
+
+        // Get Stripe to charge new customer default card
+        await stripe.charge({
+          amount: invoice.amount,
+          description: `Facture n° ${invoice.number}`,
+          customer: customer.stripeCustomerId
+        });
+
+      }
 
     // Paying with a saved card
     } else if (typeof request.body.stripeCard !== 'undefined') {

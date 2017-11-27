@@ -17,7 +17,7 @@
 
 ## Todo
 
-* Allow to add multiple cards
+* Test case for paying with a new card without a stripeCustomerId
 * Delete saved cards
 * Use Stripe Elements to add a new card
 * Generate complete invoices
@@ -31,6 +31,7 @@
 ## Changelog
 
 ### DEV
+* Add new card to existing Stripe customer instead of creating a new one
 * Add a delete button for customers
 * Show associated customer in users list
 
