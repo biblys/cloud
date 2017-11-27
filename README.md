@@ -17,7 +17,6 @@
 
 ## Todo
 
-* Show associated customer in users list
 * Allow to add multiple cards
 * Delete saved cards
 * Use Stripe Elements to add a new card
@@ -33,6 +32,7 @@
 
 ### DEV
 * Add a delete button for customers
+* Show associated customer in users list
 
 ### 1.7.0 (2017-11-24)
 * Allow customers to use cards saved with Stripe

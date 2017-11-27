@@ -56,7 +56,7 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
 
 router.get('/', auth, authAdmin, function(request, response, next) {
 
-  User.find({}).exec().then(function(users) {
+  User.find({}).populate('customer').exec().then(function(users) {
     response.render('users/list', { users });
   }).catch((err) => next(err));
 
