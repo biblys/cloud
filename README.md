@@ -17,7 +17,6 @@
 
 ## Todo
 
-* Test case for paying with a new card without a stripeCustomerId
 * Delete saved cards
 * Use Stripe Elements to add a new card
 * Generate complete invoices
