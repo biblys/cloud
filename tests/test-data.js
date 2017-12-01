@@ -17,6 +17,13 @@ const user = new User({
   axysId: '1135'
 });
 
+const otherUser = new User({
+  name: 'Another user',
+  axysSessionUid: crypto.randomBytes(16).toString('hex'),
+  email: 'other-user@biblys.fr',
+  axysId: '1138'
+});
+
 const admin = new User({
   name: 'An admin-admin',
   axysSessionUid: crypto.randomBytes(16).toString('hex'),
@@ -35,6 +42,12 @@ const otherCustomer = new Customer({
   name: 'Another Customer',
   email: 'another.customer@biblys.fr',
   axysId: '1136'
+});
+
+const deletableCustomer = new Customer({
+  name: 'Deletable Customer',
+  email: 'deletable.customer@biblys.fr',
+  axysId: '1137'
 });
 
 const customerInvoice = new Invoice({
@@ -85,6 +98,9 @@ before(function(done) {
     await user.save();
     await admin.save();
     await otherCustomer.save();
+    otherUser.customer = otherCustomer._id;
+    await otherUser.save();
+    await deletableCustomer.save();
     customerInvoice.customer = customer._id;
     await customerInvoice.save();
     otherInvoice.customer = otherCustomer._id;
@@ -112,8 +128,8 @@ after(function(done) {
 });
 
 module.exports = {
-  user, admin,
-  customer, otherCustomer,
+  user, otherUser, admin,
+  customer, otherCustomer, deletableCustomer,
   customerInvoice, otherInvoice, deletableInvoice,
   getStripeToken
 };

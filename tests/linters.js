@@ -3,6 +3,7 @@
 describe('Linters', function() {
   const paths = [
     'controllers',
+    'lib',
     'middlewares',
     'models',
     'tests',

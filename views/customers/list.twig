@@ -22,6 +22,12 @@
             <a class="button" href="/customers/{{ customer.id }}/edit">
               modif.
             </a>
+          </td>
+          <td>
+            <form method="post" action="/customers/{{ customer._id }}/delete">
+              <button>×</button>
+            </form>
+          </td>
         </tr>
       {% endfor %}
     </tbody>
