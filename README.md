@@ -29,7 +29,7 @@
 
 ## Changelog
 
-### DEV
+### 1.8.0 (2017-12-01)
 * Add new card to existing Stripe customer instead of creating a new one
 * Add a delete button for customers
 * Show associated customer in users list
