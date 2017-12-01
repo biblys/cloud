@@ -264,8 +264,6 @@ describe('Invoices controller', function() {
         });
     });
 
-    it('should redirect user without a stripeCustomerId');
-
     it('should allow authorized user to access page', function(done) {
       chai.request(server)
         .get(`/invoices/${customerInvoice._id}/pay`)
