@@ -2,6 +2,7 @@
 
 const chai           = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const crypto         = require('crypto');
 
 const stripe = require('../../lib/stripe-helper');
 
@@ -82,21 +83,31 @@ describe('Stripe Helper', function() {
   describe('Create charge from customer or card', function() {
 
     it('should throw an error if neither a customer nor a charge is provided', function() {
-      stripe.charge().should.be.rejectedWith(Error);
+      stripe.charge({}).should.be.rejectedWith(Error,
+        'Customer or source arguments must be provided');
     });
 
     it('should throw an error if amount was not provided', function() {
-      stripe.charge({ customer: 'customer' }).should.be.rejectedWith(Error);
+      stripe.charge({ customer: 'customer' }).should.be.rejectedWith(Error,
+        'Amount argument must be provided');
     });
 
     it('should throw an error if description was not provided', function() {
-      stripe.charge({ customer: 'customer', amount: 999 }).should.be.rejectedWith(Error);
+      stripe.charge({ customer: 'customer', amount: 999 }).should.be.rejectedWith(Error,
+        'Description argument must be provided');
+    });
+
+    it('should throw an error if invoiceId was not provided', function() {
+      stripe.charge({ customer: 'customer', amount: 999, description: 'Facture' })
+        .should.be.rejectedWith(Error, 'InvoiceId argument must be provided');
     });
 
     it('should create a charge with valid customer, amount and description', async function() {
       const token    = await stripe.createTokenFromCard(stripeCard);
       const customer = await stripe.createCustomer({ token: token.id, email: 'customer@biblys.fr' });
-      const charge   = await stripe.charge({ customer: customer.id, amount: 999, description: 'Facture n° 114' });
+      const invoiceId = crypto.randomBytes(16).toString('hex');
+      const charge   = await stripe.charge({ customer: customer.id, amount: 999,
+        description: 'Facture n° 114', invoiceId });
 
       charge.should.have.property('id');
     });
