@@ -8,7 +8,11 @@ const stripe   = require('../../lib/stripe-helper.js');
 chai.should();
 chai.use(chaiHttp);
 
-const { user, otherUser, admin, customer, customerInvoice, otherInvoice, getStripeToken } = require('../test-data.js');
+const {
+  user, otherUser, admin,
+  customer, customerInvoice, otherInvoice, yetAnotherInvoice,
+  getStripeToken
+} = require('../test-data.js');
 
 describe('Payments controller', function() {
 
@@ -122,7 +126,7 @@ describe('Payments controller', function() {
       const res = await chai.request(server)
         .post('/payments/create')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
-        .send({ invoiceId: customerInvoice._id, stripeToken: token.id });
+        .send({ invoiceId: yetAnotherInvoice._id, stripeToken: token.id });
 
       res.should.redirect;
     });

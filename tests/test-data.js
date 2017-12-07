@@ -68,6 +68,12 @@ const otherInvoice = new Invoice({
   payed: false
 });
 
+const yetAnotherInvoice = new Invoice({
+  number: '1235',
+  amount: '999',
+  payed: false
+});
+
 const stripeCard = {
   card: {
     number: '4242424242424242',
@@ -105,6 +111,8 @@ before(function(done) {
     await customerInvoice.save();
     otherInvoice.customer = otherCustomer._id;
     await otherInvoice.save();
+    yetAnotherInvoice.customer = customer._id;
+    await yetAnotherInvoice.save();
     deletableInvoice.customer = customer._id;
     await deletableInvoice.save();
     done();
@@ -130,6 +138,6 @@ after(function(done) {
 module.exports = {
   user, otherUser, admin,
   customer, otherCustomer, deletableCustomer,
-  customerInvoice, otherInvoice, deletableInvoice,
+  customerInvoice, otherInvoice, deletableInvoice, yetAnotherInvoice,
   getStripeToken
 };

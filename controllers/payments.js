@@ -44,7 +44,8 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
           amount: invoice.amount,
           description: `Facture n° ${invoice.number}`,
           customer: customer.stripeCustomerId,
-          source: card.id
+          source: card.id,
+          invoiceId: invoice._id
         });
       }
 
@@ -65,7 +66,8 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
         await stripe.charge({
           amount: invoice.amount,
           description: `Facture n° ${invoice.number}`,
-          customer: customer.stripeCustomerId
+          customer: customer.stripeCustomerId,
+          invoiceId: invoice._id
         });
 
       }
@@ -78,7 +80,8 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
         amount: invoice.amount,
         description: `Facture n° ${invoice.number}`,
         customer: invoice.customer.stripeCustomerId,
-        source: request.body.stripeCard
+        source: request.body.stripeCard,
+        invoiceId: invoice._id
       });
 
     }
