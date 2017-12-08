@@ -84,6 +84,8 @@ describe('Stripe Helper', function() {
     });
   });
 
+  // Get cards for a Stripe customer
+
   describe('Get cards for a Stripe customer', function() {
 
     it('should throw an error if customer was not provided', function() {
@@ -95,6 +97,28 @@ describe('Stripe Helper', function() {
       const cards    = await stripe.getCards(customer.id);
 
       cards.should.be.an('array');
+    });
+  });
+
+  // Delete card from a Stripe customer
+
+  describe('Delete card from a Stripe customer', function() {
+
+    it('should throw an error if customer was not provided', function() {
+      stripe.deleteCard({ card: 'card' }).should.be.rejectedWith(Error, 'Customer argument must be provided');
+    });
+
+    it('should throw an error if card was not provided', function() {
+      stripe.deleteCard({ customer: 'customer' }).should.be.rejectedWith(Error, 'Card argument must be provided');
+    });
+
+    it('should delete card with correct arguments', async function() {
+      const customer = await stripe.createCustomer({ token: 'tok_visa', email: 'customer@biblys.fr' });
+      const card     = await stripe.addCard({ customer: customer.id, token: 'tok_visa_debit' });
+      const response = await stripe.deleteCard({ customer: customer.id, card: card.id });
+
+      response.deleted.should.be.true;
+      response.id.should.equals(card.id);
     });
   });
 
