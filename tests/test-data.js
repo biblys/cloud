@@ -1,7 +1,7 @@
 'use strict';
 
 const crypto   = require('crypto');
-const stripe   = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe   = require('../lib/stripe-helper');
 
 const User     = require('../models/user');
 const Customer = require('../models/customer');
@@ -74,30 +74,9 @@ const yetAnotherInvoice = new Invoice({
   payed: false
 });
 
-const stripeCard = {
-  card: {
-    number: '4242424242424242',
-    exp_month: 12,
-    exp_year: 2021,
-    cvc: '123'
-  }
-};
-
-const getStripeToken = async function() {
-  return await stripe.tokens.create({
-    card: {
-      number: '4242424242424242',
-      exp_month: 12,
-      exp_year: 2021,
-      cvc: '123'
-    }
-  });
-};
-
 before(function(done) {
   (async function() {
-    const token = await stripe.tokens.create(stripeCard);
-    const stripeCustomer = await stripe.customers.create({ email: customer.email, source: token.id });
+    const stripeCustomer = await stripe.createCustomer({ token: 'tok_visa', email: 'customer@biblys.fr' });
     customer.stripeCustomerId = stripeCustomer.id;
     await customer.save();
     user.customer = customer._id;
@@ -138,6 +117,5 @@ after(function(done) {
 module.exports = {
   user, otherUser, admin,
   customer, otherCustomer, deletableCustomer,
-  customerInvoice, otherInvoice, deletableInvoice, yetAnotherInvoice,
-  getStripeToken
+  customerInvoice, otherInvoice, deletableInvoice, yetAnotherInvoice
 };
