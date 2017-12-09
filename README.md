@@ -29,7 +29,7 @@
 
 ## Changelog
 
-### DEV
+### 1.8.1 (2017-12-09)
 * Prevent Stripe to charge twice if user double-click Pay button
 
 ### 1.8.0 (2017-12-01)
