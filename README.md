@@ -29,6 +29,9 @@
 
 ## Changelog
 
+### DEV
+* Display version number in footer
+
 ### 1.8.1 (2017-12-09)
 * Prevent Stripe to charge twice if user double-click Pay button
 

@@ -35,6 +35,12 @@ h1 {
   display: none;
 }
 
+.footer {
+  font-size: .8em;
+  margin-top: 15px;
+  text-align: center;
+}
+
 /* Override Milligram */
 form,
 button {

@@ -47,6 +47,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Get version from package.json and inject in locals
+const version = require('./package.json').version;
+app.locals.version = version;
+
 // Security headers
 app.use(function(request, response, next) {
   response.setHeader('Content-Security-Policy', "default-src 'none'; connect-src https://checkout.stripe.com; script-src https://checkout.stripe.com; style-src 'self' https://checkout.stripe.com https://cdnjs.cloudflare.com; img-src 'self' https://q.stripe.com data:; frame-src https://checkout.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'");
