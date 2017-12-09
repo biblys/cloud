@@ -8,7 +8,10 @@ const stripe   = require('../../lib/stripe-helper.js');
 chai.should();
 chai.use(chaiHttp);
 
-const { user, otherUser, admin, customer, customerInvoice, otherInvoice, getStripeToken } = require('../test-data.js');
+const {
+  user, otherUser, admin,
+  customer, customerInvoice, otherInvoice, yetAnotherInvoice
+} = require('../test-data.js');
 
 describe('Payments controller', function() {
 
@@ -103,26 +106,20 @@ describe('Payments controller', function() {
 
     it('should process payment with a new card for a new customer', async function() {
 
-      // Create test stripe token
-      const token = await getStripeToken();
-
       const res = await chai.request(server)
         .post('/payments/create')
         .set('Cookie', `userUid=${otherUser.axysSessionUid}`)
-        .send({ invoiceId: otherInvoice._id, stripeToken: token.id });
+        .send({ invoiceId: otherInvoice._id, stripeToken: 'tok_visa' });
 
       res.should.redirect;
     });
 
     it('should process payment with a new card for an existing customer', async function() {
 
-      // Create test stripe token
-      const token = await getStripeToken();
-
       const res = await chai.request(server)
         .post('/payments/create')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
-        .send({ invoiceId: customerInvoice._id, stripeToken: token.id });
+        .send({ invoiceId: yetAnotherInvoice._id, stripeToken: 'tok_visa' });
 
       res.should.redirect;
     });
