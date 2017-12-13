@@ -53,7 +53,7 @@ app.locals.version = version;
 
 // Security headers
 app.use(function(request, response, next) {
-  response.setHeader('Content-Security-Policy', "default-src 'none'; connect-src https://checkout.stripe.com; script-src https://checkout.stripe.com; style-src 'self' https://checkout.stripe.com https://cdnjs.cloudflare.com; img-src 'self' https://q.stripe.com data:; frame-src https://checkout.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'");
+  response.setHeader('Content-Security-Policy', "default-src 'none'; connect-src https://js.stripe.com; script-src 'self' https://js.stripe.com; style-src 'self' https://js.stripe.com https://cdnjs.cloudflare.com; img-src 'self' https://q.stripe.com data:; frame-src https://js.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'");
   response.setHeader('X-Frame-Options', 'DENY');
   response.setHeader('X-Content-Type-Options', 'nosniff');
   response.setHeader('X-XSS-Protection', '1; mode=block');
