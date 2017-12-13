@@ -42,9 +42,15 @@ h1 {
 }
 
 /* Override Milligram */
+
 form,
 button {
   margin-bottom: 0;
+}
+
+button {
+  background-color: #f60;
+  border-color: #f60;
 }
 
 @media (min-width: 768px) {
