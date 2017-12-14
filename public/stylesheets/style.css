@@ -41,6 +41,16 @@ h1 {
   text-align: center;
 }
 
+.payment-option {
+  border-top: 1px solid rgba(0, 0, 0, .1);
+  margin-bottom: 25px;
+  padding-top: 15px;
+}
+
+.form-row {
+  margin-bottom: 25px;
+}
+
 /* Override Milligram */
 
 form,
