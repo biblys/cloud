@@ -47,8 +47,18 @@ h1 {
   padding-top: 15px;
 }
 
+.card-errors {
+  color: red;
+  font-weight: bold;
+  margin: 1em 0;
+}
+
 .form-row {
   margin-bottom: 25px;
+}
+
+.stripe-logo {
+  text-align: center;
 }
 
 /* Override Milligram */

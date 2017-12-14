@@ -2,50 +2,56 @@
 
 {% block title %}Paiement de la facture {{ invoice.number }}{% endblock %}
 
-  {% block head %}
-    <script type="text/javascript" src="/javascripts/stripe.js"></script>
-  {% endblock %}
+{% block head %}
+  <script type="text/javascript" src="/javascripts/stripe.js"></script>
+{% endblock %}
 
-  {% block body %}
+{% block body %}
 
-    <h1>Paiement</h1>
+  <h1>Paiement</h1>
 
-    <p>Facture n° {{ invoice.number }} pour {{ invoice.customer.name }}</p>
+  <p>Facture n° {{ invoice.number }} pour {{ invoice.customer.name }}</p>
 
-    <div class="payment-option">
-      <h2>Payer avec une carte sauvegardée</h2>
+  <div class="payment-option">
+    <h2>Payer avec une carte sauvegardée</h2>
 
-      {% if cards is empty %}
-        <p>Vous n'avez aucune carte sauvegardée.</p>
-      {% else %}
-        <form action="/payments/create" method="post">
-          <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
-
-          <div>
-            {% for card in cards %}
-              <input type="radio" name="stripeCard" value="{{ card.id }}" id="{{ card.id }}" required{% if loop.index == 1 %} checked{% endif %}>
-              <label class="label-inline" for="{{ card.id }}">{{ card.brand }} **** **** **** {{ card.last4 }} (Exp. {{ card.exp_month }}/{{ card.exp_year }})</label><br>
-            {% endfor %}
-          </div>
-
-          <button>Payer {{ invoice.amount|currency }}</button>
-        </form>
-      {% endif %}
-    </div>
-
-    <div class="payment-option">
-      <h2>Payer avec une nouvelle carte</h2>
-
-      <form id="add-card-form" action="/payments/create" method="POST" data-stripe-key="{{ stripePublicKey }}">
+    {% if cards is empty %}
+      <p>Vous n'avez aucune carte sauvegardée.</p>
+    {% else %}
+      <form action="/payments/create" method="post">
         <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
 
-        <div class="form-row">
-          <div id="card-element"></div>
-          <div id="card-errors" role="alert"></div>
+        <div>
+          {% for card in cards %}
+            <input type="radio" name="stripeCard" value="{{ card.id }}" id="{{ card.id }}" required{% if loop.index == 1 %} checked{% endif %}>
+            <label class="label-inline" for="{{ card.id }}">{{ card.brand }} **** **** **** {{ card.last4 }} (Exp. {{ card.exp_month }}/{{ card.exp_year }})</label><br>
+          {% endfor %}
         </div>
 
         <button>Payer {{ invoice.amount|currency }}</button>
       </form>
-    </div>
+    {% endif %}
+  </div>
+
+  <div class="payment-option">
+    <h2>Payer avec une nouvelle carte</h2>
+
+    <form id="add-card-form" action="/payments/create" method="POST" data-stripe-key="{{ stripePublicKey }}">
+      <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
+
+      <div class="form-row">
+        <div id="card-element"></div>
+        <p id="card-errors" class="card-errors" role="alert"></p>
+      </div>
+
+      <button>Payer {{ invoice.amount|currency }}</button>
+    </form>
+  </div>
+
+  <div class="stripe-logo">
+    <a href="https://www.stripe.com">
+      <img src="/images/powered-by-stripe.png">
+    </a>
+  </div>
 
 {% endblock %}
