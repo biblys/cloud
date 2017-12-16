@@ -35,10 +35,42 @@ h1 {
   display: none;
 }
 
+.footer {
+  font-size: .8em;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.payment-option {
+  border-top: 1px solid rgba(0, 0, 0, .1);
+  margin-bottom: 25px;
+  padding-top: 15px;
+}
+
+.card-errors {
+  color: red;
+  font-weight: bold;
+  margin: 1em 0;
+}
+
+.form-row {
+  margin-bottom: 25px;
+}
+
+.stripe-logo {
+  text-align: center;
+}
+
 /* Override Milligram */
+
 form,
 button {
   margin-bottom: 0;
+}
+
+button {
+  background-color: #f60;
+  border-color: #f60;
 }
 
 @media (min-width: 768px) {

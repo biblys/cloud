@@ -17,8 +17,8 @@
 
 ## Todo
 
+* Improve payment page design
 * Delete saved cards
-* Use Stripe Elements to add a new card
 * Generate complete invoices
 * Allow customers to see all their invoices
 * Support tickets
@@ -28,6 +28,10 @@
 * Home page
 
 ## Changelog
+
+### 1.9.0 (2017-12-16)
+* Use Stripe Elements to add a new card
+* Display version number in footer
 
 ### 1.8.1 (2017-12-09)
 * Prevent Stripe to charge twice if user double-click Pay button

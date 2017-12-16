@@ -2,45 +2,56 @@
 
 {% block title %}Paiement de la facture {{ invoice.number }}{% endblock %}
 
+{% block head %}
+  <script type="text/javascript" src="/javascripts/stripe.js"></script>
+{% endblock %}
+
 {% block body %}
 
   <h1>Paiement</h1>
 
   <p>Facture n° {{ invoice.number }} pour {{ invoice.customer.name }}</p>
 
-  <form action="/payments/create" method="post">
-    <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
+  <div class="payment-option">
+    <h2>Payer avec une carte sauvegardée</h2>
 
-    <div>
-      {% for card in cards %}
-        <input type="radio" name="stripeCard" value="{{ card.id }}" id="{{ card.id }}" required{% if loop.index == 1 %} checked{% endif %}>
-        <label class="label-inline" for="{{ card.id }}">{{ card.brand }} **** **** **** {{ card.last4 }} (Exp. {{ card.exp_month }}/{{ card.exp_year }})</label><br>
-      {% endfor %}
-    </div>
+    {% if cards is empty %}
+      <p>Vous n'avez aucune carte sauvegardée.</p>
+    {% else %}
+      <form action="/payments/create" method="post">
+        <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
 
-    {% if cards is not empty %}
-      <button>Payer {{ invoice.amount|currency }}</button>
+        <div>
+          {% for card in cards %}
+            <input type="radio" name="stripeCard" value="{{ card.id }}" id="{{ card.id }}" required{% if loop.index == 1 %} checked{% endif %}>
+            <label class="label-inline" for="{{ card.id }}">{{ card.brand }} **** **** **** {{ card.last4 }} (Exp. {{ card.exp_month }}/{{ card.exp_year }})</label><br>
+          {% endfor %}
+        </div>
+
+        <button>Payer {{ invoice.amount|currency }}</button>
+      </form>
     {% endif %}
+  </div>
 
-    <br><br>
+  <div class="payment-option">
+    <h2>Payer avec une nouvelle carte</h2>
 
-  </form>
+    <form id="add-card-form" action="/payments/create" method="POST" data-stripe-key="{{ stripePublicKey }}">
+      <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
 
-  <form action="/payments/create" method="POST">
-    <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
-    <script
-      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-      data-key="{{ stripePublicKey }}"
-      data-allow-remember-me="false"
-      data-amount="{{ invoice.amount }}"
-      data-email="{{ invoice.customer.email }}"
-      data-name="Biblys"
-      data-label="Payer avec une nouvelle carte"
-      data-description="Facture n° {{ invoice.number }}"
-      data-image="/images/biblys-logo-stripe.jpg"
-      data-locale="auto"
-      data-currency="eur">
-    </script>
-  </form>
+      <div class="form-row">
+        <div id="card-element"></div>
+        <p id="card-errors" class="card-errors" role="alert"></p>
+      </div>
+
+      <button>Payer {{ invoice.amount|currency }}</button>
+    </form>
+  </div>
+
+  <div class="stripe-logo">
+    <a href="https://www.stripe.com">
+      <img src="/images/powered-by-stripe.png">
+    </a>
+  </div>
 
 {% endblock %}
