@@ -29,6 +29,9 @@
 
 ## Changelog
 
+### 1.9.1 (2017-12-19)
+* Fix displaying Stripe errors
+
 ### 1.9.0 (2017-12-16)
 * Use Stripe Elements to add a new card
 * Display version number in footer
