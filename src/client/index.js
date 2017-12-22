@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import PropTypes from 'prop-types';
 
-import CheckoutForm from './CheckoutForm';
+import CheckoutForm from './components/CheckoutForm';
 
 class CardForm extends React.Component {
   render() {

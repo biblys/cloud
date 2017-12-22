@@ -4,7 +4,7 @@ require('webpack');
 const path = require('path');
 
 const BUILD_DIR = path.resolve(__dirname, 'public/javascripts');
-const APP_DIR = path.resolve(__dirname, 'src/client/app');
+const APP_DIR = path.resolve(__dirname, 'src/client');
 
 const config = {
   entry: [
