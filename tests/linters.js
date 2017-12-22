@@ -8,7 +8,7 @@ describe('Linters', function() {
     'models',
     'tests',
     'app.js',
-    'public/javascripts'
+    'src/client'
   ];
 
   // JSCS
