@@ -54,7 +54,7 @@ h1 {
 }
 
 .form-row {
-  margin-bottom: 25px;
+  margin-bottom: 16px;
 }
 
 .stripe-logo {
@@ -68,7 +68,13 @@ button {
   margin-bottom: 0;
 }
 
-button {
+button,
+.button{
+  background-color: #f60;
+  border-color: #f60;
+}
+
+button[disabled]:hover {
   background-color: #f60;
   border-color: #f60;
 }
