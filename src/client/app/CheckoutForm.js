@@ -7,7 +7,8 @@ class CheckoutForm extends React.Component {
     super(props);
     this.state = {
       cardError: null,
-      stripeToken: null
+      stripeToken: null,
+      loading: false
     };
 
   }
@@ -15,10 +16,11 @@ class CheckoutForm extends React.Component {
   async _handleSubmit(event) {
     event.preventDefault();
     const eventTarget = event.target;
+    this.setState({ loading: true });
 
     const result = await this.props.stripe.createToken();
     if (result.error) {
-      return this.setState({ cardError: result.error.message });
+      return this.setState({ loading: false, cardError: result.error.message });
     }
 
     this.setState({
@@ -38,6 +40,12 @@ class CheckoutForm extends React.Component {
   }
 
   render() {
+
+    let buttonLabel = `Payer ${this.props.amount}`;
+    if (this.state.loading) {
+      buttonLabel = 'Chargement...';
+    }
+
     return (
       <form onSubmit={this._handleSubmit.bind(this)} action="/payments/create" method="POST">
         {this.state.stripeToken &&
@@ -48,7 +56,9 @@ class CheckoutForm extends React.Component {
           <CardElement onChange={this._onCardChange.bind(this)} style={{base: {fontSize: '18px'}}} />
         </div>
         {this.state.cardError && <p className="card-errors">{this.state.cardError}</p>}
-        <button>Payer {this.props.amount}</button>
+        <button disabled={this.state.loading}>
+          {buttonLabel}
+        </button>
       </form>
     );
   }
