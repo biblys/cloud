@@ -2,10 +2,6 @@
 
 {% block title %}Paiement de la facture {{ invoice.number }}{% endblock %}
 
-{% block head %}
-  <script type="text/javascript" src="/javascripts/stripe.js"></script>
-{% endblock %}
-
 {% block body %}
 
   <h1>Paiement</h1>
@@ -36,16 +32,11 @@
   <div class="payment-option">
     <h2>Payer avec une nouvelle carte</h2>
 
-    <form id="add-card-form" action="/payments/create" method="POST" data-stripe-key="{{ stripePublicKey }}">
-      <input type="hidden" name="invoiceId" value="{{ invoice._id }}">
-
-      <div class="form-row">
-        <div id="card-element"></div>
-        <p id="card-errors" class="card-errors" role="alert"></p>
-      </div>
-
-      <button>Payer {{ invoice.amount|currency }}</button>
-    </form>
+    <div id="card-form"
+      data-stripe-key="{{ stripePublicKey }}"
+      data-invoice-id="{{ invoice._id }}"
+      data-amount="{{ invoice.amount | currency }}"
+    > </div>
   </div>
 
   <div class="stripe-logo">

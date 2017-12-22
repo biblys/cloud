@@ -1,14 +1,21 @@
 {
+    "plugins": ["react"],
     "env": {
         "browser": true,
         "es6": true,
         "node": true,
         "mocha": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 2017
+        "ecmaVersion": 2017,
+        "ecmaFeatures": {
+          "jsx": true
+        }
     },
     "rules": {
         "indent": [
@@ -29,6 +36,7 @@
         "semi": [
             2,
             "always"
-        ]
+        ],
+        "jsx-quotes": ["error", "prefer-double"]
     }
 }
