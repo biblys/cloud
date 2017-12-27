@@ -1,7 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
 
+import InvoiceLines from './containers/InvoiceLines';
 import CardForm from './components/CardForm';
+
+// InvoiceLines element
+
+const invoiceLinesElement = document.getElementById('invoice-lines');
+if (invoiceLinesElement) {
+  render(<InvoiceLines />, invoiceLinesElement);
+}
 
 // CardForm element
 
