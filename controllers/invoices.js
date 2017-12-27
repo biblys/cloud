@@ -11,7 +11,7 @@ const auth       = require('../middlewares/auth');
 const authAdmin  = require('../middlewares/authAdmin');
 const getInvoice = require('../middlewares/getInvoice');
 
-const invoiceLines = require('./invoice-lines');
+const invoiceLines = require('./invoiceLines');
 router.use('/:id/lines', invoiceLines);
 
 // New
