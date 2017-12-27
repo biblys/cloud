@@ -45,6 +45,7 @@ router.delete('/:lineId', auth, authAdmin, getInvoice, async function(request, r
   }
 
   await line.remove();
+  await request.invoice.save();
 
   response.status(204).send();
 

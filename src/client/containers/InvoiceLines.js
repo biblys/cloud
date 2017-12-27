@@ -46,16 +46,36 @@ class InvoiceLines extends React.Component {
     this._fetchLines();
   }
 
-  _getLines() {
+  _deleteLine = async (id) => {
+    // DELETE line on server
+    await fetch(`/invoices/${this.props.invoiceId}/lines/${id}`, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Update state from server
+    this._fetchLines();
+  }
+
+  _renderLines() {
     return this.state.lines.map((line) => (
-      <InvoiceLine key={line._id} label={line.label} />
+      <InvoiceLine
+        key={line._id}
+        label={line.label}
+        deleteLine={() => this._deleteLine(line._id)}
+        isAdmin={this.props.isAdmin}
+      />
     ));
   }
 
   render() {
     return (
       <tbody>
-        {this._getLines()}
+        {this._renderLines()}
         {this.props.isAdmin && <InvoiceLineForm onSubmit={this._addLine} />}
       </tbody>
     );
