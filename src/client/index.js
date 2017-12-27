@@ -1,27 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { StripeProvider, Elements } from 'react-stripe-elements';
-import PropTypes from 'prop-types';
 
-import CheckoutForm from './components/CheckoutForm';
+import CardForm from './components/CardForm';
 
-class CardForm extends React.Component {
-  render() {
-    return (
-      <StripeProvider apiKey={this.props.stripeKey}>
-        <Elements>
-          <CheckoutForm invoiceId={this.props.invoiceId} amount={this.props.amount}/>
-        </Elements>
-      </StripeProvider>
-    );
-  }
-}
-
-CardForm.propTypes = {
-  amount:    PropTypes.string.isRequired,
-  invoiceId: PropTypes.string.isRequired,
-  stripeKey: PropTypes.string.isRequired
-};
+// CardForm element
 
 const cardFormElement = document.getElementById('card-form');
 if (cardFormElement) {
