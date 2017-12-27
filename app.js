@@ -103,8 +103,13 @@ app.use(function(err, req, res, next) {
   res.locals.errorCode = statusCode;
   res.locals.error = req.app.get('env') === 'development' ? error : {};
 
-  // render the error page
   res.status(statusCode);
+
+  if (req.accepts('json') && !req.accepts('html')) {
+    return res.send({ error: error.message });
+  }
+
+  // render the error page
   res.render('error');
 });
 
