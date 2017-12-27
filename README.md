@@ -17,9 +17,11 @@
 
 ## Todo
 
-* Improve payment page design
-* Delete saved cards
 * Generate complete invoices
+  * Add amount prop for invoice line
+  * Calculate invoice amount from invoice lines
+  * Add invoice missing fields
+* Delete saved cards
 * Allow customers to see all their invoices
 * Support tickets
 * Tests for middlewares
