@@ -35,4 +35,19 @@ router.post('/', auth, authAdmin, getInvoice, function(request, response, next) 
   });
 });
 
+// Delete
+
+router.delete('/:lineId', auth, authAdmin, getInvoice, async function(request, response) {
+
+  const line = await request.invoice.lines.id(request.params.lineId);
+  if (!line) {
+    return response.status(404).send({ error: 'Invoice Line Not Found' });
+  }
+
+  await line.remove();
+
+  response.status(204).send();
+
+});
+
 module.exports = router;

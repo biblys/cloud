@@ -135,7 +135,7 @@ describe('InvoiceLines controller', function() {
         });
     });
 
-    it('should redirect admin user after invoice creation', function(done) {
+    it('should return 201 after invoice line creation', function(done) {
       chai.request(server)
         .post(`/invoices/${customerInvoice._id}/lines`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
@@ -148,4 +148,70 @@ describe('InvoiceLines controller', function() {
     });
   });
 
+  // DELETE /invoices/:id/lines/:lineId
+
+  describe('DELETE /invoices/:id/lines/:lineId', function() {
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .delete(`/invoices/${customerInvoice._id}/lines/${customerInvoice.lines[0]._id}`)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.json;
+          res.body.error.should.equal('Unauthorized');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .delete(`/invoices/${customerInvoice._id}/lines/${customerInvoice.lines[0]._id}`)
+        .set('Accept', 'application/json')
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.json;
+          res.body.error.should.equal('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 404 if invoice id is unknown', function(done) {
+      chai.request(server)
+        .delete(`/invoices/${mongoose.Types.ObjectId()}/lines/${mongoose.Types.ObjectId()}`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          res.should.have.status(404);
+          res.should.be.json;
+          res.body.error.should.equal('Invoice Not Found');
+          done();
+        });
+    });
+
+    it('should return 404 if invoice line id is unknown', function(done) {
+      chai.request(server)
+        .delete(`/invoices/${customerInvoice._id}/lines/${mongoose.Types.ObjectId()}`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          res.should.have.status(404);
+          res.should.be.json;
+          res.body.error.should.equal('Invoice Line Not Found');
+          done();
+        });
+    });
+
+    it('should return 204 after successful invoice line deletion', function(done) {
+      chai.request(server)
+        .delete(`/invoices/${customerInvoice._id}/lines/${customerInvoice.lines[0]._id}`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          res.should.have.status(204);
+          done();
+        });
+    });
+
+  });
 });
