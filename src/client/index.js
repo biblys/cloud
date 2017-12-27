@@ -8,7 +8,8 @@ import CardForm from './components/CardForm';
 
 const invoiceLinesElement = document.getElementById('invoice-lines');
 if (invoiceLinesElement) {
-  render(<InvoiceLines />, invoiceLinesElement);
+  const invoiceId = invoiceLinesElement.dataset.invoiceId;
+  render(<InvoiceLines invoiceId={invoiceId} />, invoiceLinesElement);
 }
 
 // CardForm element

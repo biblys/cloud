@@ -1,6 +1,8 @@
 import React from 'react';
 
-export default class InvoiceLifeForm extends React.Component {
+import PropTypes from 'prop-types';
+
+class InvoiceLineForm extends React.Component {
   render() {
     return (
       <tr>
@@ -13,4 +15,10 @@ export default class InvoiceLifeForm extends React.Component {
       </tr>
     );
   }
+}
+
+InvoiceLineForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired
 };
+
+export default InvoiceLineForm;

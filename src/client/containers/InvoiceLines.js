@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import InvoiceLine from '../components/InvoiceLine';
 import InvoiceLineForm from '../components/InvoiceLineForm';
@@ -12,11 +13,24 @@ class InvoiceLines extends React.Component {
     ]
   };
 
-  _addLine = (event, label) => {
+  _addLine = async (event, label) => {
     event.preventDefault();
+
+    // Update state
     const line = { _id: Math.random(), label: label.value };
     const lines = [...this.state.lines, line];
     this.setState({ lines });
+
+    // POST new line
+    await fetch(`/invoices/${this.props.invoiceId}/lines`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({ label: label.value })
+    });
   }
 
   _getLines() {
@@ -34,5 +48,9 @@ class InvoiceLines extends React.Component {
     );
   }
 }
+
+InvoiceLines.propTypes = {
+  invoiceId: PropTypes.string.isRequired
+};
 
 export default InvoiceLines;
