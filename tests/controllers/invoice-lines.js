@@ -19,10 +19,11 @@ describe('InvoiceLines controller', function() {
     it('should return 401 for unlogged user', function(done) {
       chai.request(server)
         .get('/invoices/xxx/lines')
+        .set('Accept', 'application/json')
         .end(function(err, res) {
           res.should.have.status(401);
-          res.should.be.html;
-          res.text.should.include('Connexion');
+          res.should.be.json;
+          res.body.error.should.equal('Unauthorized');
           done();
         });
     });
@@ -30,11 +31,12 @@ describe('InvoiceLines controller', function() {
     it('should return 404 for non existing invoice', function(done) {
       chai.request(server)
         .get(`/invoices/${mongoose.Types.ObjectId()}/lines`)
+        .set('Accept', 'application/json')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(404);
-          res.should.be.html;
-          res.text.should.include('Invoice Not Found');
+          res.should.be.json;
+          res.body.error.should.equal('Invoice Not Found');
           done();
         });
     });
@@ -42,11 +44,12 @@ describe('InvoiceLines controller', function() {
     it('should return 403 for unauthorized user', function(done) {
       chai.request(server)
         .get(`/invoices/${otherInvoice._id}/lines`)
+        .set('Accept', 'application/json')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(403);
-          res.should.be.html;
-          res.text.should.include('You are not authorized to see this invoice.');
+          res.should.be.json;
+          res.body.error.should.equal('You are not authorized to see this invoice.');
           done();
         });
     });
@@ -54,6 +57,7 @@ describe('InvoiceLines controller', function() {
     it('should display invoice for authorized user', function(done) {
       chai.request(server)
         .get(`/invoices/${customerInvoice._id}/lines`)
+        .set('Accept', 'application/json')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(200);
@@ -66,11 +70,79 @@ describe('InvoiceLines controller', function() {
     it('should allow admin to access all invoices lines', function(done) {
       chai.request(server)
         .get(`/invoices/${customerInvoice._id}/lines`)
+        .set('Accept', 'application/json')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(200);
           res.should.be.json;
           res.body[0].should.have.property('label');
+          done();
+        });
+    });
+  });
+
+  // POST /invoices/:id/lines
+
+  describe('POST /invoices/:id/lines', function() {
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/lines`)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.json;
+          res.body.error.should.equal('Unauthorized');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/lines`)
+        .set('Accept', 'application/json')
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.json;
+          res.body.error.should.equal('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 404 if invoice id is unknown', function(done) {
+      chai.request(server)
+        .post(`/invoices/${mongoose.Types.ObjectId()}/lines`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          res.should.have.status(404);
+          res.should.be.json;
+          res.body.error.should.equal('Invoice Not Found');
+          done();
+        });
+    });
+
+    it('should return 400 if label field is missing', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/lines`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.json;
+          res.body.error.should.equal('Le champ Label est obligatoire');
+          done();
+        });
+    });
+
+    it('should redirect admin user after invoice creation', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/lines`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .set('Accept', 'application/json')
+        .send({ label: 'Line 1' })
+        .end(function(err, res) {
+          res.should.have.status(201);
           done();
         });
     });
