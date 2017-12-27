@@ -5,13 +5,23 @@ import InvoiceLine from '../components/InvoiceLine';
 import InvoiceLineForm from '../components/InvoiceLineForm';
 
 class InvoiceLines extends React.Component {
-  state = {
-    lines: [
-      { _id: 1, label: 'Line 1' },
-      { _id: 2, label: 'Line 2' },
-      { _id: 3, label: 'Line 3' }
-    ]
-  };
+  state = { lines: [] };
+
+  componentWillMount() {
+    this._fetchLines();
+  }
+
+  _fetchLines = async () => {
+    const response = await fetch(`/invoices/${this.props.invoiceId}/lines`, {
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+    const lines = await response.json();
+    this.setState({ lines });
+  }
 
   _addLine = async (event, label) => {
     event.preventDefault();
@@ -31,6 +41,9 @@ class InvoiceLines extends React.Component {
       },
       body: JSON.stringify({ label: label.value })
     });
+
+    label.value = '';
+    this._fetchLines();
   }
 
   _getLines() {
