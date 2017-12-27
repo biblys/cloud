@@ -7,7 +7,7 @@
     "test": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test node_modules/mocha/bin/mocha tests --recursive --timeout 10000",
     "start": "webpack && NODE_ENV=production node ./bin/www",
     "dev": "DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
-    "dev:build": "webpack --watch -d source-map"
+    "dev:build": "NODE_ENV=development webpack --watch -d source-map"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-react-app": "^3.1.0",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
