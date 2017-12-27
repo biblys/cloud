@@ -12,11 +12,11 @@ const twig         = require('twig');
 const app = express();
 
 // Controllers
-const customers = require('./controllers/customers');
-const index     = require('./controllers/index');
-const invoices  = require('./controllers/invoices');
-const payments  = require('./controllers/payments');
-const users     = require('./controllers/users');
+const customers     = require('./controllers/customers');
+const index         = require('./controllers/index');
+const invoices      = require('./controllers/invoices');
+const payments      = require('./controllers/payments');
+const users         = require('./controllers/users');
 
 // Debug logs
 const mongoDebug = require('debug')('biblys-cloud:mongo');

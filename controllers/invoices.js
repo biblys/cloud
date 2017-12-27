@@ -11,6 +11,9 @@ const auth       = require('../middlewares/auth');
 const authAdmin  = require('../middlewares/authAdmin');
 const getInvoice = require('../middlewares/getInvoice');
 
+const invoiceLines = require('./invoice-lines');
+router.use('/:id/lines', invoiceLines);
+
 // New
 
 router.get('/new', auth, authAdmin, function(request, response, next) {

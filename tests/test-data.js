@@ -53,7 +53,8 @@ const deletableCustomer = new Customer({
 const customerInvoice = new Invoice({
   number: '1234',
   amount: '999',
-  payed: false
+  payed: false,
+  lines: [{ label: 'Line 1' }]
 });
 
 const deletableInvoice = new Invoice({
