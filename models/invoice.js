@@ -1,5 +1,12 @@
 const mongoose = require('mongoose');
 
+const InvoiceLineSchema = new mongoose.Schema({
+  label: {
+    type: String,
+    required: true
+  }
+});
+
 const InvoiceSchema = new mongoose.Schema({
   number: {
     type: String,
@@ -10,6 +17,7 @@ const InvoiceSchema = new mongoose.Schema({
     ref: 'Customer',
     required: true
   },
+  lines: [InvoiceLineSchema],
   amount: {
     type: String,
     required: true
