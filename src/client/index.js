@@ -9,7 +9,8 @@ import CardForm from './components/CardForm';
 const invoiceLinesElement = document.getElementById('invoice-lines');
 if (invoiceLinesElement) {
   const invoiceId = invoiceLinesElement.dataset.invoiceId;
-  render(<InvoiceLines invoiceId={invoiceId} />, invoiceLinesElement);
+  const isAdmin = (invoiceLinesElement.dataset.isAdmin == 'true');
+  render(<InvoiceLines invoiceId={invoiceId} isAdmin={isAdmin} />, invoiceLinesElement);
 }
 
 // CardForm element

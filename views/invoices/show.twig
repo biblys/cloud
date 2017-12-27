@@ -17,6 +17,9 @@
 
   {% endif %}
 
-  <table id="invoice-lines" data-invoice-id="{{ invoice._id }}"> </table>
+  <table id="invoice-lines"
+    data-invoice-id="{{ invoice._id }}"
+    data-is-admin="{{ currentUser.isAdmin }}">
+  </table>
 
 {% endblock %}

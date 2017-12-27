@@ -56,14 +56,15 @@ class InvoiceLines extends React.Component {
     return (
       <tbody>
         {this._getLines()}
-        <InvoiceLineForm onSubmit={this._addLine} />
+        {this.props.isAdmin && <InvoiceLineForm onSubmit={this._addLine} />}
       </tbody>
     );
   }
 }
 
 InvoiceLines.propTypes = {
-  invoiceId: PropTypes.string.isRequired
+  invoiceId: PropTypes.string.isRequired,
+  isAdmin: PropTypes.bool.isRequired
 };
 
 export default InvoiceLines;
