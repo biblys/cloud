@@ -23,7 +23,7 @@ const InvoiceSchema = new mongoose.Schema({
   },
   lines: [InvoiceLineSchema],
   amount: {
-    type: String,
+    type: Number,
     required: true
   },
   payed: {
@@ -41,7 +41,7 @@ InvoiceSchema.methods.calculateTotal = function() {
   const total = this.lines.reduce((total, line) => {
     return total + line.price;
   }, 0);
-  this.amount = parseFloat(total);
+  this.amount = parseInt(total);
 };
 
 module.exports = mongoose.model('Invoice', InvoiceSchema);

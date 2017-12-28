@@ -34,7 +34,7 @@ router.post('/', auth, authAdmin, getInvoice, function(request, response, next) 
   const line    = {
     _id: mongoose.Types.ObjectId(),
     label: request.body.label,
-    price: request.body.price
+    price: parseInt(request.body.price) * 100
   };
   invoice.lines.push(line);
   invoice.calculateTotal();
