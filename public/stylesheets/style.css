@@ -67,6 +67,15 @@ h1 {
   text-align: center;
 }
 
+.invoice-lines .label {
+  width: 100%;
+}
+
+.invoice-lines .price,
+.invoice-lines .total {
+  text-align: right;
+}
+
 /* Override Milligram */
 
 form,
@@ -83,6 +92,10 @@ button,
 button[disabled]:hover {
   background-color: #f60;
   border-color: #f60;
+}
+
+th:last-child {
+  padding-right: 1.5rem;
 }
 
 @media (min-width: 768px) {
@@ -118,6 +131,11 @@ button[disabled]:hover {
 
   .payment-button {
     display: none
+  }
+
+  .invoice-lines .invoice-delete,
+  .invoice-lines .invoice-line-form {
+    display: none;
   }
 
   .footer {

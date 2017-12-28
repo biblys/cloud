@@ -6,11 +6,11 @@ import Price from './Price.js';
 const invoiceLine = (props) => (
   <tr>
     <td>{props.label}</td>
-    <td>
+    <td className="price">
       <Price amount={props.price} />
     </td>
     {props.isAdmin &&
-      <td>
+      <td className="invoice-delete">
         <button onClick={props.deleteLine}>x</button>
       </td>
     }

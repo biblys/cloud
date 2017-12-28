@@ -77,7 +77,7 @@ class InvoiceLines extends React.Component {
       <React.Fragment>
         <thead>
           <tr>
-            <th>Prestation</th>
+            <th className="label">Prestation</th>
             <th>Montant</th>
           </tr>
         </thead>
@@ -87,8 +87,8 @@ class InvoiceLines extends React.Component {
         </tbody>
         <tfoot>
           <tr>
-            <th>Total :</th>
-            <th>
+            <th className="total">Total :</th>
+            <th className="price">
               <Price amount={total} />
             </th>
           </tr>

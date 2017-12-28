@@ -6,7 +6,7 @@ class InvoiceLineForm extends React.Component {
   render() {
     const style = { display: 'flex' };
     return (
-      <tr>
+      <tr className="invoice-line-form">
         <td colSpan="3">
           <form style={style} onSubmit={(e) => this.props.onSubmit(e, this._label, this._price)}>
             <input type="text" placeholder="Prestation" ref={(i) => this._label = i} required />
