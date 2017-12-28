@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Price from './Price.js';
+
 const invoiceLine = (props) => (
   <tr>
     <td>{props.label}</td>
+    <td>
+      <Price amount={props.price} />
+    </td>
     {props.isAdmin &&
       <td>
         <button onClick={props.deleteLine}>x</button>
@@ -15,7 +20,8 @@ const invoiceLine = (props) => (
 invoiceLine.propTypes = {
   deleteLine: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
-  label: PropTypes.string.isRequired
+  label: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired
 };
 
 export default invoiceLine;

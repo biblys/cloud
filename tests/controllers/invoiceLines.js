@@ -62,7 +62,9 @@ describe('InvoiceLines controller', function() {
         .end(function(err, res) {
           res.should.have.status(200);
           res.should.be.json;
+          res.body[0].should.have.property('_id');
           res.body[0].should.have.property('label');
+          res.body[0].should.have.property('price');
           done();
         });
     });
@@ -75,7 +77,9 @@ describe('InvoiceLines controller', function() {
         .end(function(err, res) {
           res.should.have.status(200);
           res.should.be.json;
+          res.body[0].should.have.property('_id');
           res.body[0].should.have.property('label');
+          res.body[0].should.have.property('price');
           done();
         });
     });
@@ -135,14 +139,31 @@ describe('InvoiceLines controller', function() {
         });
     });
 
-    it('should return 201 after invoice line creation', function(done) {
+    it('should return 400 if price field is missing', function(done) {
       chai.request(server)
         .post(`/invoices/${customerInvoice._id}/lines`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .set('Accept', 'application/json')
         .send({ label: 'Line 1' })
         .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.json;
+          res.body.error.should.equal('Le champ Prix est obligatoire');
+          done();
+        });
+    });
+
+    it('should return 201 after invoice line creation', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/lines`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .set('Accept', 'application/json')
+        .send({ label: 'Line 1', price: '13.99' })
+        .end(function(err, res) {
           res.should.have.status(201);
+          res.body.should.have.property('_id');
+          res.body.should.have.property('label');
+          res.body.should.have.property('price');
           done();
         });
     });

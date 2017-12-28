@@ -1,7 +1,8 @@
 'use strict';
 
-const express = require('express');
-const router  = express.Router({ mergeParams: true });
+const mongoose = require('mongoose');
+const express  = require('express');
+const router   = express.Router({ mergeParams: true });
 
 const auth       = require('../middlewares/auth');
 const authAdmin  = require('../middlewares/authAdmin');
@@ -24,12 +25,21 @@ router.post('/', auth, authAdmin, getInvoice, function(request, response, next) 
     return next('Le champ Label est obligatoire');
   }
 
-  const invoice = request.invoice;
+  if (typeof request.body.price === 'undefined') {
+    response.status(400);
+    return next('Le champ Prix est obligatoire');
+  }
 
-  invoice.lines.push({ label: request.body.label });
+  const invoice = request.invoice;
+  const line    = {
+    _id: mongoose.Types.ObjectId(),
+    label: request.body.label,
+    price: request.body.price
+  };
+  invoice.lines.push(line);
 
   invoice.save().then(function() {
-    response.status(201).send();
+    response.status(201).send(line);
   }).catch(function(error) {
     return next(error);
   });

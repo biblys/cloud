@@ -54,7 +54,7 @@ const customerInvoice = new Invoice({
   number: '1234',
   amount: '999',
   payed: false,
-  lines: [{ label: 'Line 1' }]
+  lines: [{ label: 'Line 1', price: 9.99 }]
 });
 
 const deletableInvoice = new Invoice({

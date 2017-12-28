@@ -18,7 +18,6 @@
 ## Todo
 
 * Generate complete invoices
-  * Add amount prop for invoice line
   * Calculate invoice amount from invoice lines
   * Add invoice missing fields
 * Delete saved cards

@@ -23,13 +23,8 @@ class InvoiceLines extends React.Component {
     this.setState({ lines });
   }
 
-  _addLine = async (event, label) => {
+  _addLine = async (event, label, price) => {
     event.preventDefault();
-
-    // Update state
-    const line = { _id: Math.random(), label: label.value };
-    const lines = [...this.state.lines, line];
-    this.setState({ lines });
 
     // POST new line
     await fetch(`/invoices/${this.props.invoiceId}/lines`, {
@@ -39,10 +34,12 @@ class InvoiceLines extends React.Component {
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },
-      body: JSON.stringify({ label: label.value })
+      body: JSON.stringify({ label: label.value, price: price.value })
     });
 
     label.value = '';
+    price.value = '';
+    label.focus();
     this._fetchLines();
   }
 
@@ -66,6 +63,7 @@ class InvoiceLines extends React.Component {
       <InvoiceLine
         key={line._id}
         label={line.label}
+        price={line.price}
         deleteLine={() => this._deleteLine(line._id)}
         isAdmin={this.props.isAdmin}
       />

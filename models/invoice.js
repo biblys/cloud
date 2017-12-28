@@ -4,6 +4,10 @@ const InvoiceLineSchema = new mongoose.Schema({
   label: {
     type: String,
     required: true
+  },
+  price: {
+    type: Number,
+    required: true
   }
 });
 
