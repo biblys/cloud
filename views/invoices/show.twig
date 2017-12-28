@@ -3,7 +3,7 @@
 {% block title %}Facture n° {{ invoice.number }}{% endblock %}
 
 {% block body %}
-  <h1>Facture n° {{ invoice.number }}</h1>
+  <h1 class="invoice-title">Facture n° {{ invoice.number }}</h1>
 
   <p>{{ invoice.customer.name }}</p>
 
@@ -13,7 +13,7 @@
 
   {% else %}
 
-    <a class="button" href="/invoices/{{invoice._id}}/pay">Payer</a>
+    <a class="button payment-button" href="/invoices/{{invoice._id}}/pay">Payer</a>
 
   {% endif %}
 

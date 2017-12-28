@@ -94,3 +94,33 @@ button[disabled]:hover {
     width: 450px;
   }
 }
+
+@media print {
+  body {
+    background: none;
+  }
+
+  .user-zone {
+    display: none;
+  }
+
+  .page {
+    width: 21cm;
+  }
+
+  .main-logo {
+    width: 50%;
+  }
+
+  .invoice-title {
+    font-size: 3rem;
+  }
+
+  .payment-button {
+    display: none
+  }
+
+  .footer {
+    display: none;
+  }
+}
