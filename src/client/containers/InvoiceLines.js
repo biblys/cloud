@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import InvoiceLine from '../components/InvoiceLine';
 import InvoiceLineForm from '../components/InvoiceLineForm';
+import Price from '../components/Price';
 
 class InvoiceLines extends React.Component {
   state = { lines: [] };
@@ -71,6 +72,7 @@ class InvoiceLines extends React.Component {
   }
 
   render() {
+    const total = this.state.lines.reduce((total, line) => total + line.price, 0);
     return (
       <React.Fragment>
         <thead>
@@ -83,6 +85,14 @@ class InvoiceLines extends React.Component {
           {this._renderLines()}
           {this.props.isAdmin && <InvoiceLineForm onSubmit={this._addLine} />}
         </tbody>
+        <tfoot>
+          <tr>
+            <th>Total :</th>
+            <th>
+              <Price amount={total} />
+            </th>
+          </tr>
+        </tfoot>
       </React.Fragment>
     );
   }
