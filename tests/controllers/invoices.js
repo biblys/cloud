@@ -50,6 +50,8 @@ describe('Invoices controller', function() {
     });
   });
 
+  // POST /invoices/create
+
   describe('POST /invoices/create', function() {
     it('should return 401 for unlogged user', function(done) {
       chai.request(server)
@@ -112,11 +114,24 @@ describe('Invoices controller', function() {
         });
     });
 
-    it('should redirect admin user after invoice creation', function(done) {
+    it('should return 400 if customerAddress field is missing', function(done) {
       chai.request(server)
         .post('/invoices/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .send({ number: 1145, customer: customer._id, amount: 999 })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ Adresse du client est obligatoire.');
+          done();
+        });
+    });
+
+    it('should redirect admin user after invoice creation', function(done) {
+      chai.request(server)
+        .post('/invoices/create')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: 1145, customer: customer._id, amount: 999, customerAddress: 'Address' })
         .end(function(err, res) {
           res.should.redirect;
           done();

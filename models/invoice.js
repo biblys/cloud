@@ -21,6 +21,10 @@ const InvoiceSchema = new mongoose.Schema({
     ref: 'Customer',
     required: true
   },
+  customerAddress: {
+    type: String,
+    required: true
+  },
   lines: [InvoiceLineSchema],
   amount: {
     type: Number,

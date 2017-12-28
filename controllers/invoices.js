@@ -45,9 +45,15 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
     return next('Le champ montant est obligatoire.');
   }
 
+  if (typeof request.body.customerAddress === 'undefined') {
+    response.status(400);
+    return next('Le champ Adresse du client est obligatoire.');
+  }
+
   const invoice = new Invoice({
     number: request.body.number,
     customer: request.body.customer,
+    customerAddress: request.body.customerAddress,
     amount: request.body.amount,
     payed: false
   });
