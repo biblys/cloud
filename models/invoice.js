@@ -37,4 +37,11 @@ const InvoiceSchema = new mongoose.Schema({
   timestamps: true
 });
 
+InvoiceSchema.methods.calculateTotal = function() {
+  const total = this.lines.reduce((total, line) => {
+    return total + line.price;
+  }, 0);
+  this.amount = parseFloat(total);
+};
+
 module.exports = mongoose.model('Invoice', InvoiceSchema);
