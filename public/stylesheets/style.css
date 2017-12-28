@@ -61,6 +61,12 @@ h1 {
   text-align: center;
 }
 
+/* Invoice */
+
+.invoice-footer {
+  text-align: center;
+}
+
 /* Override Milligram */
 
 form,
