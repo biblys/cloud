@@ -72,10 +72,18 @@ class InvoiceLines extends React.Component {
 
   render() {
     return (
-      <tbody>
-        {this._renderLines()}
-        {this.props.isAdmin && <InvoiceLineForm onSubmit={this._addLine} />}
-      </tbody>
+      <React.Fragment>
+        <thead>
+          <tr>
+            <th>Prestation</th>
+            <th>Montant</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this._renderLines()}
+          {this.props.isAdmin && <InvoiceLineForm onSubmit={this._addLine} />}
+        </tbody>
+      </React.Fragment>
     );
   }
 }
