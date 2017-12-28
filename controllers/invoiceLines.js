@@ -37,6 +37,7 @@ router.post('/', auth, authAdmin, getInvoice, function(request, response, next) 
     price: request.body.price
   };
   invoice.lines.push(line);
+  invoice.calculateTotal();
 
   invoice.save().then(function() {
     response.status(201).send(line);
@@ -55,6 +56,7 @@ router.delete('/:lineId', auth, authAdmin, getInvoice, async function(request, r
   }
 
   await line.remove();
+  request.invoice.calculateTotal();
   await request.invoice.save();
 
   response.status(204).send();
