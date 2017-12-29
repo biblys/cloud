@@ -111,6 +111,7 @@ th:last-child {
 @media print {
   body {
     background: none;
+    color: black;
   }
 
   .user-zone {

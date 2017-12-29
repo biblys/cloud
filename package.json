@@ -5,8 +5,8 @@
   "main": "./bin/www",
   "scripts": {
     "test": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test node_modules/mocha/bin/mocha tests --recursive --timeout 10000",
-    "start": "webpack && NODE_ENV=production node ./bin/www",
-    "dev": "DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
+    "start": "NODE_ENV=production webpack && node ./bin/www",
+    "dev": "NODE_ENV=development DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
     "dev:build": "NODE_ENV=development webpack --watch -d source-map"
   },
   "repository": {
