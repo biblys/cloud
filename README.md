@@ -32,6 +32,7 @@
 * Generate complete invoices
 * Add an admin page to edit customers
 * Sort invoices and payments by date
+* Add a print button on invoice page
 
 ### 1.9.1 (2017-12-19)
 * Fix displaying Stripe errors

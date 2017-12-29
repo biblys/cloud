@@ -76,6 +76,10 @@ h1 {
   text-align: right;
 }
 
+.invoice-buttons {
+  text-align: center;
+}
+
 /* Override Milligram */
 
 form,

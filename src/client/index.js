@@ -22,3 +22,11 @@ if (cardFormElement) {
   const invoiceId = cardFormElement.dataset.invoiceId;
   render(<CardForm stripeKey={stripeKey} invoiceId={invoiceId} amount={amount} />, cardFormElement);
 }
+
+// Print button
+
+const printButton = document.getElementById('print-button');
+if (printButton) {
+  printButton.addEventListener('click', () => window.print());
+}
+
