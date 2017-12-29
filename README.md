@@ -18,8 +18,6 @@
 ## Todo
 
 * Generate complete invoices
-  * Add invoice missing fields (invoiceDate)
-  * Display customer address and invoice date
 * Delete saved cards
 * Allow customers to see all their invoices
 * Support tickets

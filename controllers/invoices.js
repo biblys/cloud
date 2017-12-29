@@ -45,10 +45,16 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
     return next('Le champ Adresse du client est obligatoire.');
   }
 
+  if (typeof request.body.date === 'undefined') {
+    response.status(400);
+    return next('Le champ Date est obligatoire.');
+  }
+
   const invoice = new Invoice({
     number: request.body.number,
     customer: request.body.customer,
     customerAddress: request.body.customerAddress,
+    date: request.body.date,
     amount: request.body.amount,
     payed: false
   });
@@ -64,7 +70,7 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
 
 router.get('/', auth, authAdmin, function(request, response, next) {
 
-  Invoice.find({}).populate('customer').exec().then(function(invoices) {
+  Invoice.find({}).sort('-date').populate('customer').exec().then(function(invoices) {
     response.render('invoices/list', { invoices: invoices });
   }).catch((err) => next(err));
 

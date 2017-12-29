@@ -114,11 +114,24 @@ describe('Invoices controller', function() {
         });
     });
 
-    it('should redirect admin user after invoice creation', function(done) {
+    it('should return 400 if date field is missing', function(done) {
       chai.request(server)
         .post('/invoices/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .send({ number: 1145, customer: customer._id, customerAddress: 'Address' })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ Date est obligatoire.');
+          done();
+        });
+    });
+
+    it('should redirect admin user after invoice creation', function(done) {
+      chai.request(server)
+        .post('/invoices/create')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: 1145, customer: customer._id, customerAddress: 'Address', date: '1969-07-20' })
         .end(function(err, res) {
           res.should.redirect;
           done();
