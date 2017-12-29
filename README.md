@@ -13,7 +13,7 @@
 
 ## Running in development
 
-    npm run dev
+    npm run dev & npm run dev:build
 
 ## Todo
 
@@ -28,7 +28,7 @@
 
 ## Changelog
 
-### DEV
+### 1.10.0 (2017-12-29)
 * Generate complete invoices
 * Add an admin page to edit customers
 * Sort invoices and payments by date
