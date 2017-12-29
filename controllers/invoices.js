@@ -84,8 +84,49 @@ router.get('/:id', auth, getInvoice, function(request, response) {
 
 // Edit invoice
 
-router.get('/:id/edit', auth, authAdmin, getInvoice, function(request, response) {
-  response.render('invoices/edit');
+router.get('/:id/edit', auth, authAdmin, getInvoice, async function(request, response) {
+  const customers = await Customer.find({});
+  response.render('invoices/edit', { customers });
+});
+
+// Update
+
+router.post('/:id/update', auth, authAdmin, getInvoice, async function(request, response, next) {
+
+  try {
+
+    if (typeof request.body.number === 'undefined') {
+      response.status(400);
+      throw 'Le champ Numéro est obligatoire.';
+    }
+
+    if (typeof request.body.customer === 'undefined') {
+      response.status(400);
+      throw 'Le champ Client est obligatoire.';
+    }
+
+    if (typeof request.body.customerAddress === 'undefined') {
+      response.status(400);
+      throw 'Le champ Adresse du client est obligatoire.';
+    }
+
+    if (typeof request.body.date === 'undefined') {
+      response.status(400);
+      throw 'Le champ Date est obligatoire.';
+    }
+
+    request.invoice.number          = request.body.number;
+    request.invoice.customer        = request.body.customer;
+    request.invoice.customerAddress = request.body.customerAddress;
+    request.invoice.date            = request.body.date;
+
+    await request.invoice.save();
+
+  } catch (error) {
+    return next(error);
+  }
+
+  response.redirect(`/invoices/${request.invoice.id}/`);
 });
 
 // Pay invoice

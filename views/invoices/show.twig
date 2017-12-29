@@ -10,7 +10,7 @@
     {{ invoice.customerAddress|nl2br }}
   </p>
 
-  <p>Date : {{ invoice.date|date('m/d/Y') }}</p>
+  <p>Date : {{ invoice.date|date('d/m/Y') }}</p>
 
   {% if invoice.payed %}
 

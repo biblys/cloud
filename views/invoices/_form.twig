@@ -6,6 +6,7 @@
 <div class="field">
   <label for="customer">Client :</label>
   <select name="customer" id="customer" required>
+    <option value="{{ invoice.customer._id }}">{{ invoice.customer.name }}</option>
     {% for customer in customers %}
       <option value="{{ customer._id }}">{{ customer.name }}</option>
     {% endfor %}

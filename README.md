@@ -17,7 +17,6 @@
 
 ## Todo
 
-* Generate complete invoices
 * Delete saved cards
 * Allow customers to see all their invoices
 * Support tickets
@@ -25,8 +24,14 @@
 * Webpack
 * Favicon
 * Home page
+* Save customer address and prefill invoice customerAddress
 
 ## Changelog
+
+### DEV
+* Generate complete invoices
+* Add an admin page to edit customers
+* Sort invoices and payments by date
 
 ### 1.9.1 (2017-12-19)
 * Fix displaying Stripe errors
