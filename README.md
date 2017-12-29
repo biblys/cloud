@@ -17,6 +17,8 @@
 
 ## Todo
 
+* Hide print button on invoice page for print media
+* Add edit button on admin invoices pages
 * Delete saved cards
 * Allow customers to see all their invoices
 * Support tickets
