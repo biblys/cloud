@@ -28,7 +28,8 @@ const InvoiceSchema = new mongoose.Schema({
   lines: [InvoiceLineSchema],
   amount: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   },
   payed: {
     type: mongoose.Schema.Types.Boolean,

@@ -101,24 +101,11 @@ describe('Invoices controller', function() {
         });
     });
 
-    it('should return 400 if amount field is missing', function(done) {
-      chai.request(server)
-        .post('/invoices/create')
-        .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ number: 1145, customer: customer._id })
-        .end(function(err, res) {
-          res.should.have.status(400);
-          res.should.be.html;
-          res.text.should.include('Le champ montant est obligatoire.');
-          done();
-        });
-    });
-
     it('should return 400 if customerAddress field is missing', function(done) {
       chai.request(server)
         .post('/invoices/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ number: 1145, customer: customer._id, amount: 999 })
+        .send({ number: 1145, customer: customer._id })
         .end(function(err, res) {
           res.should.have.status(400);
           res.should.be.html;
@@ -131,13 +118,15 @@ describe('Invoices controller', function() {
       chai.request(server)
         .post('/invoices/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ number: 1145, customer: customer._id, amount: 999, customerAddress: 'Address' })
+        .send({ number: 1145, customer: customer._id, customerAddress: 'Address' })
         .end(function(err, res) {
           res.should.redirect;
           done();
         });
     });
   });
+
+  // GET /invoices/
 
   describe('GET /invoices/', function() {
     it('should return 401 for unlogged user', function(done) {
