@@ -82,6 +82,12 @@ router.get('/:id', auth, getInvoice, function(request, response) {
   response.render('invoices/show');
 });
 
+// Edit invoice
+
+router.get('/:id/edit', auth, authAdmin, getInvoice, function(request, response) {
+  response.render('invoices/edit');
+});
+
 // Pay invoice
 
 router.get('/:id/pay', auth, getInvoice, function(request, response, next) {

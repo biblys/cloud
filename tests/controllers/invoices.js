@@ -355,4 +355,56 @@ describe('Invoices controller', function() {
     });
   });
 
+  // GET /invoices/:id/edit
+
+  describe('GET /invoices/:id/edit', function() {
+
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .get(`/invoices/${customerInvoice._id}/edit`)
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .get(`/invoices/${customerInvoice._id}/edit`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 404 for non existing invoice', function(done) {
+      chai.request(server)
+        .get(`/invoices/${mongoose.Types.ObjectId()}/edit`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(404);
+          res.should.be.html;
+          res.text.should.include('Invoice Not Found');
+          done();
+        });
+    });
+
+    it('should return 200 for admin user', function(done) {
+      chai.request(server)
+        .get(`/invoices/${customerInvoice._id}/edit`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(200);
+          res.should.be.html;
+          res.text.should.include('Modifier une facture');
+          done();
+        });
+    });
+  });
+
 });
