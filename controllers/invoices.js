@@ -11,6 +11,9 @@ const auth       = require('../middlewares/auth');
 const authAdmin  = require('../middlewares/authAdmin');
 const getInvoice = require('../middlewares/getInvoice');
 
+const invoiceLines = require('./invoiceLines');
+router.use('/:id/lines', invoiceLines);
+
 // New
 
 router.get('/new', auth, authAdmin, function(request, response, next) {
@@ -37,14 +40,21 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
     return next('Le champ client est obligatoire.');
   }
 
-  if (typeof request.body.amount === 'undefined') {
+  if (typeof request.body.customerAddress === 'undefined') {
     response.status(400);
-    return next('Le champ montant est obligatoire.');
+    return next('Le champ Adresse du client est obligatoire.');
+  }
+
+  if (typeof request.body.date === 'undefined') {
+    response.status(400);
+    return next('Le champ Date est obligatoire.');
   }
 
   const invoice = new Invoice({
     number: request.body.number,
     customer: request.body.customer,
+    customerAddress: request.body.customerAddress,
+    date: request.body.date,
     amount: request.body.amount,
     payed: false
   });
@@ -60,7 +70,7 @@ router.post('/create', auth, authAdmin, function(request, response, next) {
 
 router.get('/', auth, authAdmin, function(request, response, next) {
 
-  Invoice.find({}).populate('customer').exec().then(function(invoices) {
+  Invoice.find({}).sort('-date').populate('customer').exec().then(function(invoices) {
     response.render('invoices/list', { invoices: invoices });
   }).catch((err) => next(err));
 
@@ -70,6 +80,53 @@ router.get('/', auth, authAdmin, function(request, response, next) {
 
 router.get('/:id', auth, getInvoice, function(request, response) {
   response.render('invoices/show');
+});
+
+// Edit invoice
+
+router.get('/:id/edit', auth, authAdmin, getInvoice, async function(request, response) {
+  const customers = await Customer.find({});
+  response.render('invoices/edit', { customers });
+});
+
+// Update
+
+router.post('/:id/update', auth, authAdmin, getInvoice, async function(request, response, next) {
+
+  try {
+
+    if (typeof request.body.number === 'undefined') {
+      response.status(400);
+      throw 'Le champ Numéro est obligatoire.';
+    }
+
+    if (typeof request.body.customer === 'undefined') {
+      response.status(400);
+      throw 'Le champ Client est obligatoire.';
+    }
+
+    if (typeof request.body.customerAddress === 'undefined') {
+      response.status(400);
+      throw 'Le champ Adresse du client est obligatoire.';
+    }
+
+    if (typeof request.body.date === 'undefined') {
+      response.status(400);
+      throw 'Le champ Date est obligatoire.';
+    }
+
+    request.invoice.number          = request.body.number;
+    request.invoice.customer        = request.body.customer;
+    request.invoice.customerAddress = request.body.customerAddress;
+    request.invoice.date            = request.body.date;
+
+    await request.invoice.save();
+
+  } catch (error) {
+    return next(error);
+  }
+
+  response.redirect(`/invoices/${request.invoice.id}/`);
 });
 
 // Pay invoice

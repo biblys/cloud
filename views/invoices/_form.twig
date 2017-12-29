@@ -1,0 +1,26 @@
+<div class="field">
+  <label for="number">Numéro :</label>
+  <input type="text" name="number" id="number" value="{{ invoice.number }}" required>
+</div>
+
+<div class="field">
+  <label for="customer">Client :</label>
+  <select name="customer" id="customer" required>
+    <option value="{{ invoice.customer._id }}">{{ invoice.customer.name }}</option>
+    {% for customer in customers %}
+      <option value="{{ customer._id }}">{{ customer.name }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<div class="field">
+  <label for="amount">Adresse du client :</label>
+  <textarea name="customerAddress" id="customerAddress">{{ invoice.customerAddress }}</textarea>
+</div>
+
+<div class="field">
+  <label for="date">Date :</label>
+  <input type="date" name="date" id="date" value="{{ invoice.date|date('Y-m-d') }}" required>
+</div>
+
+<button type="submit" class="submit-button">Save</button>

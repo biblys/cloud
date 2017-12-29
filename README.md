@@ -13,21 +13,26 @@
 
 ## Running in development
 
-    npm run dev
+    npm run dev & npm run dev:build
 
 ## Todo
 
-* Improve payment page design
 * Delete saved cards
-* Generate complete invoices
 * Allow customers to see all their invoices
 * Support tickets
 * Tests for middlewares
 * Webpack
 * Favicon
 * Home page
+* Save customer address and prefill invoice customerAddress
 
 ## Changelog
+
+### 1.10.0 (2017-12-29)
+* Generate complete invoices
+* Add an admin page to edit customers
+* Sort invoices and payments by date
+* Add a print button on invoice page
 
 ### 1.9.1 (2017-12-19)
 * Fix displaying Stripe errors

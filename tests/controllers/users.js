@@ -172,7 +172,7 @@ describe('Users controller', function() {
     });
   });
 
-  // GET /users/edit
+  // GET /users/:id/edit
 
   describe('GET /users/:id/edit', function() {
 

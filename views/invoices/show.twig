@@ -3,17 +3,41 @@
 {% block title %}Facture n° {{ invoice.number }}{% endblock %}
 
 {% block body %}
-  <h1>Facture n° {{ invoice.number }}</h1>
+  <h1 class="invoice-title">Facture n° {{ invoice.number }}</h1>
 
-  <p>{{ invoice.customer.name }} - {{ invoice.amount|currency }}</p>
+  <p>
+    <strong>{{ invoice.customer.name }}</strong><br>
+    {{ invoice.customerAddress|nl2br }}
+  </p>
+
+  <p>Date : {{ invoice.date|date('d/m/Y') }}</p>
 
   {% if invoice.payed %}
 
     <p>Facture payée le {{ invoice.payedAt|date('d/m/Y') }}</p>
 
-  {% else %}
-
-    <a class="button" href="/invoices/{{invoice._id}}/pay">Payer</a>
-
   {% endif %}
+
+  <div class="invoice-buttons">
+    {% if not invoice.payed %}
+      <a class="button payment-button" href="/invoices/{{invoice._id}}/pay">Payer</a>
+    {% endif %}
+    <button id="print-button">Imprimer</button>
+  </div>
+
+  <table id="invoice-lines"
+    class="invoice-lines"
+    data-invoice-id="{{ invoice._id }}"
+    data-is-admin="{{ currentUser.isAdmin }}">
+  </table>
+
+  <div class="invoice-footer">
+    <p>TVA non applicable, art. 293 B du CGI</p>
+    <p>
+      Clément Bourgoin — Auto-entrepreneur<br>
+      69 rue Balard — 75015 Paris<br>
+      SIRET : 504 299 371 00014
+    </p>
+  </div>
+
 {% endblock %}

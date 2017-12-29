@@ -50,6 +50,8 @@ describe('Invoices controller', function() {
     });
   });
 
+  // POST /invoices/create
+
   describe('POST /invoices/create', function() {
     it('should return 401 for unlogged user', function(done) {
       chai.request(server)
@@ -99,7 +101,7 @@ describe('Invoices controller', function() {
         });
     });
 
-    it('should return 400 if amount field is missing', function(done) {
+    it('should return 400 if customerAddress field is missing', function(done) {
       chai.request(server)
         .post('/invoices/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
@@ -107,7 +109,20 @@ describe('Invoices controller', function() {
         .end(function(err, res) {
           res.should.have.status(400);
           res.should.be.html;
-          res.text.should.include('Le champ montant est obligatoire.');
+          res.text.should.include('Le champ Adresse du client est obligatoire.');
+          done();
+        });
+    });
+
+    it('should return 400 if date field is missing', function(done) {
+      chai.request(server)
+        .post('/invoices/create')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: 1145, customer: customer._id, customerAddress: 'Address' })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ Date est obligatoire.');
           done();
         });
     });
@@ -116,13 +131,15 @@ describe('Invoices controller', function() {
       chai.request(server)
         .post('/invoices/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
-        .send({ number: 1145, customer: customer._id, amount: 999 })
+        .send({ number: 1145, customer: customer._id, customerAddress: 'Address', date: '1969-07-20' })
         .end(function(err, res) {
           res.should.redirect;
           done();
         });
     });
   });
+
+  // GET /invoices/
 
   describe('GET /invoices/', function() {
     it('should return 401 for unlogged user', function(done) {
@@ -333,6 +350,164 @@ describe('Invoices controller', function() {
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
           res.should.have.status(200);
+          done();
+        });
+    });
+  });
+
+  // GET /invoices/:id/edit
+
+  describe('GET /invoices/:id/edit', function() {
+
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .get(`/invoices/${customerInvoice._id}/edit`)
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .get(`/invoices/${customerInvoice._id}/edit`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 404 for non existing invoice', function(done) {
+      chai.request(server)
+        .get(`/invoices/${mongoose.Types.ObjectId()}/edit`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(404);
+          res.should.be.html;
+          res.text.should.include('Invoice Not Found');
+          done();
+        });
+    });
+
+    it('should return 200 for admin user', function(done) {
+      chai.request(server)
+        .get(`/invoices/${customerInvoice._id}/edit`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(200);
+          res.should.be.html;
+          res.text.should.include('Modifier une facture');
+          done();
+        });
+    });
+  });
+
+  // POST /invoices/:id/update
+
+  describe('POST /invoices/:id/update', function() {
+
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/update`)
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/update`)
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 404 for non existing user', function(done) {
+      chai.request(server)
+        .post(`/invoices/${mongoose.Types.ObjectId()}/update`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(404);
+          res.should.be.html;
+          res.text.should.include('Invoice Not Found');
+          done();
+        });
+    });
+
+    // Required fields
+
+    it('should return 400 if number field is missing', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/update`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ Numéro est obligatoire.');
+          done();
+        });
+    });
+
+    it('should return 400 if customer field is missing', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/update`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: '2018-001' })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ Client est obligatoire.');
+          done();
+        });
+    });
+
+    it('should return 400 if customerAddress field is missing', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/update`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: '2018-001', customer: customer._id })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ Adresse du client est obligatoire.');
+          done();
+        });
+    });
+
+    it('should return 400 if date field is missing', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/update`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: '2018-001', customer: customer._id, customerAddress: 'Address' })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Le champ Date est obligatoire.');
+          done();
+        });
+    });
+
+    // Success
+
+    it('should redirect admin user after user creation', function(done) {
+      chai.request(server)
+        .post(`/invoices/${customerInvoice._id}/update`)
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ number: '2018-001', customer: customer._id, customerAddress: 'Address', date: '2018-01-01' })
+        .end(function(err, res) {
+          res.should.redirect;
           done();
         });
     });

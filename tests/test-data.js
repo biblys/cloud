@@ -53,24 +53,33 @@ const deletableCustomer = new Customer({
 const customerInvoice = new Invoice({
   number: '1234',
   amount: '999',
-  payed: false
+  customerAddress: 'Address',
+  date: Date.now(),
+  payed: false,
+  lines: [{ label: 'Line 1', price: 999 }]
 });
 
 const deletableInvoice = new Invoice({
   number: '1236',
   amount: '8999',
+  customerAddress: 'Address',
+  date: Date.now(),
   payed: false
 });
 
 const otherInvoice = new Invoice({
   number: '1235',
   amount: '999',
+  date: Date.now(),
+  customerAddress: 'Address',
   payed: false
 });
 
 const yetAnotherInvoice = new Invoice({
   number: '1235',
   amount: '999',
+  date: Date.now(),
+  customerAddress: 'Address',
   payed: false
 });
 

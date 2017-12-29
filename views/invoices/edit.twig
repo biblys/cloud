@@ -1,0 +1,13 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Modifier une facture{% endblock %}
+
+{% block body %}
+
+  <h1>Modifier une facture</h1>
+
+  <form class="model-form" action="/invoices/{{ invoice._id }}/update" method="post">
+    {% include 'invoices/_form.twig' %}
+  </form>
+
+{% endblock %}

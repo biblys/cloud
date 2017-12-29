@@ -54,10 +54,29 @@ h1 {
 }
 
 .form-row {
-  margin-bottom: 25px;
+  margin-bottom: 16px;
 }
 
 .stripe-logo {
+  text-align: center;
+}
+
+/* Invoice */
+
+.invoice-footer {
+  text-align: center;
+}
+
+.invoice-lines .label {
+  width: 100%;
+}
+
+.invoice-lines .price,
+.invoice-lines .total {
+  text-align: right;
+}
+
+.invoice-buttons {
   text-align: center;
 }
 
@@ -68,9 +87,19 @@ button {
   margin-bottom: 0;
 }
 
-button {
+button,
+.button{
   background-color: #f60;
   border-color: #f60;
+}
+
+button[disabled]:hover {
+  background-color: #f60;
+  border-color: #f60;
+}
+
+th:last-child {
+  padding-right: 1.5rem;
 }
 
 @media (min-width: 768px) {
@@ -80,5 +109,41 @@ button {
 
   .main-logo {
     width: 450px;
+  }
+}
+
+@media print {
+  body {
+    background: none;
+    color: black;
+  }
+
+  .user-zone {
+    display: none;
+  }
+
+  .page {
+    width: 21cm;
+  }
+
+  .main-logo {
+    width: 50%;
+  }
+
+  .invoice-title {
+    font-size: 3rem;
+  }
+
+  .payment-button {
+    display: none
+  }
+
+  .invoice-lines .invoice-delete,
+  .invoice-lines .invoice-line-form {
+    display: none;
+  }
+
+  .footer {
+    display: none;
   }
 }

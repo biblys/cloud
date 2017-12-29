@@ -59,3 +59,6 @@ typings/
 
 # Config
 .env
+
+# Webpack bundle
+public/javascripts/bundle.js

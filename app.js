@@ -12,11 +12,11 @@ const twig         = require('twig');
 const app = express();
 
 // Controllers
-const customers = require('./controllers/customers');
-const index     = require('./controllers/index');
-const invoices  = require('./controllers/invoices');
-const payments  = require('./controllers/payments');
-const users     = require('./controllers/users');
+const customers     = require('./controllers/customers');
+const index         = require('./controllers/index');
+const invoices      = require('./controllers/invoices');
+const payments      = require('./controllers/payments');
+const users         = require('./controllers/users');
 
 // Debug logs
 const mongoDebug = require('debug')('biblys-cloud:mongo');
@@ -53,7 +53,10 @@ app.locals.version = version;
 
 // Security headers
 app.use(function(request, response, next) {
-  response.setHeader('Content-Security-Policy', "default-src 'none'; connect-src https://js.stripe.com; script-src 'self' https://js.stripe.com; style-src 'self' https://js.stripe.com https://cdnjs.cloudflare.com; img-src 'self' https://q.stripe.com data:; frame-src https://js.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'");
+  if (app.get('env') == 'production') {
+    response.setHeader('Content-Security-Policy', "default-src 'none'; connect-src https://js.stripe.com; script-src 'self' https://js.stripe.com; style-src 'self' https://js.stripe.com https://cdnjs.cloudflare.com; img-src 'self' https://q.stripe.com data:; frame-src https://js.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'");
+  }
+
   response.setHeader('X-Frame-Options', 'DENY');
   response.setHeader('X-Content-Type-Options', 'nosniff');
   response.setHeader('X-XSS-Protection', '1; mode=block');
@@ -100,8 +103,13 @@ app.use(function(err, req, res, next) {
   res.locals.errorCode = statusCode;
   res.locals.error = req.app.get('env') === 'development' ? error : {};
 
-  // render the error page
   res.status(statusCode);
+
+  if (req.accepts('json') && !req.accepts('html')) {
+    return res.send({ error: error.message });
+  }
+
+  // render the error page
   res.render('error');
 });
 

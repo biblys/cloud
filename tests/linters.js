@@ -7,7 +7,8 @@ describe('Linters', function() {
     'middlewares',
     'models',
     'tests',
-    'app.js'
+    'app.js',
+    'src/client'
   ];
 
   // JSCS

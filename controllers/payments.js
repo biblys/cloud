@@ -5,13 +5,13 @@ const router  = express.Router();
 const stripe = require('../lib/stripe-helper');
 
 const Customer = require('../models/customer');
-const Payment =  require('../models/payment');
+const Payment  = require('../models/payment');
 
 const auth       = require('../middlewares/auth');
 const authAdmin  = require('../middlewares/authAdmin');
 const getInvoice = require('../middlewares/getInvoice');
 
-// Create a new payment
+// Delete a Stripe customer's card
 
 router.post('/create', auth, getInvoice, async function(request, response, next) {
 
@@ -112,7 +112,7 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
 // List all invoices (admin)
 router.get('/', auth, authAdmin, function(request, response, next) {
 
-  Payment.find({}).populate('customer').populate('invoice').populate('user').exec().then(function(payments) {
+  Payment.find({}).sort('-createdAt').populate('customer').populate('invoice').populate('user').exec().then(function(payments) {
     response.render('payments/list', { payments: payments });
   }).catch((err) => next(err));
 
