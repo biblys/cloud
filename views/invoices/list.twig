@@ -14,6 +14,7 @@
         <th>Montant</th>
         <th>Date</th>
         <th>Payée le</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -35,6 +36,7 @@
             {% endif %}
           </td>
           <td>
+            <a class="button" href="/invoices/{{ invoice._id }}/edit">modif.</a>
             <form method="post" action="/invoices/{{ invoice._id }}/delete">
               <button>×</button>
             </form>

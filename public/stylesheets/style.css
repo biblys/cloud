@@ -91,6 +91,9 @@ button,
 .button{
   background-color: #f60;
   border-color: #f60;
+  height: 3rem;
+  line-height: 2.5em;
+  padding: 0 1rem;
 }
 
 button[disabled]:hover {
