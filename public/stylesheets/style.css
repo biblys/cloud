@@ -137,6 +137,7 @@ th:last-child {
     font-size: 3rem;
   }
 
+  .print-button,
   .payment-button {
     display: none
   }
