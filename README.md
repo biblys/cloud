@@ -17,8 +17,6 @@
 
 ## Todo
 
-* Hide print button on invoice page for print media
-* Add edit button on admin invoices pages
 * Delete saved cards
 * Allow customers to see all their invoices
 * Support tickets
@@ -29,6 +27,10 @@
 * Save customer address and prefill invoice customerAddress
 
 ## Changelog
+
+### 1.10.1 (2017-12-30)
+* Fix print button showing on invoice page for print media
+* Fix missing edit button on invoices list page
 
 ### 1.10.0 (2017-12-29)
 * Generate complete invoices
