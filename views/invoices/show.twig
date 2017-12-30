@@ -22,7 +22,7 @@
     {% if not invoice.payed %}
       <a class="button payment-button" href="/invoices/{{invoice._id}}/pay">Payer</a>
     {% endif %}
-    <button id="print-button">Imprimer</button>
+    <button id="print-button" class="print-button">Imprimer</button>
   </div>
 
   <table id="invoice-lines"

@@ -28,6 +28,10 @@
 
 ## Changelog
 
+### 1.10.1 (2017-12-30)
+* Fix print button showing on invoice page for print media
+* Fix missing edit button on invoices list page
+
 ### 1.10.0 (2017-12-29)
 * Generate complete invoices
 * Add an admin page to edit customers
