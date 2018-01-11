@@ -17,6 +17,7 @@
 
 ## Todo
 
+* Manually add payment & mark order as saved
 * Delete saved cards
 * Allow customers to see all their invoices
 * Support tickets
