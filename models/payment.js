@@ -33,12 +33,4 @@ const PaymentSchema = new mongoose.Schema({
   timestamps: true
 });
 
-PaymentSchema.virtual('paymentDate').get(function() {
-  if (typeof this.date !== 'undefined') {
-    return this.date;
-  }
-
-  return this.createdAt;
-});
-
 module.exports = mongoose.model('Payment', PaymentSchema);
