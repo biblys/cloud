@@ -1,0 +1,24 @@
+<div class="field">
+  <label for="invoice">Facture :</label>
+  <select name="invoice" id="invoice" required>
+    {% for invoice in invoices %}
+      <option value="{{ invoice._id }}">{{ invoice.number }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<div class="field">
+  <label for="method">Mode de paiement :</label>
+  <select name="method" id="method" required>
+    {% for method in methods %}
+      <option>{{ method }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<div class="field">
+  <label for="date">Date :</label>
+  <input type="date" name="date" id="date" value="{{ payment.date|date('Y-m-d') }}" required>
+</div>
+
+<button type="submit" class="submit-button">Save</button>

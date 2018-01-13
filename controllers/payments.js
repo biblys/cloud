@@ -5,13 +5,32 @@ const router  = express.Router();
 const stripe = require('../lib/stripe-helper');
 
 const Customer = require('../models/customer');
+const Invoice = require('../models/invoice');
 const Payment  = require('../models/payment');
 
 const auth       = require('../middlewares/auth');
 const authAdmin  = require('../middlewares/authAdmin');
 const getInvoice = require('../middlewares/getInvoice');
 
-// Delete a Stripe customer's card
+// New
+
+router.get('/new', auth, authAdmin, async function(request, response, next) {
+
+  try {
+
+    // Get unpayed invoices
+    const invoices = await Invoice.find({ payed: false }).exec();
+
+    const methods = Payment.schema.path('method').enumValues;
+
+    response.render('payments/new', { invoices, methods });
+  } catch (e) {
+    return next(e);
+  }
+
+});
+
+// POST new Payment
 
 router.post('/create', auth, getInvoice, async function(request, response, next) {
 
