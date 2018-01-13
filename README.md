@@ -32,7 +32,7 @@
 
 ## Changelog
 
-### DEV
+### 1.11.0 (2017-01-13)
 * Manually add payment & mark order as saved
 * Add 'create' button on every admin list pages
 
