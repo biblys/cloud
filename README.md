@@ -13,7 +13,7 @@
 
 ## Running in development
 
-    npm run dev & npm run dev:build
+    npm run dev
 
 ## Todo
 
@@ -28,6 +28,9 @@
 * Save customer address and prefill invoice customerAddress
 
 ## Changelog
+
+### DEV
+* Add 'create' button on every admin list pages
 
 ### 1.10.1 (2017-12-30)
 * Fix print button showing on invoice page for print media
