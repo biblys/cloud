@@ -17,7 +17,6 @@
 
 ## Todo
 
-* Manually add payment & mark order as saved
 * Delete saved cards
 * Allow customers to see all their invoices
 * Support tickets
@@ -30,6 +29,7 @@
 ## Changelog
 
 ### DEV
+* Manually add payment & mark order as saved
 * Add 'create' button on every admin list pages
 
 ### 1.10.1 (2017-12-30)

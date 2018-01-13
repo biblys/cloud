@@ -1,6 +1,6 @@
 <div class="field">
-  <label for="invoice">Facture :</label>
-  <select name="invoice" id="invoice" required>
+  <label for="invoiceId">Facture :</label>
+  <select name="invoiceId" id="invoiceId" required>
     {% for invoice in invoices %}
       <option value="{{ invoice._id }}">{{ invoice.number }}</option>
     {% endfor %}

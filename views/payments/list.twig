@@ -34,7 +34,7 @@
           </td>
           <td>{{ payment.amount|currency }}</td>
           <td>{{ payment.method }}</td>
-          <td>{{ payment.createdAt|date('d/m/Y') }}</td>
+          <td>{{ payment.paymentDate|date('d/m/Y') }}</td>
         </tr>
       {% endfor %}
     </tbody>
