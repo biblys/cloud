@@ -44,18 +44,22 @@ router.post('/create-from-form', auth, authAdmin, getInvoice, async function(req
     return next('Date must be provided.');
   }
 
-  const payment = new Payment();
-  payment.user = request.currentUser._id;
-  payment.customer = request.invoice.customer._id;
-  payment.invoice = request.invoice._id;
-  payment.amount = request.invoice.amount;
-  payment.method = request.body.method;
-  payment.date = request.body.date;
-  await payment.save();
+  try {
+    const payment = new Payment();
+    payment.user = request.currentUser._id;
+    payment.customer = request.invoice.customer._id;
+    payment.invoice = request.invoice._id;
+    payment.amount = request.invoice.amount;
+    payment.method = request.body.method;
+    payment.date = request.body.date;
+    await payment.save();
 
-  request.invoice.payed = true;
-  request.invoice.payedAt = request.body.date;
-  await request.invoice.save();
+    request.invoice.payed = true;
+    request.invoice.payedAt = request.body.date;
+    await request.invoice.save();
+  } catch (error) {
+    return next(error);
+  }
 
   response.redirect('/payments/');
 });
