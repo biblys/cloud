@@ -19,6 +19,15 @@ const PaymentSchema = new mongoose.Schema({
   amount: {
     type: String,
     required: true
+  },
+  method: {
+    type: String,
+    enum: ['card', 'transfer', 'check'],
+    default: 'card'
+  },
+  date: {
+    type: Date,
+    required: true
   }
 }, {
   timestamps: true

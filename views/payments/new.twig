@@ -1,0 +1,13 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Ajouter un paiement{% endblock %}
+
+{% block body %}
+
+<h1>Ajouter un paiement</h1>
+
+<form class="model-form" action="/payments/create-from-form" method="post">
+  {% include 'payments/_form.twig' %}
+</form>
+
+{% endblock %}

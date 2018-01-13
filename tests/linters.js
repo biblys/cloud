@@ -5,6 +5,7 @@ describe('Linters', function() {
     'controllers',
     'lib',
     'middlewares',
+    'migrations',
     'models',
     'tests',
     'app.js',

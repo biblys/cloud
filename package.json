@@ -1,13 +1,15 @@
 {
   "name": "biblys-cloud",
-  "version": "1.10.1",
+  "version": "1.11.0",
   "description": "Biblys Cloud",
   "main": "./bin/www",
   "scripts": {
     "test": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test node_modules/mocha/bin/mocha tests --recursive --timeout 10000",
     "start": "NODE_ENV=production webpack && node ./bin/www",
-    "dev": "NODE_ENV=development DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
-    "dev:build": "NODE_ENV=development webpack --watch -d source-map"
+    "dev": "npm run dev:server & npm run dev:client",
+    "dev:server": "NODE_ENV=development DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
+    "dev:client": "NODE_ENV=development webpack --watch -d source-map",
+    "migrate": "DEBUG=migrations migrations/migrate.js"
   },
   "repository": {
     "type": "git",

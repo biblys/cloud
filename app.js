@@ -26,10 +26,7 @@ const axysReturn   = require('./middlewares/axysReturn');
 const identifyUser = require('./middlewares/identifyUser');
 
 // MongoDB
-const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/biblys-cloud';
-mongoose.connect(mongoUrl, { useMongoClient: true });
-mongoose.Promise = global.Promise;
-mongoDebug(`Connected to ${mongoUrl}`);
+require('./database');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -118,7 +115,7 @@ const server = http.createServer(app);
 
 server.on('close', function() {
   mongoose.connection.close();
-  mongoDebug(`Closing connection to ${mongoUrl}`);
+  mongoDebug('Closing connection to mongodb');
 });
 
 module.exports = server;

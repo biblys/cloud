@@ -6,12 +6,17 @@
 
   <h1>Paiements</h1>
 
+  <a class="button" href="/payments/new">
+    Nouveau paiement
+  </a>
+
   <table>
     <thead>
       <tr>
         <th>Client</th>
         <th>Facture</th>
         <th>Montant</th>
+        <th>Mode</th>
         <th>Date</th>
       </tr>
     </thead>
@@ -28,7 +33,8 @@
             <a href="/invoices/{{ payment.invoice._id }}">{{ payment.invoice.number }}</a>
           </td>
           <td>{{ payment.amount|currency }}</td>
-          <td>{{ payment.createdAt|date('d/m/Y') }}</td>
+          <td>{{ payment.method }}</td>
+          <td>{{ payment.date|date('d/m/Y') }}</td>
         </tr>
       {% endfor %}
     </tbody>

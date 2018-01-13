@@ -15,6 +15,8 @@ const {
 
 describe('Payments controller', function() {
 
+  // GET /payments/
+
   describe('GET /payments/', function() {
     it('should return 401 for unlogged user', function(done) {
       chai.request(server)
@@ -51,6 +53,125 @@ describe('Payments controller', function() {
         });
     });
   });
+
+  // GET /payments/new
+
+  describe('GET /payments/new', function() {
+
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .get('/payments/new')
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non admin user', function(done) {
+      chai.request(server)
+        .get('/payments/new')
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 200 for admin user', function(done) {
+      chai.request(server)
+        .get('/payments/new')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(200);
+          res.should.be.html;
+          res.text.should.include('Ajouter un paiement');
+          done();
+        });
+    });
+  });
+
+  // POST /payments/create-from-form
+
+  describe('POST /payments/create-from-form', function() {
+
+    it('should return 401 for unlogged user', function(done) {
+      chai.request(server)
+        .post('/payments/create-from-form')
+        .end(function(err, res) {
+          res.should.have.status(401);
+          res.should.be.html;
+          res.text.should.include('Connexion');
+          done();
+        });
+    });
+
+    it('should return 403 for non-admin user', function(done) {
+      chai.request(server)
+        .post('/payments/create-from-form')
+        .set('Cookie', `userUid=${user.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(403);
+          res.should.be.html;
+          res.text.should.include('For admin eyes only');
+          done();
+        });
+    });
+
+    it('should return 400 when not sending invoice id', function(done) {
+      chai.request(server)
+        .post('/payments/create-from-form')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('invoiceId parameter must be provided');
+          done();
+        });
+    });
+
+    it('should return 400 when not sending payment method', function(done) {
+      chai.request(server)
+        .post('/payments/create-from-form')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ invoiceId: customerInvoice._id })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Method must be provided.');
+          done();
+        });
+    });
+
+    it('should return 400 when not sending payment date', function(done) {
+      chai.request(server)
+        .post('/payments/create-from-form')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ invoiceId: customerInvoice._id, method: 'transfer' })
+        .end(function(err, res) {
+          res.should.have.status(400);
+          res.should.be.html;
+          res.text.should.include('Date must be provided.');
+          done();
+        });
+    });
+
+    it('should redirect after successful payment creation', function(done) {
+      chai.request(server)
+        .post('/payments/create-from-form')
+        .set('Cookie', `userUid=${admin.axysSessionUid}`)
+        .send({ invoiceId: customerInvoice._id, method: 'transfer', date: '2017-01-10' })
+        .end(function(err, res) {
+          res.should.redirect;
+          done();
+        });
+    });
+  });
+
+  // POST /payments/create
 
   describe('POST /payments/create', function() {
 

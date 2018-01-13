@@ -4,16 +4,20 @@
 
     git clone git@github.com:iwazaru/biblys-cloud.git
     cd biblys-cloud
-    npm install
+    yarn
     cp .env.template .env
 
 ## Running in production
 
-    npm start
+    yarn start
 
 ## Running in development
 
-    npm run dev & npm run dev:build
+    yarn run dev
+
+## Run migrations
+
+    yarn run migrate 1.11.0
 
 ## Todo
 
@@ -27,6 +31,10 @@
 * Save customer address and prefill invoice customerAddress
 
 ## Changelog
+
+### 1.11.0 (2017-01-13)
+* Manually add payment & mark order as saved
+* Add 'create' button on every admin list pages
 
 ### 1.10.1 (2017-12-30)
 * Fix print button showing on invoice page for print media
