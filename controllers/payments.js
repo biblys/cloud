@@ -144,7 +144,8 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
       invoice:  request.body.invoiceId,
       user:     response.locals.currentUser._id,
       customer: invoice.customer._id,
-      amount:   invoice.amount
+      amount:   invoice.amount,
+      date:     Date.now()
     });
     await payment.save();
 
