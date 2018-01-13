@@ -115,7 +115,7 @@ const server = http.createServer(app);
 
 server.on('close', function() {
   mongoose.connection.close();
-  mongoDebug(`Closing connection to mongodb`);
+  mongoDebug('Closing connection to mongodb');
 });
 
 module.exports = server;
