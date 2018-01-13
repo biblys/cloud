@@ -4,16 +4,20 @@
 
     git clone git@github.com:iwazaru/biblys-cloud.git
     cd biblys-cloud
-    npm install
+    yarn
     cp .env.template .env
 
 ## Running in production
 
-    npm start
+    yarn start
 
 ## Running in development
 
-    npm run dev
+    yarn run dev
+
+## Run migrations
+
+    yarn run migrate 1.11.0
 
 ## Todo
 

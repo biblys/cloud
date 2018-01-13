@@ -8,7 +8,8 @@
     "start": "NODE_ENV=production webpack && node ./bin/www",
     "dev": "npm run dev:server & npm run dev:client",
     "dev:server": "NODE_ENV=development DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
-    "dev:client": "NODE_ENV=development webpack --watch -d source-map"
+    "dev:client": "NODE_ENV=development webpack --watch -d source-map",
+    "migrate": "DEBUG=migrations migrations/migrate.js"
   },
   "repository": {
     "type": "git",
