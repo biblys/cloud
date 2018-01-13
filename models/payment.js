@@ -24,9 +24,22 @@ const PaymentSchema = new mongoose.Schema({
     type: String,
     enum: ['card', 'transfer', 'check'],
     default: 'card'
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+    required: true
   }
 }, {
   timestamps: true
+});
+
+PaymentSchema.virtual('paymentDate').get(function() {
+  if (typeof this.date !== 'undefined') {
+    return this.date;
+  }
+
+  return this.createdAt;
 });
 
 module.exports = mongoose.model('Payment', PaymentSchema);
