@@ -1,20 +1,20 @@
 'use strict';
 
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 const stripe = require('../lib/stripe-helper');
 
 const Customer = require('../models/customer');
 const Invoice = require('../models/invoice');
-const Payment  = require('../models/payment');
+const Payment = require('../models/payment');
 
-const auth       = require('../middlewares/auth');
-const authAdmin  = require('../middlewares/authAdmin');
+const auth = require('../middlewares/auth');
+const authAdmin = require('../middlewares/authAdmin');
 const getInvoice = require('../middlewares/getInvoice');
 
 // New
 
-router.get('/new', auth, authAdmin, async function(request, response, next) {
+router.get('/new', auth, authAdmin, async function (request, response, next) {
 
   try {
 
@@ -32,7 +32,7 @@ router.get('/new', auth, authAdmin, async function(request, response, next) {
 
 // POST new Payment using admin form
 
-router.post('/create-from-form', auth, authAdmin, getInvoice, async function(request, response, next) {
+router.post('/create-from-form', auth, authAdmin, getInvoice, async function (request, response, next) {
 
   if (typeof request.body.method === 'undefined' || request.body.method === '') {
     response.status(400);
@@ -66,7 +66,7 @@ router.post('/create-from-form', auth, authAdmin, getInvoice, async function(req
 
 // POST new Payment using Stripe
 
-router.post('/create', auth, getInvoice, async function(request, response, next) {
+router.post('/create', auth, getInvoice, async function (request, response, next) {
 
   if (typeof request.body.stripeToken === 'undefined' && typeof request.body.stripeCard === 'undefined') {
     response.status(400);
@@ -125,7 +125,7 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
 
       }
 
-    // Paying with a saved card
+      // Paying with a saved card
     } else if (typeof request.body.stripeCard !== 'undefined') {
 
       // Get Stripe to charge saved card
@@ -141,16 +141,16 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
 
     // Create payment
     const payment = new Payment({
-      invoice:  request.body.invoiceId,
-      user:     response.locals.currentUser._id,
+      invoice: request.body.invoiceId,
+      user: response.locals.currentUser._id,
       customer: invoice.customer._id,
-      amount:   invoice.amount,
-      date:     Date.now()
+      amount: invoice.amount,
+      date: Date.now()
     });
     await payment.save();
 
     // Update invoice.payed & invoice.payedAt
-    invoice.payed   = true;
+    invoice.payed = true;
     invoice.payedAt = Date.now();
     await invoice.save();
 
@@ -163,11 +163,16 @@ router.post('/create', auth, getInvoice, async function(request, response, next)
 
 });
 
-// List all invoices (admin)
-router.get('/', auth, authAdmin, function(request, response, next) {
+// List all payments (admin)
+router.get('/', auth, authAdmin, function (request, response, next) {
 
-  Payment.find({}).sort('-createdAt').populate('customer').populate('invoice').populate('user').exec().then(function(payments) {
-    response.render('payments/list', { payments: payments });
+  const contentType = request.get('Content-Type');
+  if (contentType !== 'application/json') {
+    return response.render('payments/list');
+  }
+
+  Payment.find({}).sort('-createdAt').populate('customer').populate('invoice').populate('user').exec().then(function (payments) {
+    response.send(payments);
   }).catch((err) => next(err));
 
 });

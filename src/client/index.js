@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import InvoiceLines from './containers/InvoiceLines';
+import PaymentList from './containers/PaymentList';
 import CardForm from './components/CardForm';
 
 // InvoiceLines element
@@ -13,12 +14,19 @@ if (invoiceLinesElement) {
   render(<InvoiceLines invoiceId={invoiceId} isAdmin={isAdmin} />, invoiceLinesElement);
 }
 
+// PaymentList element
+
+const paymentListElement = document.getElementById('payment-list');
+if (paymentListElement) {
+  render(<PaymentList />, paymentListElement);
+}
+
 // CardForm element
 
 const cardFormElement = document.getElementById('card-form');
 if (cardFormElement) {
   const stripeKey = cardFormElement.dataset.stripeKey;
-  const amount    = cardFormElement.dataset.amount;
+  const amount = cardFormElement.dataset.amount;
   const invoiceId = cardFormElement.dataset.invoiceId;
   render(<CardForm stripeKey={stripeKey} invoiceId={invoiceId} amount={amount} />, cardFormElement);
 }
