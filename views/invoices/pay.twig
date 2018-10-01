@@ -8,6 +8,20 @@
 
   <p>Facture n° {{ invoice.number }} pour {{ invoice.customer.name }}</p>
 
+  {% if iban %}
+    <div class="payment-option">
+      <h2>Payer par virement (recommandé)</h2>
+      <p>
+        IBAN : {{ iban }}<br>
+        Montant : {{ invoice.amount | currency }}
+      </p>
+      <p>
+        Merci d'inclure le numéro de commande ({{ invoice.number }}) dans le motif 
+        du virement.
+      </p>
+    </div>
+  {% endif %}
+
   <div class="payment-option">
     <h2>Payer avec une carte sauvegardée</h2>
 
