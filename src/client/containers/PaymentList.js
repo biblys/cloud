@@ -20,13 +20,14 @@ class PaymentList extends React.Component {
     });
     const payments = await response.json();
     this.setState({ payments });
-  }
+  };
 
-  _renderLines() {
-    return this.state.payments.map((payment) => (
+  _renderLines(payments) {
+    return payments.map(payment => (
       <tr key={payment._id}>
         <td>
-          {payment.customer.name}<br />
+          {payment.customer.name}
+          <br />
           {payment.user && <small>{payment.user.name}</small>}
         </td>
         <td>
@@ -36,17 +37,31 @@ class PaymentList extends React.Component {
         </td>
         <td>{payment.method}</td>
         <td>{moment(payment.createdAt).format('DD/MM/YYYY')}</td>
-        <td className="right"><Price amount={+payment.amount} /></td>
-      </tr >
+        <td className="right">
+          <Price amount={+payment.amount} />
+        </td>
+      </tr>
     ));
   }
 
   render() {
-    const total = this.state.payments
-      .reduce((total, payment) => total + +payment.amount, 0);
+    let payments = this.state.payments;
+
+    // Filter by year
+    if (this.props.year && this.props.year.length === 4) {
+      payments = this.state.payments.filter(payment => {
+        const year = moment(payment.createdAt).format('YYYY');
+        return year === this.props.year;
+      });
+    }
+
+    const total = payments.reduce(
+      (total, payment) => total + +payment.amount,
+      0
+    );
 
     return (
-      <React.Fragment>
+      <table>
         <thead>
           <tr>
             <th>Client</th>
@@ -56,9 +71,7 @@ class PaymentList extends React.Component {
             <th>Montant</th>
           </tr>
         </thead>
-        <tbody>
-          {this._renderLines()}
-        </tbody>
+        <tbody>{this._renderLines(payments)}</tbody>
         <tfoot>
           <tr>
             <th className="total">Total :</th>
@@ -67,7 +80,7 @@ class PaymentList extends React.Component {
             </th>
           </tr>
         </tfoot>
-      </React.Fragment >
+      </table>
     );
   }
 }

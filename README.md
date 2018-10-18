@@ -36,6 +36,7 @@
 ### DEV
 
 - Add transfer payment option when `IBAN` env variable is set
+- Add payments year filter functionnality
 
 ### 1.11.0 (2017-01-13)
 
