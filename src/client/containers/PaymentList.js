@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import Price from '../components/Price';
 
-class PaymentList extends React.Component {
+export default class PaymentList extends React.Component {
   state = { payments: [] };
 
   componentDidMount() {
@@ -15,8 +16,8 @@ class PaymentList extends React.Component {
       credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
     const payments = await response.json();
     this.setState({ payments });
@@ -36,7 +37,7 @@ class PaymentList extends React.Component {
           </a>
         </td>
         <td>{payment.method}</td>
-        <td>{moment(payment.createdAt).format('DD/MM/YYYY')}</td>
+        <td>{payment.date && moment(payment.date).format('DD/MM/YYYY')}</td>
         <td className="right">
           <Price amount={+payment.amount} />
         </td>
@@ -50,14 +51,22 @@ class PaymentList extends React.Component {
     // Filter by year
     if (this.props.year && this.props.year.length === 4) {
       payments = this.state.payments.filter(payment => {
-        const year = moment(payment.createdAt).format('YYYY');
-        return year === this.props.year;
+        const year = moment(payment.date).format('YYYY');
+        return parseInt(year) === this.props.year;
+      });
+    }
+
+    // Filter by month
+    if (this.props.month) {
+      payments = this.state.payments.filter(payment => {
+        const month = moment(payment.date).format('M');
+        return month === this.props.month;
       });
     }
 
     const total = payments.reduce(
-      (total, payment) => total + +payment.amount,
-      0
+      (total, payment) => total + parseInt(payment.amount),
+      0,
     );
 
     return (
@@ -85,4 +94,7 @@ class PaymentList extends React.Component {
   }
 }
 
-export default PaymentList;
+PaymentList.propTypes = {
+  month: PropTypes.string,
+  year: PropTypes.string,
+};
