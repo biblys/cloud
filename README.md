@@ -33,6 +33,10 @@
 
 ## Changelog
 
+### DEV
+
+- Fix filtering payments by year
+
 ### 1.12.0 (2018-12-18)
 
 - Add transfer payment option when `IBAN` env variable is set
