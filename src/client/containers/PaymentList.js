@@ -50,16 +50,15 @@ export default class PaymentList extends React.Component {
 
     // Filter by year
     if (this.props.year && this.props.year.length === 4) {
-      payments = this.state.payments.filter(payment => {
+      payments = payments.filter(payment => {
         const year = payment.date && moment(payment.date).format('YYYY');
-        console.log(payment.date, this.props.year);
         return year === this.props.year;
       });
     }
 
     // Filter by month
     if (this.props.month) {
-      payments = this.state.payments.filter(payment => {
+      payments = payments.filter(payment => {
         const month = payment.date && moment(payment.date).format('M');
         return month === this.props.month;
       });
