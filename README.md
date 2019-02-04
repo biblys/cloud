@@ -32,7 +32,7 @@
 
 ## Changelog
 
-### DEV
+### 1.12.1 (2019-02-04)
 
 - Fix filtering payments by year
 
