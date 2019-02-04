@@ -13,7 +13,7 @@
 
 ## Running in development
 
-    yarn run dev
+    yarn dev
 
 ## Run migrations
 
@@ -21,7 +21,6 @@
 
 ## Todo
 
-- Filter payments by month & year
 - Delete saved cards
 - Allow customers to see all their invoices
 - Support tickets
