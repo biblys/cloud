@@ -3,9 +3,9 @@
 const debug = require('debug')('migrations');
 require('../database');
 
-const Payment = require('../models/Payment');
-const User = require('../models/User');
-require('../models/Customer');
+const Payment = require('../models/payment');
+const User = require('../models/user');
+require('../models/customer');
 
 const migrate = async () => {
   try {
