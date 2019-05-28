@@ -43,7 +43,7 @@
     "morgan": "~1.9.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.8.6",
     "react-stripe-elements": "^1.2.1",
     "request": "^2.83.0",
     "stripe": "^5.1.1",
