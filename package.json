@@ -1,6 +1,6 @@
 {
   "name": "biblys-cloud",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "description": "Biblys Cloud",
   "main": "./bin/www",
   "scripts": {

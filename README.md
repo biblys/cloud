@@ -32,9 +32,10 @@
 
 ## Changelog
 
-### DEV
+### 1.12.2 (2019-06-10)
+
 - Update dependencies
-- Fix React deprecation warning 
+- Fix React deprecation warning
 
 ### 1.12.1 (2019-02-04)
 
