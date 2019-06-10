@@ -8,7 +8,7 @@ import Price from '../components/Price';
 class InvoiceLines extends React.Component {
   state = { lines: [] };
 
-  componentWillMount() {
+  componentDidMount() {
     this._fetchLines();
   }
 
