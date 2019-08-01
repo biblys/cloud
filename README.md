@@ -21,6 +21,8 @@
 
 ## Todo
 
+- Replace mongodb with MySQL
+- Dockerize
 - Delete saved cards
 - Allow customers to see all their invoices
 - Support tickets
@@ -31,6 +33,10 @@
 - Save customer address and prefill invoice customerAddress
 
 ## Changelog
+
+### 1.12.3 (2019-08-01)
+
+- Update dependencies to fix lodash security vulnerability
 
 ### 1.12.2 (2019-06-10)
 
