@@ -142,14 +142,10 @@ router.post('/:id/update', auth, authAdmin, getInvoice, async function(
 
 router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
   (async function() {
-    let cards = [];
-
-    if (typeof request.invoice.customer.stripeCustomerId !== 'undefined') {
-      cards = await stripe.getCards(request.invoice.customer.stripeCustomerId);
-    }
+    const session = await stripe.createCheckoutSession();
 
     response.render('invoices/pay', {
-      cards: cards,
+      checkoutSessionId: session.id,
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY,
       iban: process.env.IBAN,
     });
