@@ -13,9 +13,11 @@
   <p>Date : {{ invoice.date|date('d/m/Y') }}</p>
 
   {% if invoice.payed %}
-
     <p>Facture payée le {{ invoice.payedAt|date('d/m/Y') }}</p>
+  {% endif %}
 
+  {% if success %}
+    <p class="success">Merci ! Votre règlement a bien été reçu.</p>
   {% endif %}
 
   <div class="invoice-buttons">

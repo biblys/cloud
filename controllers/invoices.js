@@ -84,7 +84,9 @@ router.get('/', auth, authAdmin, function(request, response, next) {
 // Show invoice
 
 router.get('/:id', auth, getInvoice, function(request, response) {
-  response.render('invoices/show');
+  response.render('invoices/show', {
+    success: request.query.success,
+  });
 });
 
 // Edit invoice
@@ -143,7 +145,9 @@ router.post('/:id/update', auth, authAdmin, getInvoice, async function(
 router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
   (async function() {
     const { protocol, invoice } = request;
-    const returnUrl = `${protocol}://${request.get('host')}/`;
+    const returnUrl = `${protocol}://${request.get('host')}/invoices/${
+      invoice._id
+    }`;
     const session = await stripe.createCheckoutSession(
       invoice.customer,
       invoice.lines,
