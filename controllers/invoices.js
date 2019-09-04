@@ -142,8 +142,13 @@ router.post('/:id/update', auth, authAdmin, getInvoice, async function(
 
 router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
   (async function() {
-    const session = await stripe.createCheckoutSession();
-
+    const { protocol, invoice } = request;
+    const returnUrl = `${protocol}://${request.get('host')}/`;
+    const session = await stripe.createCheckoutSession(
+      invoice.customer,
+      invoice.lines,
+      returnUrl,
+    );
     response.render('invoices/pay', {
       checkoutSessionId: session.id,
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY,
