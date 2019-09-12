@@ -149,8 +149,8 @@ router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
       invoice._id
     }`;
     const session = await stripe.createCheckoutSession(
-      invoice.customer,
-      invoice.lines,
+      invoice,
+      request.currentUser,
       returnUrl,
     );
     response.render('invoices/pay', {

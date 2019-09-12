@@ -34,6 +34,12 @@
 
 ## Changelog
 
+### DEV
+
+/!\ Deployment: configure Stripe webhook
+
+- Revamp card payment to use Stripe Checkout new version
+
 ### 1.12.3 (2019-08-01)
 
 - Update dependencies to fix lodash security vulnerability
