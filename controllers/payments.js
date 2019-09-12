@@ -206,8 +206,6 @@ router.post(
       // Handle the event
       switch (event.type) {
         case 'checkout.session.completed':
-          console.log(event);
-
           // Get invoice & user
           const [
             invoiceId,
