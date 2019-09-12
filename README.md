@@ -2,10 +2,9 @@
 
 ## Install
 
-    git clone git@github.com:iwazaru/biblys-cloud.git
-    cd biblys-cloud
-    yarn
-    cp .env.template .env
+1. Install dependencies: `yarn`
+2. Create config file from template: `cp .env.template .env`
+3. Fill configuration options in `.env`
 
 ## Running in production
 
@@ -14,6 +13,14 @@
 ## Running in development
 
     yarn dev
+
+## Configure Stripe Checkout webhook
+
+1. Create a new webhook in
+   [Stripe dashboard](https://dashboard.stripe.com/test/webhooks) pointing
+   to https://{host}/payments/stripe-webhook
+2. Get Stripe endpoint secret key from dashboard and save it as
+   `STRIPE_ENDPOINT_SECRET` env variable
 
 ## Run migrations
 
