@@ -46,7 +46,7 @@
 
 ## Changelog
 
-### DEV
+### 1.13.0 (2019-09-16)
 
 /!\ Deployment: configure Stripe webhook
 
