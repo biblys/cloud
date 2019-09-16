@@ -5,6 +5,7 @@
   "main": "./bin/www",
   "scripts": {
     "test": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test node_modules/mocha/bin/mocha tests --recursive --timeout 10000",
+    "coverage": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test nyc --reporter=text node_modules/mocha/bin/mocha tests --recursive --timeout 10000",
     "start": "NODE_ENV=production webpack && node ./bin/www",
     "dev": "concurrently -n server,client -c yellow,green \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "NODE_ENV=development DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
@@ -57,6 +58,7 @@
     "concurrently": "^4.1.1",
     "mocha": "^4.0.1",
     "mocha-eslint": "^4.1.0",
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "nyc": "^14.1.1"
   }
 }

@@ -22,6 +22,11 @@
 2. Get Stripe endpoint secret key from dashboard and save it as
    `STRIPE_ENDPOINT_SECRET` env variable
 
+## Run tests / coverage
+
+    yarn test
+    yarn coverage
+
 ## Run migrations
 
     yarn run migrate 1.11.0
