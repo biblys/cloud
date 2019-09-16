@@ -57,7 +57,7 @@
     "chai-http": "^3.0.0",
     "concurrently": "^4.1.1",
     "mocha": "^4.0.1",
-    "mocha-eslint": "^4.1.0",
+    "mocha-eslint": "^5.0.0",
     "nodemon": "^1.12.1",
     "nyc": "^14.1.1"
   }
