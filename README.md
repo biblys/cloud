@@ -46,6 +46,10 @@
 
 ## Changelog
 
+### DEV
+
+- Throw error if Stripe keys are missing in env configuration
+
 ### 1.13.0 (2019-09-16)
 
 /!\ Deployment: configure Stripe webhook
