@@ -6,7 +6,7 @@
   "scripts": {
     "test": "DEBUG=biblys-cloud:test PORT=3001 MONGO_URL=mongodb://localhost/biblys-cloud-test node_modules/mocha/bin/mocha tests --recursive --timeout 10000",
     "start": "NODE_ENV=production webpack && node ./bin/www",
-    "dev": "npm run dev:server & npm run dev:client",
+    "dev": "concurrently -n server,client -c yellow,green \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "NODE_ENV=development DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
     "dev:client": "NODE_ENV=development webpack --watch -d source-map",
     "migrate": "DEBUG=migrations migrations/migrate.js"
@@ -44,9 +44,9 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-stripe-elements": "^1.2.1",
+    "react-stripe-elements": "^4.0.0",
     "request": "^2.83.0",
-    "stripe": "^5.1.1",
+    "stripe": "^7.4.0",
     "twig": "1.10.5",
     "webpack": "^3.10.0"
   },
@@ -54,6 +54,7 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^3.0.0",
+    "concurrently": "^4.1.1",
     "mocha": "^4.0.1",
     "mocha-eslint": "^4.1.0",
     "nodemon": "^1.12.1"

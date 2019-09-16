@@ -1,28 +1,28 @@
 require('dotenv').config();
-const express      = require('express');
-const path         = require('path');
-const logger       = require('morgan');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser   = require('body-parser');
-const mongoose     = require('mongoose');
-const http         = require('http');
-const twig         = require('twig');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const http = require('http');
+const twig = require('twig');
 
 // Create Express app
 const app = express();
 
 // Controllers
-const customers     = require('./controllers/customers');
-const index         = require('./controllers/index');
-const invoices      = require('./controllers/invoices');
-const payments      = require('./controllers/payments');
-const users         = require('./controllers/users');
+const customers = require('./controllers/customers');
+const index = require('./controllers/index');
+const invoices = require('./controllers/invoices');
+const payments = require('./controllers/payments');
+const users = require('./controllers/users');
 
 // Debug logs
 const mongoDebug = require('debug')('biblys-cloud:mongo');
 
 // Middlewares
-const axysReturn   = require('./middlewares/axysReturn');
+const axysReturn = require('./middlewares/axysReturn');
 const identifyUser = require('./middlewares/identifyUser');
 
 // MongoDB
@@ -34,12 +34,26 @@ app.set('view engine', 'twig');
 
 twig.extendFilter('currency', function(value) {
   value /= 100;
-  value = value.toFixed(2).toString().replace('.', ',');
+  value = value
+    .toFixed(2)
+    .toString()
+    .replace('.', ',');
   return `${value} €`;
 });
 
+// Middleware filter
+const unless = function(path, middleware) {
+  return function(req, res, next) {
+    if (path === req.path) {
+      return next();
+    } else {
+      return middleware(req, res, next);
+    }
+  };
+};
+
 app.use(logger('dev'));
-app.use(bodyParser.json());
+app.use(unless('/payments/stripe-webhook', bodyParser.json()));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -51,7 +65,10 @@ app.locals.version = version;
 // Security headers
 app.use(function(request, response, next) {
   if (app.get('env') == 'production') {
-    response.setHeader('Content-Security-Policy', "default-src 'none'; connect-src https://js.stripe.com; script-src 'self' https://js.stripe.com; style-src 'self' https://js.stripe.com https://cdnjs.cloudflare.com; img-src 'self' https://q.stripe.com data:; frame-src https://js.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'");
+    response.setHeader(
+      'Content-Security-Policy',
+      "default-src 'none'; connect-src https://js.stripe.com; script-src 'self' https://js.stripe.com; style-src 'self' https://js.stripe.com https://cdnjs.cloudflare.com; img-src 'self' https://q.stripe.com data:; frame-src https://js.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'",
+    );
   }
 
   response.setHeader('X-Frame-Options', 'DENY');
@@ -83,7 +100,6 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-
   if (res.headersSent) {
     return next(err);
   }

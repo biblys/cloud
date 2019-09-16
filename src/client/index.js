@@ -1,9 +1,10 @@
+/* global Stripe */
+
 import React from 'react';
 import { render } from 'react-dom';
 
 import InvoiceLines from './containers/InvoiceLines';
 import Payments from './containers/Payments';
-import CardForm from './components/CardForm';
 
 // InvoiceLines element
 
@@ -13,7 +14,7 @@ if (invoiceLinesElement) {
   const isAdmin = invoiceLinesElement.dataset.isAdmin == 'true';
   render(
     <InvoiceLines invoiceId={invoiceId} isAdmin={isAdmin} />,
-    invoiceLinesElement
+    invoiceLinesElement,
   );
 }
 
@@ -24,22 +25,26 @@ if (payments) {
   render(<Payments />, payments);
 }
 
-// CardForm element
-
-const cardFormElement = document.getElementById('card-form');
-if (cardFormElement) {
-  const stripeKey = cardFormElement.dataset.stripeKey;
-  const amount = cardFormElement.dataset.amount;
-  const invoiceId = cardFormElement.dataset.invoiceId;
-  render(
-    <CardForm stripeKey={stripeKey} invoiceId={invoiceId} amount={amount} />,
-    cardFormElement
-  );
-}
-
 // Print button
 
 const printButton = document.getElementById('print-button');
 if (printButton) {
   printButton.addEventListener('click', () => window.print());
+}
+
+// Stripe Checkout
+
+const payButton = document.getElementById('pay-button');
+if (payButton) {
+  payButton.addEventListener('click', () => {
+    const { stripePublicKey, checkoutSessionId } = payButton.dataset;
+    const stripe = Stripe(stripePublicKey);
+    stripe
+      .redirectToCheckout({
+        sessionId: checkoutSessionId,
+      })
+      .then(result => {
+        alert(result.error.message);
+      });
+  });
 }

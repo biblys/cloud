@@ -84,7 +84,9 @@ router.get('/', auth, authAdmin, function(request, response, next) {
 // Show invoice
 
 router.get('/:id', auth, getInvoice, function(request, response) {
-  response.render('invoices/show');
+  response.render('invoices/show', {
+    success: request.query.success,
+  });
 });
 
 // Edit invoice
@@ -142,14 +144,17 @@ router.post('/:id/update', auth, authAdmin, getInvoice, async function(
 
 router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
   (async function() {
-    let cards = [];
-
-    if (typeof request.invoice.customer.stripeCustomerId !== 'undefined') {
-      cards = await stripe.getCards(request.invoice.customer.stripeCustomerId);
-    }
-
+    const { protocol, invoice } = request;
+    const returnUrl = `${protocol}://${request.get('host')}/invoices/${
+      invoice._id
+    }`;
+    const session = await stripe.createCheckoutSession(
+      invoice,
+      request.currentUser,
+      returnUrl,
+    );
     response.render('invoices/pay', {
-      cards: cards,
+      checkoutSessionId: session.id,
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY,
       iban: process.env.IBAN,
     });
