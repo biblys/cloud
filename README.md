@@ -6,11 +6,19 @@
 2. Create config file from template: `cp .env.template .env`
 3. Fill configuration options in `.env`
 
-## Running in production
+## Run using docker
 
-    yarn start
+Create and `.env` file from `env.template`, fill options and:
 
-## Running in development
+```console
+docker run -d -p 3000:8080 \
+  --env-file=.env \
+  --restart=unless-stopped \
+  --name cloud \
+  biblys/cloud
+```
+
+## Run in development
 
     yarn dev
 
