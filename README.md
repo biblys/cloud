@@ -6,11 +6,19 @@
 2. Create config file from template: `cp .env.template .env`
 3. Fill configuration options in `.env`
 
-## Running in production
+## Run using docker
 
-    yarn start
+Create and `.env` file from `env.template`, fill options and:
 
-## Running in development
+```console
+docker run -d -p 3000:8080 \
+  --env-file=.env \
+  --restart=unless-stopped \
+  --name cloud \
+  biblys/cloud
+```
+
+## Run in development
 
     yarn dev
 
@@ -45,6 +53,12 @@
 - Save customer address and prefill invoice customerAddress
 
 ## Changelog
+
+### 1.13.1 (2019-10-01)
+
+- Throw error if Stripe keys are missing in env configuration
+- Fix CSP error on invoice page
+- Enable CSP in dev mode
 
 ### 1.13.0 (2019-09-16)
 

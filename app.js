@@ -64,12 +64,10 @@ app.locals.version = version;
 
 // Security headers
 app.use(function(request, response, next) {
-  if (app.get('env') == 'production') {
-    response.setHeader(
-      'Content-Security-Policy',
-      "default-src 'none'; connect-src https://js.stripe.com; script-src 'self' https://js.stripe.com; style-src 'self' https://js.stripe.com https://cdnjs.cloudflare.com; img-src 'self' https://q.stripe.com data:; frame-src https://js.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'",
-    );
-  }
+  response.setHeader(
+    'Content-Security-Policy',
+    "default-src 'none'; connect-src 'self' https://js.stripe.com; script-src 'self' https://js.stripe.com; style-src 'self' https://js.stripe.com https://cdnjs.cloudflare.com; img-src 'self' https://q.stripe.com data:; frame-src https://js.stripe.com; frame-ancestors 'none'; base-uri 'none'; object-src 'none'",
+  );
 
   response.setHeader('X-Frame-Options', 'DENY');
   response.setHeader('X-Content-Type-Options', 'nosniff');

@@ -144,6 +144,21 @@ router.post('/:id/update', auth, authAdmin, getInvoice, async function(
 
 router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
   (async function() {
+    const {
+      STRIPE_PUBLIC_KEY,
+      STRIPE_SECRET_KEY,
+      STRIPE_ENDPOINT_SECRET,
+    } = process.env;
+
+    if (
+      typeof STRIPE_PUBLIC_KEY === 'undefined' ||
+      typeof STRIPE_SECRET_KEY === 'undefined' ||
+      typeof STRIPE_ENDPOINT_SECRET === 'undefined'
+    ) {
+      response.status(400);
+      throw 'Missing Stripe keys in configuration';
+    }
+
     const { protocol, invoice } = request;
     const returnUrl = `${protocol}://${request.get('host')}/invoices/${
       invoice._id
@@ -155,7 +170,7 @@ router.get('/:id/pay', auth, getInvoice, function(request, response, next) {
     );
     response.render('invoices/pay', {
       checkoutSessionId: session.id,
-      stripePublicKey: process.env.STRIPE_PUBLIC_KEY,
+      stripePublicKey: STRIPE_PUBLIC_KEY,
       iban: process.env.IBAN,
     });
   })().catch(error => next(error));
