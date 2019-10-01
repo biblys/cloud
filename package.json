@@ -9,7 +9,7 @@
     "start": "NODE_ENV=production webpack && node ./bin/www",
     "dev": "concurrently -n server,client -c yellow,green \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "NODE_ENV=development DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
-    "dev:client": "NODE_ENV=development webpack --watch -d source-map",
+    "dev:client": "NODE_ENV=development webpack --watch",
     "migrate": "DEBUG=migrations migrations/migrate.js"
   },
   "repository": {

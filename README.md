@@ -57,6 +57,7 @@ docker run -d -p 3000:8080 \
 ### DEV
 
 - Throw error if Stripe keys are missing in env configuration
+- Fix
 
 ### 1.13.0 (2019-09-16)
 
