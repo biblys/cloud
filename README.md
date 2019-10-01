@@ -54,10 +54,11 @@ docker run -d -p 3000:8080 \
 
 ## Changelog
 
-### DEV
+### 1.13.1 (2019-10-01)
 
 - Throw error if Stripe keys are missing in env configuration
-- Fix
+- Fix CSP error on invoice page
+- Enable CSP in dev mode
 
 ### 1.13.0 (2019-09-16)
 
