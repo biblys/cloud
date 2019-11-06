@@ -47,7 +47,7 @@
     "react-dom": "^16.2.0",
     "react-stripe-elements": "^4.0.0",
     "request": "^2.83.0",
-    "stripe": "^7.4.0",
+    "stripe": "^7.12.0",
     "twig": "1.10.5",
     "webpack": "^3.10.0"
   },
