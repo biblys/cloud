@@ -42,21 +42,21 @@ docker run -d -p 3000:8080 \
 ## Todo
 
 - Replace mongodb with MySQL
-- Dockerize
+- Allow to save cards (again)
 - Delete saved cards
 - Allow customers to see all their invoices
 - Support tickets
 - Tests for middlewares
-- Webpack
 - Favicon
 - Home page
 - Save customer address and prefill invoice customerAddress
 
 ## Changelog
 
-### DEV
+### 1.13.2 (2019-11-25)
 
 - Fix invoice link in payments list
+- Updated dependencies
 
 ### 1.13.1 (2019-10-01)
 
