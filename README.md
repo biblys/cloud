@@ -54,6 +54,10 @@ docker run -d -p 3000:8080 \
 
 ## Changelog
 
+### DEV
+
+- Fix invoice link in payments list
+
 ### 1.13.1 (2019-10-01)
 
 - Throw error if Stripe keys are missing in env configuration
