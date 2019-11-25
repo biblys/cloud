@@ -32,7 +32,7 @@ export default class PaymentList extends React.Component {
           {payment.user && <small>{payment.user.name}</small>}
         </td>
         <td>
-          <a href={`/invoice/${payment.invoice._id}`}>
+          <a href={`/invoices/${payment.invoice._id}`}>
             {payment.invoice.number}
           </a>
         </td>
