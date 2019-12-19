@@ -1,34 +1,32 @@
 'use strict';
 
-const chai     = require('chai');
+const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server   = require('../../bin/www');
+const server = require('../../bin/www');
 const mongoose = require('mongoose');
 
 chai.should();
 chai.use(chaiHttp);
 
+const request = chai.request(server).keepOpen();
+
 const { user, admin } = require('../test-data.js');
 
 describe('Users controller', function() {
-
   // GET /users/new
 
   describe('GET /users/new', function() {
-
     it('should return 401 for unlogged user', function(done) {
-      chai.request(server)
-        .get('/users/new')
-        .end(function(err, res) {
-          res.should.have.status(401);
-          res.should.be.html;
-          res.text.should.include('Connexion');
-          done();
-        });
+      request.get('/users/new').end(function(err, res) {
+        res.should.have.status(401);
+        res.should.be.html;
+        res.text.should.include('Connexion');
+        done();
+      });
     });
 
     it('should return 403 for non admin user', function(done) {
-      chai.request(server)
+      request
         .get('/users/new')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
@@ -40,7 +38,7 @@ describe('Users controller', function() {
     });
 
     it('should return 200 for admin user', function(done) {
-      chai.request(server)
+      request
         .get('/users/new')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
@@ -55,20 +53,17 @@ describe('Users controller', function() {
   // POST /users/create
 
   describe('POST /users/create', function() {
-
     it('should return 401 for unlogged user', function(done) {
-      chai.request(server)
-        .post('/users/create')
-        .end(function(err, res) {
-          res.should.have.status(401);
-          res.should.be.html;
-          res.text.should.include('Connexion');
-          done();
-        });
+      request.post('/users/create').end(function(err, res) {
+        res.should.have.status(401);
+        res.should.be.html;
+        res.text.should.include('Connexion');
+        done();
+      });
     });
 
     it('should return 403 for non admin user', function(done) {
-      chai.request(server)
+      request
         .post('/users/create')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
@@ -82,7 +77,7 @@ describe('Users controller', function() {
     // Required fields
 
     it('should return 400 if axysId field is missing', function(done) {
-      chai.request(server)
+      request
         .post('/users/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
@@ -94,7 +89,7 @@ describe('Users controller', function() {
     });
 
     it('should return 400 if name field is missing', function(done) {
-      chai.request(server)
+      request
         .post('/users/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .send({ axysId: 1145 })
@@ -107,7 +102,7 @@ describe('Users controller', function() {
     });
 
     it('should return 400 if email field is missing', function(done) {
-      chai.request(server)
+      request
         .post('/users/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .send({ axysId: 1145, name: 'A User' })
@@ -122,7 +117,7 @@ describe('Users controller', function() {
     // Success
 
     it('should redirect to admin index after user creation', function(done) {
-      chai.request(server)
+      request
         .post('/users/create')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .send({ axysId: 1145, name: 'A User', email: 'created-user@biblys.fr' })
@@ -137,18 +132,16 @@ describe('Users controller', function() {
 
   describe('GET /users/', function() {
     it('should return 401 for unlogged user', function(done) {
-      chai.request(server)
-        .get('/users/')
-        .end(function(err, res) {
-          res.should.have.status(401);
-          res.should.be.html;
-          res.text.should.include('Connexion');
-          done();
-        });
+      request.get('/users/').end(function(err, res) {
+        res.should.have.status(401);
+        res.should.be.html;
+        res.text.should.include('Connexion');
+        done();
+      });
     });
 
     it('should return 403 for non admin user', function(done) {
-      chai.request(server)
+      request
         .get('/users/')
         .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
@@ -160,7 +153,7 @@ describe('Users controller', function() {
     });
 
     it('should return 200 for admin user', function(done) {
-      chai.request(server)
+      request
         .get('/users/')
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
@@ -175,20 +168,17 @@ describe('Users controller', function() {
   // GET /users/:id/edit
 
   describe('GET /users/:id/edit', function() {
-
     it('should return 401 for unlogged user', function(done) {
-      chai.request(server)
-        .get(`/users/${user._id}/edit`)
-        .end(function(err, res) {
-          res.should.have.status(401);
-          res.should.be.html;
-          res.text.should.include('Connexion');
-          done();
-        });
+      request.get(`/users/${user._id}/edit`).end(function(err, res) {
+        res.should.have.status(401);
+        res.should.be.html;
+        res.text.should.include('Connexion');
+        done();
+      });
     });
 
     it('should return 403 for non admin user', function(done) {
-      chai.request(server)
+      request
         .get(`/users/${user._id}/edit`)
         .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
@@ -200,7 +190,7 @@ describe('Users controller', function() {
     });
 
     it('should return 404 for non existing user', function(done) {
-      chai.request(server)
+      request
         .get(`/users/${mongoose.Types.ObjectId()}/edit`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
@@ -212,7 +202,7 @@ describe('Users controller', function() {
     });
 
     it('should return 200 for admin user', function(done) {
-      chai.request(server)
+      request
         .get(`/users/${user._id}/edit`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
@@ -227,20 +217,17 @@ describe('Users controller', function() {
   // POST /users/:id/update
 
   describe('POST /users/:id/update', function() {
-
     it('should return 401 for unlogged user', function(done) {
-      chai.request(server)
-        .post(`/users/${user._id}/update`)
-        .end(function(err, res) {
-          res.should.have.status(401);
-          res.should.be.html;
-          res.text.should.include('Connexion');
-          done();
-        });
+      request.post(`/users/${user._id}/update`).end(function(err, res) {
+        res.should.have.status(401);
+        res.should.be.html;
+        res.text.should.include('Connexion');
+        done();
+      });
     });
 
     it('should return 403 for non admin user', function(done) {
-      chai.request(server)
+      request
         .post(`/users/${user._id}/update`)
         .set('Cookie', `userUid=${user.axysSessionUid}`)
         .end(function(err, res) {
@@ -252,7 +239,7 @@ describe('Users controller', function() {
     });
 
     it('should return 404 for non existing user', function(done) {
-      chai.request(server)
+      request
         .post(`/users/${mongoose.Types.ObjectId()}/update`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
@@ -266,7 +253,7 @@ describe('Users controller', function() {
     // Required fields
 
     it('should return 400 if axysId field is missing', function(done) {
-      chai.request(server)
+      request
         .post(`/users/${user._id}/update`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .end(function(err, res) {
@@ -278,7 +265,7 @@ describe('Users controller', function() {
     });
 
     it('should return 400 if name field is missing', function(done) {
-      chai.request(server)
+      request
         .post(`/users/${user._id}/update`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .send({ axysId: 1145 })
@@ -291,7 +278,7 @@ describe('Users controller', function() {
     });
 
     it('should return 400 if email field is missing', function(done) {
-      chai.request(server)
+      request
         .post(`/users/${user._id}/update`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .send({ axysId: 1145, name: 'A User' })
@@ -306,7 +293,7 @@ describe('Users controller', function() {
     // Success
 
     it('should redirect admin user after user creation', function(done) {
-      chai.request(server)
+      request
         .post(`/users/${user._id}/update`)
         .set('Cookie', `userUid=${admin.axysSessionUid}`)
         .send({ axysId: 1145, name: 'A User', email: 'user@biblys.fr' })
@@ -316,5 +303,4 @@ describe('Users controller', function() {
         });
     });
   });
-
 });

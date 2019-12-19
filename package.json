@@ -1,6 +1,6 @@
 {
   "name": "biblys-cloud",
-  "version": "1.13.2",
+  "version": "1.13.3",
   "description": "Biblys Cloud",
   "main": "./bin/www",
   "scripts": {
@@ -10,7 +10,8 @@
     "dev": "concurrently -n server,client -c yellow,green \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "NODE_ENV=development DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
     "dev:client": "NODE_ENV=development webpack --watch",
-    "migrate": "DEBUG=migrations migrations/migrate.js"
+    "migrate": "DEBUG=migrations migrations/migrate.js",
+    "lint": "eslint controllers lib middlewares migrations models tests app.js src/client"
   },
   "repository": {
     "type": "git",
@@ -26,18 +27,10 @@
     "node": ">=8.0"
   },
   "dependencies": {
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.1.2",
-    "babel-loader": "^7.1.2",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-react-app": "^3.1.0",
-    "body-parser": "~1.18.2",
+    "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "dotenv": "^4.0.0",
-    "eslint-plugin-react": "^7.5.1",
+    "debug": "~4.1.1",
+    "dotenv": "^8.2.0",
     "express": "^4.16.2",
     "moment": "^2.22.2",
     "mongoose": "^5.7.5",
@@ -45,20 +38,29 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-stripe-elements": "^4.0.0",
     "request": "^2.83.0",
     "stripe": "^7.13.1",
     "twig": "1.14.0",
-    "webpack": "^3.10.0"
+    "webpack": "^4.41.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-react-app": "^9.1.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "chai-http": "^3.0.0",
-    "concurrently": "^4.1.1",
-    "mocha": "^4.0.1",
-    "mocha-eslint": "^4.1.0",
-    "nodemon": "^1.12.1",
-    "nyc": "^14.1.1"
+    "chai-http": "^4.3.0",
+    "concurrently": "^5.0.2",
+    "eslint": "^6.7.2",
+    "eslint-plugin-react": "^7.5.1",
+    "mocha": "^6.2.2",
+    "mocha-eslint": "^6.0.0",
+    "nodemon": "^2.0.2",
+    "nyc": "^14.1.1",
+    "webpack-cli": "^3.3.10"
   }
 }

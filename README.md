@@ -53,6 +53,10 @@ docker run -d -p 3000:8080 \
 
 ## Changelog
 
+### 1.13.3 (2019-12-19)
+
+- Upgraded all dependencies
+
 ### 1.13.2 (2019-11-25)
 
 - Fix invoice link in payments list

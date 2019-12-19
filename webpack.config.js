@@ -7,23 +7,20 @@ const BUILD_DIR = path.resolve(__dirname, 'public/javascripts');
 const APP_DIR = path.resolve(__dirname, 'src/client');
 
 const config = {
-  entry: [
-    'babel-polyfill',
-    `${APP_DIR}/index.js`
-  ],
+  entry: ['babel-polyfill', `${APP_DIR}/index.js`],
   output: {
     path: BUILD_DIR,
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js/,
         include: APP_DIR,
-        loader: 'babel-loader'
-      }
-    ]
-  }
+        loader: 'babel-loader',
+      },
+    ],
+  },
 };
 
 module.exports = config;

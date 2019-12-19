@@ -17,12 +17,12 @@ class InvoiceLines extends React.Component {
       credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
     const lines = await response.json();
     this.setState({ lines });
-  }
+  };
 
   _addLine = async (event, label, price) => {
     event.preventDefault();
@@ -33,34 +33,36 @@ class InvoiceLines extends React.Component {
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
-        Accept: 'application/json'
+        Accept: 'application/json',
       },
-      body: JSON.stringify({ label: label.value, price: price.value })
+      body: JSON.stringify({ label: label.value, price: price.value }),
     });
 
+    // eslint-disable-next-line require-atomic-updates
     label.value = '';
+    // eslint-disable-next-line require-atomic-updates
     price.value = '';
     label.focus();
     this._fetchLines();
-  }
+  };
 
-  _deleteLine = async (id) => {
+  _deleteLine = async id => {
     // DELETE line on server
     await fetch(`/invoices/${this.props.invoiceId}/lines/${id}`, {
       method: 'DELETE',
       credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
 
     // Update state from server
     this._fetchLines();
-  }
+  };
 
   _renderLines() {
-    return this.state.lines.map((line) => (
+    return this.state.lines.map(line => (
       <InvoiceLine
         key={line._id}
         label={line.label}
@@ -72,7 +74,10 @@ class InvoiceLines extends React.Component {
   }
 
   render() {
-    const total = this.state.lines.reduce((total, line) => total + line.price, 0);
+    const total = this.state.lines.reduce(
+      (total, line) => total + line.price,
+      0,
+    );
     return (
       <React.Fragment>
         <thead>
@@ -100,7 +105,7 @@ class InvoiceLines extends React.Component {
 
 InvoiceLines.propTypes = {
   invoiceId: PropTypes.string.isRequired,
-  isAdmin: PropTypes.bool.isRequired
+  isAdmin: PropTypes.bool.isRequired,
 };
 
 export default InvoiceLines;

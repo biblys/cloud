@@ -60,10 +60,10 @@ router.post('/create-from-form', auth, authAdmin, getInvoice, async function(
     payment.amount = request.invoice.amount;
     payment.method = request.body.method;
     payment.date = request.body.date;
-    await payment.save();
-
     request.invoice.payed = true;
     request.invoice.payedAt = request.body.date;
+
+    await payment.save();
     await request.invoice.save();
   } catch (error) {
     return next(error);
