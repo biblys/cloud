@@ -10,7 +10,8 @@
     "dev": "concurrently -n server,client -c yellow,green \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "NODE_ENV=development DEBUG=biblys-cloud* ./node_modules/nodemon/bin/nodemon.js --ext .js,.twig",
     "dev:client": "NODE_ENV=development webpack --watch",
-    "migrate": "DEBUG=migrations migrations/migrate.js"
+    "migrate": "DEBUG=migrations migrations/migrate.js",
+    "lint": "eslint controllers lib middlewares migrations models tests app.js src/client"
   },
   "repository": {
     "type": "git",
@@ -58,7 +59,7 @@
     "concurrently": "^4.1.1",
     "eslint": "^6.7.2",
     "mocha": "^4.0.1",
-    "mocha-eslint": "^4.1.0",
+    "mocha-eslint": "^6.0.0",
     "nodemon": "^1.12.1",
     "nyc": "^14.1.1"
   }
