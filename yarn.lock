@@ -1090,10 +1090,10 @@
   resolved "https://registry.yarnpkg.com/@types/cookiejar/-/cookiejar-2.1.1.tgz#90b68446364baf9efd8e8349bb36bd3852b75b80"
   integrity sha512-aRnpPa7ysx3aNW60hTiCtLHlQaIFsXFCgQlpakNgDNVFzbtusSY8PwjAQgRWfSk0ekNoBjO51eQRB6upA9uuyw==
 
-"@types/node@*", "@types/node@^13.1.0":
-  version "13.1.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.1.6.tgz#076028d0b0400be8105b89a0a55550c86684ffec"
-  integrity sha512-Jg1F+bmxcpENHP23sVKkNuU3uaxPnsBMW0cLjleiikFKomJQbsn0Cqk2yDvQArqzZN6ABfBkZ0To7pQ8sLdWDg==
+"@types/node@*", "@types/node@>=8.1.0":
+  version "13.5.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.5.2.tgz#3de53b55fd39efc428a901a0f6db31f761cfa131"
+  integrity sha512-Fr6a47c84PRLfd7M7u3/hEknyUdQrrBA6VoPmkze0tcflhU5UnpWEX2kn12ktA/lb+MNHSqFlSiPHIHsaErTPA==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -6237,12 +6237,12 @@ strip-json-comments@^3.0.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-3.0.1.tgz#85713975a91fb87bf1b305cca77395e40d2a64a7"
   integrity sha512-VTyMAUfdm047mwKl+u79WIdrZxtFtn+nBxHeb844XBQ9uMNTuTHdx2hc5RiAJYqwTj3wc/xe5HLSdJSkJ+WfZw==
 
-stripe@^8.8.0:
-  version "8.8.0"
-  resolved "https://registry.yarnpkg.com/stripe/-/stripe-8.8.0.tgz#b1eb8545a4737682ec610a39c6d500c5caa8dccc"
-  integrity sha512-B9rBG0yY5OSHQDHGyx6SGTdjEpxAC/CsiZpuHiLjxNE/pi3dftVsklB6YNNdsu3oNeRBy7eM7sBEXr61NRJiZg==
+stripe@^8.8.1:
+  version "8.8.1"
+  resolved "https://registry.yarnpkg.com/stripe/-/stripe-8.8.1.tgz#9c522555d7f90e82551a0d039772e3fbfa1ac274"
+  integrity sha512-+nBGdY6nqZCIQDAkKHD+tfA4z409KLHAdOd+Soglp9krLDhfO9Ynkb8WkNiq+LdRhDOmVsJhzVAFbpQgC86lHQ==
   dependencies:
-    "@types/node" "^13.1.0"
+    "@types/node" ">=8.1.0"
     qs "^6.6.0"
 
 superagent@^3.7.0:
