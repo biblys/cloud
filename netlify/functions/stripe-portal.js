@@ -11,9 +11,10 @@ exports.handler = async function (event, context) {
 
   const body = JSON.parse(event.body);
   const customerId = body.customer_id;
+  const returnUrl = body.return_url;
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
-    return_url: 'https://biblys.fr/',
+    return_url: returnUrl,
   });
 
   return {
