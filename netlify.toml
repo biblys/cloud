@@ -9,6 +9,12 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/api/stripe/subscription"
+  to = "/.netlify/functions/stripe_subscription"
+  status = 200
+  force = true
+
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
   #[[redirects]]
