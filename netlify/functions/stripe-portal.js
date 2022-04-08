@@ -9,8 +9,8 @@ exports.handler = async function (event, context) {
     };
   }
 
-  const params = event.queryStringParameters;
-  const customerId = params.customer_id;
+  const body = JSON.parse(event.body);
+  const customerId = body.customer_id;
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
     return_url: 'https://biblys.fr/',
