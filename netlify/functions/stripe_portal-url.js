@@ -13,8 +13,7 @@ exports.handler = async function (event, context) {
     };
   }
 
-  const body = JSON.parse(event.body);
-  const returnUrl = body.return_url;
+  const returnUrl = event.queryStringParameters.return_url;
   const session = await stripe.billingPortal.sessions.create({
     customer: publicKey,
     return_url: returnUrl,
