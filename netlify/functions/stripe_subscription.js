@@ -18,8 +18,15 @@ exports.handler = async function (event) {
     status: 'active',
     limit: 1,
   });
-  const { id, days_until_due, current_period_end } = subscriptions.data[0];
 
+  if (subscriptions.data.length === 0) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({}),
+    };
+  }
+
+  const { id, days_until_due, current_period_end } = subscriptions.data[0];
   return {
     statusCode: 200,
     body: JSON.stringify({ id, days_until_due, current_period_end }),
