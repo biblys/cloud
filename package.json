@@ -3,6 +3,7 @@
     "start": "netlify dev"
   },
   "dependencies": {
+    "jest": "^27.5.1",
     "stripe": "^8.216.0"
   }
 }
