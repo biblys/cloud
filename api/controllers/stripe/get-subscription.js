@@ -1,5 +1,5 @@
 const { authenticate } = require('../../services/authenticator');
-const HttpUnauthorizedError = require('../../errors/http-unauthorized-error');
+const { handleError } = require('../../services/error-handler');
 
 module.exports = async function getSubscription(event, stripe) {
   try {
@@ -23,16 +23,6 @@ module.exports = async function getSubscription(event, stripe) {
       body: JSON.stringify({ id, days_until_due, current_period_end }),
     };
   } catch (error) {
-    if (error instanceof HttpUnauthorizedError) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: 'Unauthorized' }),
-      };
-    }
-
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
-    };
+    return handleError(error);
   }
 };

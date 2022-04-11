@@ -1,5 +1,5 @@
 const { authenticate } = require('../../services/authenticator');
-const HttpUnauthorizedError = require('../../errors/http-unauthorized-error');
+const { handleError } = require('../../services/error-handler');
 
 module.exports = async function getPortalUrl(event, stripe) {
   try {
@@ -15,16 +15,6 @@ module.exports = async function getPortalUrl(event, stripe) {
       body: JSON.stringify({url: session.url}),
     };
   } catch (error) {
-    if (error instanceof HttpUnauthorizedError) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: 'Unauthorized' }),
-      };
-    }
-
-    return {
-      statusCode: 500,
-      body: JSON.stringify({error: error.message}),
-    };
+    return handleError(error);
   }
 };
