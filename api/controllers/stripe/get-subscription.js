@@ -6,7 +6,6 @@ module.exports = async function getSubscription(event, stripe) {
     const publicKey = authenticate(event.headers);
     const subscriptions = await stripe.subscriptions.list({
       customer: publicKey,
-      status: 'active',
       limit: 1,
     });
 
