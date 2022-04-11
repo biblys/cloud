@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "netlify dev"
+  },
   "dependencies": {
     "stripe": "^8.216.0"
   }
