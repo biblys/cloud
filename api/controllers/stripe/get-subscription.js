@@ -1,6 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_KEY);
-
-module.exports = async function getSubscription(event) {
+module.exports = async function getSubscription(event, stripe) {
   const headers = event.headers;
   const base64Credentials =  headers.authorization.split(' ')[1];
   const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
