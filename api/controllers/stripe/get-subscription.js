@@ -16,10 +16,10 @@ module.exports = async function getSubscription(event, stripe) {
       };
     }
 
-    const { id, days_until_due, current_period_end } = subscriptions.data[0];
+    const { id, status, days_until_due, current_period_end } = subscriptions.data[0];
     return {
       statusCode: 200,
-      body: JSON.stringify({ id, days_until_due, current_period_end }),
+      body: JSON.stringify({ id, status, days_until_due, current_period_end }),
     };
   } catch (error) {
     return handleError(error);

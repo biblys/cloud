@@ -73,6 +73,7 @@ describe('getSubscription', () => {
             list: jest.fn(() => Promise.resolve({
               data: [{
                 id: 1,
+                status: 'active',
                 days_until_due: 7,
                 current_period_end: 123456789,
               }]
@@ -88,6 +89,7 @@ describe('getSubscription', () => {
         expect(response.statusCode).toBe(200);
         expect(response.body).toBe(JSON.stringify({
           id: 1,
+          status: 'active',
           days_until_due: 7,
           current_period_end: 123456789,
         }));
