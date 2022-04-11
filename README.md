@@ -14,6 +14,12 @@
 yarn install
 ```
 
+### Run tests
+
+```shell
+yarn test
+```
+
 ### Run development server
 
 ```shell

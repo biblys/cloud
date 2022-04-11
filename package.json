@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "netlify dev"
+    "start": "netlify dev",
+    "test": "jest"
   },
   "dependencies": {
     "jest": "^27.5.1",
