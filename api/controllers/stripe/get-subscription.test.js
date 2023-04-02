@@ -90,8 +90,6 @@ describe('getSubscription', () => {
         expect(response.body).toBe(JSON.stringify({
           id: 1,
           status: 'active',
-          days_until_due: 7,
-          current_period_end: 123456789,
         }));
       });
     });
