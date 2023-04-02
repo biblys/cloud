@@ -16,10 +16,17 @@ module.exports = async function getSubscription(event, stripe) {
       };
     }
 
-    const { id, status } = subscriptions.data[0];
+    const { id, status, latest_invoice } = subscriptions.data[0];
+
+    let isSubscriptionPaid = false;
+    if (latest_invoice) {
+      const invoice = await stripe.invoices.retrieve(latest_invoice);
+      isSubscriptionPaid = invoice.paid;
+    }
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ id, status }),
+      body: JSON.stringify({ id, status, is_paid: isSubscriptionPaid }),
     };
   } catch (error) {
     return handleError(error);
