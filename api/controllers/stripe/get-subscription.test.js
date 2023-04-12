@@ -1,3 +1,5 @@
+/* global jest, describe, it, expect */
+
 const getSubscription = require('./get-subscription');
 
 describe('getSubscription', () => {
@@ -26,24 +28,8 @@ describe('getSubscription', () => {
     describe('when there is no subscription', () => {
       it('returns an empty object', async () => {
         // given
-        process.env.BIBLYS_CLOUD_KEY = 'secret_key';
-        const credentials = 'public_key:secret_key';
-        const encodedCredentials = Buffer.from(credentials, 'ascii').toString('base64');
-        const event = {
-          headers: {
-            authorization: `Bearer ${encodedCredentials}`,
-          },
-          queryStringParameters: {
-            return_url: 'https://example.org/return-url',
-          },
-        };
-        const stripe = {
-          subscriptions: {
-            list: jest.fn(() => Promise.resolve({
-              data: []
-            })),
-          }
-        };
+        const event = _mockEventForAuthenticatedUser();
+        const stripe = _mockStripeResponse({});
 
         // when
         const response = await getSubscription(event, stripe);
@@ -59,29 +45,14 @@ describe('getSubscription', () => {
         it('returns the subscription', async () => {
           // given
           process.env.BIBLYS_CLOUD_KEY = 'secret_key';
-          const credentials = 'public_key:secret_key';
-          const encodedCredentials = Buffer.from(credentials, 'ascii').toString('base64');
-          const event = {
-            headers: {
-              authorization: `Bearer ${encodedCredentials}`,
-            },
-            queryStringParameters: {
-              return_url: 'https://example.org/return-url',
-            },
-          };
-          const stripe = {
-            subscriptions: {
-              list: jest.fn(() => Promise.resolve({
-                data: [{
-                  id: 1,
-                  status: 'active',
-                  days_until_due: 7,
-                  current_period_end: 123456789,
-                  latest_invoice: null,
-                }]
-              })),
-            }
-          };
+          const event = _mockEventForAuthenticatedUser();
+          const stripe = _mockStripeResponse({ subscription: {
+              id: 1,
+              status: 'active',
+              days_until_due: 7,
+              current_period_end: 123456789,
+              latest_invoice: null,
+            }});
 
           // when
           const response = await getSubscription(event, stripe);
@@ -100,35 +71,17 @@ describe('getSubscription', () => {
       describe('when there is a latest invoice', () => {
         it('returns the subscription with invoice detail', async () => {
           // given
-          process.env.BIBLYS_CLOUD_KEY = 'secret_key';
-          const credentials = 'public_key:secret_key';
-          const encodedCredentials = Buffer.from(credentials, 'ascii').toString('base64');
-          const event = {
-            headers: {
-              authorization: `Bearer ${encodedCredentials}`,
+          const event = _mockEventForAuthenticatedUser();
+          const stripe = _mockStripeResponse({
+            subscription: {
+              id: 1,
+              status: 'active',
+              days_until_due: 7,
+              current_period_end: 123456789,
+              latest_invoice: 'invoice_123456789',
             },
-            queryStringParameters: {
-              return_url: 'https://example.org/return-url',
-            },
-          };
-          const stripe = {
-            subscriptions: {
-              list: jest.fn(() => Promise.resolve({
-                data: [{
-                  id: 1,
-                  status: 'active',
-                  days_until_due: 7,
-                  current_period_end: 123456789,
-                  latest_invoice: 'invoice_123456789',
-                }]
-              })),
-            },
-            invoices: {
-              retrieve: jest.fn(() => Promise.resolve({
-                paid: true,
-              })),
-            }
-          };
+            invoice: { paid: true },
+          });
 
           // when
           const response = await getSubscription(event, stripe);
@@ -145,8 +98,33 @@ describe('getSubscription', () => {
         });
       });
     });
-
-
   });
 });
 
+function _mockEventForAuthenticatedUser() {
+  process.env.BIBLYS_CLOUD_KEY = 'secret_key';
+  const credentials = 'public_key:secret_key';
+  const encodedCredentials = Buffer.from(credentials, 'ascii').toString('base64');
+  return {
+    headers: {
+      authorization: `Bearer ${encodedCredentials}`,
+    },
+    queryStringParameters: {
+      return_url: 'https://example.org/return-url',
+    },
+  };
+}
+
+function _mockStripeResponse({ subscription, invoice }) {
+  const subscriptions = subscription ? [subscription] : [];
+  return {
+    subscriptions: {
+      list: jest.fn(() => Promise.resolve({
+        data: subscriptions,
+      })),
+    },
+    invoices: {
+      retrieve: jest.fn(() => Promise.resolve(invoice)),
+    }
+  };
+}
