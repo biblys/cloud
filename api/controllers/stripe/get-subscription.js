@@ -22,6 +22,11 @@ module.exports = async function getSubscription(event, stripe) {
     if (latest_invoice) {
       const invoice = await stripe.invoices.retrieve(latest_invoice);
       isSubscriptionPaid = invoice.paid;
+
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime();
+      if (isSubscriptionPaid === false && invoice.date > sevenDaysAgo) {
+        isSubscriptionPaid = true;
+      }
     }
 
     return {

@@ -1,5 +1,7 @@
 /* global jest, describe, it, expect */
 
+const MockDate = require('mockdate');
+
 const getSubscription = require('./get-subscription');
 
 describe('getSubscription', () => {
@@ -68,8 +70,8 @@ describe('getSubscription', () => {
         });
       });
 
-      describe('when there is a latest invoice', () => {
-        it('returns the subscription with invoice detail', async () => {
+      describe('when there is a paid invoice', () => {
+        it('returns the subscription as paid', async () => {
           // given
           const event = _mockEventForAuthenticatedUser();
           const stripe = _mockStripeResponse({
@@ -80,8 +82,76 @@ describe('getSubscription', () => {
               current_period_end: 123456789,
               latest_invoice: 'invoice_123456789',
             },
-            invoice: { paid: true },
+            invoice: {
+              paid: true,
+              date: 1556412120
+            },
           });
+
+          // when
+          const response = await getSubscription(event, stripe);
+
+          // then
+          expect(stripe.subscriptions.list).toHaveBeenCalledWith({ customer: 'public_key', limit: 1 });
+          expect(stripe.invoices.retrieve).toHaveBeenCalledWith('invoice_123456789');
+          expect(response.statusCode).toBe(200);
+          expect(response.body).toBe(JSON.stringify({
+            id: 1,
+            status: 'active',
+            is_paid: true,
+          }));
+        });
+      });
+
+      describe('when there is an unpaid invoice', () => {
+        it('returns the subscription as unpaid', async () => {
+          // given
+          const event = _mockEventForAuthenticatedUser();
+          const stripe = _mockStripeResponse({
+            subscription: {
+              id: 1,
+              status: 'active',
+              days_until_due: 7,
+              current_period_end: 123456789,
+              latest_invoice: 'invoice_123456789',
+            },
+            invoice: { paid: false, date: 1556412120 },
+          });
+
+          // when
+          const response = await getSubscription(event, stripe);
+
+          // then
+          expect(stripe.subscriptions.list).toHaveBeenCalledWith({ customer: 'public_key', limit: 1 });
+          expect(stripe.invoices.retrieve).toHaveBeenCalledWith('invoice_123456789');
+          expect(response.statusCode).toBe(200);
+          expect(response.body).toBe(JSON.stringify({
+            id: 1,
+            status: 'active',
+            is_paid: false,
+          }));
+        });
+      });
+
+      describe('when there is an unpaid invoice less than 7 days old', () => {
+        it('returns the subscription as paid', async () => {
+
+          // given
+          const event = _mockEventForAuthenticatedUser();
+          const stripe = _mockStripeResponse({
+            subscription: {
+              id: 1,
+              status: 'active',
+              days_until_due: 7,
+              current_period_end: 123456789,
+              latest_invoice: 'invoice_123456789',
+            },
+            invoice: {
+              paid: false,
+              date: 1682407831, // April 25th
+            },
+          });
+          MockDate.set(1682667031); // April 28th
 
           // when
           const response = await getSubscription(event, stripe);
