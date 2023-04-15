@@ -6,5 +6,8 @@
   "dependencies": {
     "jest": "^27.5.1",
     "stripe": "^8.216.0"
+  },
+  "devDependencies": {
+    "mockdate": "^3.0.5"
   }
 }
