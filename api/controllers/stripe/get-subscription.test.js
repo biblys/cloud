@@ -66,6 +66,7 @@ describe('getSubscription', () => {
             id: 1,
             status: 'active',
             is_paid: false,
+            current_period_end: 123456789,
           }));
         });
       });
@@ -99,6 +100,7 @@ describe('getSubscription', () => {
             id: 1,
             status: 'active',
             is_paid: true,
+            current_period_end: 123456789,
           }));
         });
       });
@@ -129,6 +131,7 @@ describe('getSubscription', () => {
             id: 1,
             status: 'active',
             is_paid: false,
+            current_period_end: 123456789,
           }));
         });
       });
@@ -164,6 +167,7 @@ describe('getSubscription', () => {
             id: 1,
             status: 'active',
             is_paid: true,
+            current_period_end: 123456789,
           }));
         });
       });

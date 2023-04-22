@@ -16,7 +16,7 @@ module.exports = async function getSubscription(event, stripe) {
       };
     }
 
-    const { id, status, latest_invoice } = subscriptions.data[0];
+    const { id, status, latest_invoice, current_period_end } = subscriptions.data[0];
 
     let isSubscriptionPaid = false;
     if (latest_invoice) {
@@ -31,7 +31,7 @@ module.exports = async function getSubscription(event, stripe) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ id, status, is_paid: isSubscriptionPaid }),
+      body: JSON.stringify({ id, status, is_paid: isSubscriptionPaid, current_period_end }),
     };
   } catch (error) {
     return handleError(error);
