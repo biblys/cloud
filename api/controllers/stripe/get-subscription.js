@@ -16,22 +16,15 @@ module.exports = async function getSubscription(event, stripe) {
       };
     }
 
-    const { id, status, latest_invoice, current_period_end } = subscriptions.data[0];
-
-    let isSubscriptionPaid = false;
-    if (latest_invoice) {
-      const invoice = await stripe.invoices.retrieve(latest_invoice);
-      isSubscriptionPaid = invoice.paid;
-
-      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime();
-      if (isSubscriptionPaid === false && invoice.date > sevenDaysAgo) {
-        isSubscriptionPaid = true;
-      }
-    }
+    const { id, status } = subscriptions.data[0];
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ id, status, is_paid: isSubscriptionPaid, current_period_end }),
+      body: JSON.stringify({
+        id,
+        status,
+        is_paid: true, // deprecated but kept for retro-compatibility
+      }),
     };
   } catch (error) {
     return handleError(error);
