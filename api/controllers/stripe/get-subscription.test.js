@@ -64,7 +64,6 @@ describe('getSubscription', () => {
         expect(response.body).toBe(JSON.stringify({
           id: 1,
           status: 'active',
-          is_paid: true,
         }));
       });
     });

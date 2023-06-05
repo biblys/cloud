@@ -23,7 +23,6 @@ module.exports = async function getSubscription(event, stripe) {
       body: JSON.stringify({
         id,
         status,
-        is_paid: true, // deprecated but kept for retro-compatibility
       }),
     };
   } catch (error) {
